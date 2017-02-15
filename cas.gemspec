@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = Cas::VERSION
   s.authors     = ["Thayná de Oliveira"]
   s.email       = ["euthaynaeng@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Cas."
-  s.description = "TODO: Description of Cas."
+  s.homepage    = ""
+  s.summary     = "Summary of Cas."
+  s.description = "Description of Cas."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 5.0.1"
 
   s.add_development_dependency "sqlite3"
+  s.add_development_dependency "rspec-rails"
 end
