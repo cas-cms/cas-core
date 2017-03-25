@@ -1,3 +1,6 @@
 Cas::Engine.routes.draw do
-  resource :home, only: [:show]
+  resources :sections, only: [:index] do
+    resources :contents, controller: 'sections/contents'
+  end
+  root 'sections#index'
 end

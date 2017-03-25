@@ -1,0 +1,15 @@
+<h1>Listing sections</h1>
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Type</th>
+  </tr>
+ 
+  <% @sections.each do |section| %>
+    <tr>
+      <td><%= section.name %></td>
+      <td><%= link_to section.section_type, section_contents_path(section_id: section.id) %></td>
+      
+    </tr>
+  <% end %>
+</table>
