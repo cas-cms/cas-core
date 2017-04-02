@@ -1,1 +1,15 @@
-<%= @section.inspect %>
+<h1>Listing Noticias</h1>
+<table>
+  <tr>
+    <th>Title</th>
+    
+  </tr>
+ 
+  <% @contents.each do |content| %>
+    <tr id="content-<%= content.id %>">
+      <td><%= content.title %></td>
+      
+      
+    </tr>
+  <% end %>
+</table>

@@ -1,0 +1,27 @@
+sites: 
+  ponet:
+    sections:
+      noticias:
+        name: Notícias
+        type: content
+        fields:
+          - title
+          - summary
+          - text
+          - images
+          - files    
+      tunel_do_tempo:  
+        name: Túnel do Tempo
+        type: content
+        fields:
+          - title
+          - text
+          - date
+          - images
+      biografia:
+        name: Biografia
+        type: content
+        fields:
+          - title
+          - text
+          - image

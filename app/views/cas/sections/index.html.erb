@@ -3,12 +3,15 @@
   <tr>
     <th>Title</th>
     <th>Type</th>
+    <th></th>
   </tr>
  
   <% @sections.each do |section| %>
-    <tr>
+    <tr id="section-<%= section.id %>">
       <td><%= section.name %></td>
       <td><%= link_to section.section_type, section_contents_path(section_id: section.id) %></td>
+      <td><%= link_to 'Novo', new_section_content_path(section) %></td>
+
       
     </tr>
   <% end %>

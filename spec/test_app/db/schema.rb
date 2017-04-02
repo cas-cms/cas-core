@@ -17,17 +17,26 @@ ActiveRecord::Schema.define(version: 20170219175007) do
   enable_extension "uuid-ossp"
 
   create_table "cas_contents", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid     "structure_id"
+    t.uuid     "section_id"
     t.string   "title"
     t.text     "text"
     t.uuid     "author_id"
     t.datetime "date"
     t.boolean  "published"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_cas_contents_on_author_id", using: :btree
     t.index ["published"], name: "index_cas_contents_on_published", using: :btree
-    t.index ["structure_id"], name: "index_cas_contents_on_structure_id", using: :btree
+    t.index ["section_id"], name: "index_cas_contents_on_section_id", using: :btree
+  end
+
+  create_table "cas_sections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "name",         null: false
+    t.string   "section_type", null: false
+    t.uuid     "site_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["site_id"], name: "index_cas_sections_on_site_id", using: :btree
   end
 
   create_table "cas_sites", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -35,15 +44,6 @@ ActiveRecord::Schema.define(version: 20170219175007) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_cas_sites_on_name", using: :btree
-  end
-
-  create_table "cas_structures", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.string   "name",           null: false
-    t.string   "structure_type", null: false
-    t.uuid     "site_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.index ["site_id"], name: "index_cas_structures_on_site_id", using: :btree
   end
 
 end
