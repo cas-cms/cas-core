@@ -18,7 +18,14 @@ module Cas
       @content.save
       redirect_to section_contents_url(@section)
     end
+    def edit
+      @section = Section.find(params[:section_id])
+      @content = Cas::Content.find(params[:id])
+    end
 
+    def delete
+      
+    end
     private
 
     def content_params
