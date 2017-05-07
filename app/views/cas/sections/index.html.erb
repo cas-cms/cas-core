@@ -1,16 +1,16 @@
 <h1>Listing sections</h1>
 <table>
   <tr>
-    <th>Title</th>
-    <th>Type</th>
+    <th></th>
+    <th></th>
     <th></th>
   </tr>
  
   <% @sections.each do |section| %>
     <tr id="section-<%= section.id %>">
       <td><%= section.name %></td>
-      <td><%= link_to section.section_type, section_contents_path(section_id: section.id) %></td>
       <td><%= link_to 'Novo', new_section_content_path(section) %></td>
+      <td><%= link_to 'Listar', section_contents_path(section) %></td>
 
       
     </tr>

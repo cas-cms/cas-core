@@ -19,6 +19,22 @@ module Cas
       redirect_to section_contents_url(@section)
     end
 
+    def edit
+      @section = Section.find(params[:section_id])
+      @content = Cas::Content.find(params[:id])
+    end
+
+    def update
+      @section = Section.find(params[:section_id])
+      @content = Cas::Content.find(params[:id])
+ 
+      if @content.update(content_params)
+        redirect_to section_content_url(@section, @content)
+      else
+        render 'edit'
+      end
+    end
+ 
     private
 
     def content_params

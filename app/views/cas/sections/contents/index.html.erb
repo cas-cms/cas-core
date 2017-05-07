@@ -1,4 +1,4 @@
-<h1>Listing Noticias</h1>
+<h1>Listing Contents</h1>
 <table>
   <tr>
     <th>Title</th>
@@ -7,7 +7,8 @@
  
   <% @contents.each do |content| %>
     <tr id="content-<%= content.id %>">
-      <td><%= content.title %></td>
+      <td><%= link_to content.title,
+      edit_section_content_path(@section.id, content.id) %></td>
       
       
     </tr>

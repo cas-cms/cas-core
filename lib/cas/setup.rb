@@ -4,6 +4,7 @@ module Cas
     def initialize(filename)
       @filename = filename
     end
+    
     def install
       config = YAML.load_file(@filename)
       config["sites"].each do |site_name, site_config|
