@@ -15,7 +15,6 @@ module Cas
           
           # execução
           has_field = subject.has_field?(:blab)
-          
 
           #verificação
           expect(has_field).to eq false
@@ -33,7 +32,6 @@ module Cas
           # execução
           has_field = subject.has_field?(:title)
           
-
           #verificação
           expect(has_field).to eq true
         end

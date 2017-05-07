@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 feature "Content management", :type => :feature do
-  # before :each do
-  #   User.make(email: 'user@example.com', password: 'password')
-  # end
 
   describe "As an admin" do
     scenario "I see all sections" do
@@ -11,8 +8,6 @@ feature "Content management", :type => :feature do
       subject = Cas::Setup.new("spec/fixtures/cas.yml") 
       subject.install
       visit '/cas'
-
-      #news = Cas::Section.where(name: 'Notícias').first
       expect(page).to have_content 'Notícias'
     end
 
@@ -31,8 +26,7 @@ feature "Content management", :type => :feature do
       expect(page).to have_content 'Noticia 1'
     end
 
-    scenario "I wanted to edit a content" do
-      
+    scenario "I want to edit a content" do
       subject = Cas::Setup.new("spec/fixtures/cas.yml") 
       subject.install
 

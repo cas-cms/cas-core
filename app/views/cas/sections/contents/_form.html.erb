@@ -1,12 +1,12 @@
 
 
 <%= form_for [@section, @content] do |f| %>
-  <% # if Cas::SectionForm.new(@section.name, @section.site.name).has_field?(:title) %>
+  <% if Cas::SectionForm.new(@section.name, @section.site.name).has_field?(:title) %>
     <p>
       <%= f.label :Título %><br>
       <%= f.text_field :title %>
     </p>
-  <% # end %>
+  <% end %>
 
   <p>
     <%= f.label :Texto %><br>

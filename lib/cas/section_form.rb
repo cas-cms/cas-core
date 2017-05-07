@@ -9,7 +9,6 @@ module Cas
 
     def has_field?(field)
       config = YAML.load_file(@filename)
-      #binding.pry
       sites = config["sites"]
       site = sites[@namesite]
       section = site["sections"]

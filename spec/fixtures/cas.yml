@@ -17,8 +17,7 @@ sites:
           - title
           - text
           - date
-          - images
-          - 
+          - images 
       biografia:
         name: Biografia
         type: content
