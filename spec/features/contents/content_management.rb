@@ -45,9 +45,11 @@ feature "Content management", :type => :feature do
       click_link('Noticia 2')
       expect(find_field('content_title').value).to eq 'Noticia 2'
       expect(find_field('content_text').value).to eq 'Texto da noticia 2'
-      
+
       fill_in('content_text', with: 'Texto da noticia 2 modificado!')
       click_button('Salvar')
+      expect(current_path).to eq section_contents_path(edit_section_content)
+      expect(find_field('content_text').value).to eq 'Texto da noticia 2 modificado!'
     end
   end
 end
