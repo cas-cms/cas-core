@@ -1,5 +1,4 @@
 class CreateCasSites < ActiveRecord::Migration[5.0]
-
   def change
     reversible do |dir|
       dir.up do
@@ -12,6 +11,5 @@ class CreateCasSites < ActiveRecord::Migration[5.0]
       t.timestamps
     end
     add_index :cas_sites, :name
-    
   end
 end
