@@ -1,4 +1,3 @@
 Rails.application.routes.draw do
-  mount Cas::Engine => "/cas"
-  
+  mount Cas::Engine => "/admin"
 end

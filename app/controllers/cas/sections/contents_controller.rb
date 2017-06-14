@@ -1,22 +1,26 @@
+require_dependency "cas/application_controller"
+
 module Cas
-  class Sections::ContentsController < ApplicationController
+  class Sections::ContentsController < Sections::ApplicationController
     def index
-      @section = Section.find(params[:section_id])
-      @contents = @section.contents 
+      #@user = Cas::User.find(params[:author_id])
+      @contents = @section.contents
     end
 
     def new
-      @section = Section.find(params[:section_id])
       @content = Cas::Content.new
-      
     end
 
     def create
-      @content = Cas::Content.new(content_params)
-      @section = Section.find(params[:section_id])
-      @content.section_id = @section.id
-      @content.save
-      redirect_to section_contents_url(@section)
+      @content = Cas::Content.new(content_params, current_user)
+      #@content.category = @category
+
+      binding.pry
+      if @content.save
+        redirect_to section_contents_url(@content), notice: 'Noticia salva com sucesso.'
+      else
+        render :new
+      end
     end
 
     def edit
@@ -38,7 +42,7 @@ module Cas
     private
 
     def content_params
-      params.require(:content).permit(:title, :text)
+      params.require(:content).permit(:title, :summary, :text)
     end
   end
 end

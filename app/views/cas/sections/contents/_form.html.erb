@@ -1,13 +1,16 @@
-
-
 <%= form_for [@section, @content] do |f| %>
-  <% if Cas::SectionForm.new(@section.name, @section.site.name).has_field?(:title) %>
+  <% if Cas::SectionForm.new(@section.site.name, @section.name, 'cas.yml').has_field?(:title) %>
     <p>
       <%= f.label :Título %><br>
       <%= f.text_field :title %>
     </p>
   <% end %>
 
+  <p>
+    <%= f.label :Resumo %><br>
+    <%= f.text_field :summary %>
+  </p>
+  
   <p>
     <%= f.label :Texto %><br>
     <%= f.text_area :text %>
