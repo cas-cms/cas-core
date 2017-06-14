@@ -4,7 +4,6 @@ class CreateCasSections < ActiveRecord::Migration[5.0]
       t.string :name, null: false
       t.string :section_type, null: false
       t.column :site_id, :uuid
-      t.string :slug
 
       t.timestamps
     end

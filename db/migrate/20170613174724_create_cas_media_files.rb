@@ -1,7 +1,8 @@
 class CreateCasMediaFiles < ActiveRecord::Migration[5.0]
   def change
     create_table :cas_media_files, id: :uuid do |t|
-      t.references :attachable, polymorphic: true, index: true
+      t.uuid :attachable_id, polymorphic: true
+      t.string :attachable_type, polymorphic: true
       t.uuid :author_id, null: false
       t.string :service, null: false
       t.text :title
@@ -14,5 +15,6 @@ class CreateCasMediaFiles < ActiveRecord::Migration[5.0]
       t.timestamps
     end
     add_index :cas_media_files, :author_id
+    add_index :cas_media_files, [:attachable_id, :attachable_type]
   end
 end

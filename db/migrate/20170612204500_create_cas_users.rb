@@ -9,7 +9,6 @@ class CreateCasUsers < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
-    add_index :cas_users, :section_id
     add_index :cas_users, :author_id
   end
 end
