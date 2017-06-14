@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 20170613184809) do
 
   create_table "cas_users", force: :cascade do |t|
     t.string   "name",                    null: false
-    t.string   "login",                   null: false
+    t.string   "login"
     t.string   "password",                null: false
     t.uuid     "author_id"
     t.string   "roles",      default: [],              array: true
