@@ -7,7 +7,7 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  
+
   <header>
     <div class="">
       <div class="grid">
@@ -16,9 +16,9 @@
             ponet
           </h1>
         </div>
-      </div>
-      <div class=“col-1-2”>
-        algum texto
+        <div class="col-1-2">
+          <%= link_to "Sair", cas.destroy_user_session_path, method: :delete %>
+        </div>
       </div>
 
       <nav class="grid">
@@ -26,7 +26,7 @@
           <p>menus</p>
         </div>
       </nav>
-    </div>    
+    </div>
   </header>
 
   <%= yield %>
