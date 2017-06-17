@@ -1,0 +1,45 @@
+
+
+body
+  margin: 0
+  padding: 0
+  background: $body-background-color
+
+body > header
+  background: $general-background-color
+  color: white
+
+  .top
+    .secondary
+      text-align: right
+      padding-top: 25px
+      a
+        color: white
+
+
+  nav
+    ul
+      margin: 0
+      padding: 0
+      list-style: none
+      margin: 0 15px
+      li
+        display: table
+        float: left
+        background: white
+        margin: 0 4px
+        border-radius: 4px 4px 0 0
+        &.secondary
+          float: right
+        a
+          display: table
+          padding: 10px 13px
+          text-decoration: none
+
+body > section
+  background: white
+
+  &.grid > [class*='col-']
+    padding-right: 0
+    & > .content
+      margin: 15px
