@@ -1,9 +1,9 @@
 /*
-  Simple Grid
-  Project Page - http://thisisdallas.github.com/Simple-Grid/
-  Author - Dallas Bass
-  Site - http://dallasbass.com
-*/
+Simple Grid
+Project Page - http://thisisdallas.github.com/Simple-Grid/
+Author - Dallas Bass
+Site - http://dallasbass.com
+ */
 
 
 [class*='grid'],
@@ -12,12 +12,12 @@
 .grid:after {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
-  box-sizing: border-box; 
+  box-sizing: border-box;	
 }
 
 [class*='col-'] {
   float: left;
-    min-height: 1px;
+  min-height: 1px;
   padding-right: 20px; /* column-space */
 }
 
@@ -37,6 +37,10 @@
   content: "";
   display: table;
   clear: both;
+}
+
+.grid .grid {
+  min-width: auto;
 }
 
 .grid-pad {
@@ -283,5 +287,12 @@
     display: none !important;
     width: 0;
     height: 0;
+  }
+
+  .center-on-mobile {
+    text-align: center;
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
