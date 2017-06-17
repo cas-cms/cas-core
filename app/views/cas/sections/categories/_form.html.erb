@@ -1,0 +1,19 @@
+<%= simple_form_for([@section, section_category]) do |f| %>
+  <% if section_category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(section_category.errors.count, "error") %> prohibited this sections_category from being saved:</h2>
+
+      <ul>
+        <% section_category.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.input :name %>
+
+  <div class="actions">
+    <%= f.submit "Salvar", id: 'submit' %>
+  </div>
+<% end %>

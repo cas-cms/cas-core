@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Categorias: <%= @section.name %></h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Categoria</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @section_categories.each do |section_category| %>
+      <tr>
+        <td>
+          <%= link_to section_category.name,
+            cas.edit_section_category_path(@section, section_category)
+          %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Nova categoria', cas.new_section_category_path(@section), id: 'new-category' %>

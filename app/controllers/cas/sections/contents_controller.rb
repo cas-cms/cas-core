@@ -40,6 +40,5 @@ module Cas
     def content_params
       params.require(:content).permit(:title, :text)
     end
-
   end
 end

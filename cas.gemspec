@@ -20,12 +20,16 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 5.0.1"
   s.add_dependency "pg"
   s.add_dependency "devise"
+  s.add_dependency "sass-rails"
+  s.add_dependency "jquery-rails"
+  s.add_dependency "simple_form"
 
+  s.add_development_dependency "awesome_print"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "database_cleaner"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "poltergeist"
   s.add_development_dependency "capybara"
   s.add_development_dependency "pry-rails"
-
+  s.add_development_dependency "factory_girl"
 end
