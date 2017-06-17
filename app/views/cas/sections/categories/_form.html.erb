@@ -1,0 +1,19 @@
+<%= simple_form_for([@section, category]) do |f| %>
+  <% if category.errors.any? %>
+    <div id="error_explanation">
+      <h2>Ocorreram alguns erros:</h2>
+
+      <ul>
+        <% category.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.input :name %>
+
+  <div class="actions">
+    <%= f.submit "Salvar", id: 'submit' %>
+  </div>
+<% end %>

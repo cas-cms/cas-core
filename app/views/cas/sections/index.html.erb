@@ -11,7 +11,9 @@
       <td><%= section.name %></td>
       <td>
         <%= link_to 'Novo', new_section_content_path(section) %>
-        <%= link_to 'Gerenciar', section_contents_path(section) %>
+        &nbsp;
+        &nbsp;
+        <%= link_to 'Gerenciar', section_contents_path(section), id: "manage-section-#{section.id}" %>
       </td>
     </tr>
   <% end %>

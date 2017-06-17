@@ -1,9 +1,19 @@
-<h1><%= @section.name %></h1>
+<div class="grid">
+  <div class="col-1-2">
+    <h1><%= @section.name %></h1>
+  </div>
+  <div class="col-1-2 section-options">
+    <%= link_to "Categorias", section_categories_path(@section), id: 'manage-categories' %>
+  </div>
+</div>
 <table>
-  <tr>
-    <th>Título</th>
-  </tr>
+  <thead>
+    <tr>
+      <th>Título</th>
+    </tr>
+  </thead>
 
+  <tbody>
   <% @contents.each do |content| %>
     <tr id="content-<%= content.id %>">
       <td><%= link_to content.title,
@@ -11,4 +21,5 @@
 
     </tr>
   <% end %>
+  </tbody>
 </table>
