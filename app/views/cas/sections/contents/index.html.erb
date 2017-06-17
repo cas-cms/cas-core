@@ -1,16 +1,14 @@
-<h1>Listing Contents</h1>
+<h1><%= @section.name %></h1>
 <table>
   <tr>
-    <th>Title</th>
-    
+    <th>Título</th>
   </tr>
- 
+
   <% @contents.each do |content| %>
     <tr id="content-<%= content.id %>">
       <td><%= link_to content.title,
       edit_section_content_path(@section.id, content.id) %></td>
-      
-      
+
     </tr>
   <% end %>
 </table>
