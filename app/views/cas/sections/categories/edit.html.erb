@@ -1,6 +1,5 @@
-<h1>Editing Sections Category</h1>
+<h1>Editando categoria: <%= @category.name %></h1>
 
-<%= render 'form', sections_category: @sections_category %>
+<%= render 'form', category: @category %>
 
-<%= link_to 'Show', @sections_category %> |
-<%= link_to 'Back', sections_categories_path %>
+<%= link_to 'Voltar', section_categories_path(@section) %>

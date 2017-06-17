@@ -10,11 +10,12 @@
   </thead>
 
   <tbody>
-    <% @section_categories.each do |section_category| %>
+    <% @categories.each do |category| %>
       <tr>
         <td>
-          <%= link_to section_category.name,
-            cas.edit_section_category_path(@section, section_category)
+          <%= link_to category.name,
+            cas.edit_section_category_path(@section, category),
+            id: "edit-category-#{category.id}"
           %>
         </td>
       </tr>
