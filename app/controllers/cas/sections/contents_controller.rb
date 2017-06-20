@@ -2,8 +2,8 @@ require_dependency "cas/application_controller"
 
 module Cas
   class Sections::ContentsController < Sections::ApplicationController
+
     def index
-      #@user = Cas::User.find(params[:author_id])
       @contents = @section.contents
     end
 
@@ -12,12 +12,12 @@ module Cas
     end
 
     def create
-      @content = Cas::Content.new(content_params, current_user)
-      #@content.category = @category
+      @content = Cas::Content.new(content_params)
+      @content.author_id = current_user.id
+      @content.section_id = @section.id
 
-      binding.pry
       if @content.save
-        redirect_to section_contents_url(@content), notice: 'Noticia salva com sucesso.'
+        redirect_to section_contents_url(@section, @content), notice: 'Noticia salva com sucesso.'
       else
         render :new
       end
@@ -33,7 +33,7 @@ module Cas
       @content = Cas::Content.find(params[:id])
  
       if @content.update(content_params)
-        redirect_to section_content_url(@section, @content)
+        redirect_to section_contents_path
       else
         render 'edit'
       end
@@ -42,7 +42,7 @@ module Cas
     private
 
     def content_params
-      params.require(:content).permit(:title, :summary, :text)
+      params.require(:content).permit(:title, :summary, :text, :author_id)
     end
   end
 end

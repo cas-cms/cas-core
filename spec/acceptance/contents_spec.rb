@@ -1,11 +1,19 @@
 require "rails_helper"
 
-feature "Admin/Sections/Contents" do
-  background do
-    @user = FactoryGirl.create(:user)
-    @site = FactoryGirl.create(:site)
-    @section = FactoryGirl.create(:section)
-    @content = FactoryGirl.create(:content)
+Rspec.feature 'Contents' do
+  let(:user) { create(:user) }
+  let!(:section) { create(:section) }
+  let!(:category) { create(:category, section: section) }
+  let!(:content) { create(:content) }
+
+  context 'As admin' do
+    background do
+      login(user)
+    end
+  end
+
+  scenario 'I create a content' do
+    
   end
 
   context 'As admin in the contents' do
