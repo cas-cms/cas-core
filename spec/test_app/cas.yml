@@ -1,8 +1,8 @@
 sites: 
-  mysite:
+  pedroosorio:
     sections:
       noticias:
-        name: news
+        name: Noticias
         type: content
         fields:
           - title
@@ -11,13 +11,13 @@ sites:
           - images
           - files    
       tunel_do_tempo:  
-        name: Túnel do Tempo
+        name: Tunel do Tempo
         type: content
         fields:
           - title
           - text
           - date
-          - images 
+          - images
       biografia:
         name: Biografia
         type: content
