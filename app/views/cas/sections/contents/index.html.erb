@@ -6,6 +6,7 @@
     <%= link_to "Categorias", section_categories_path(@section), id: 'manage-categories' %>
   </div>
 </div>
+
 <table>
   <thead>
     <tr>
@@ -17,8 +18,11 @@
   <% @contents.each do |content| %>
     <tr id="content-<%= content.id %>">
       <td><%= link_to content.title,
-      edit_section_content_path(@section.id, content.id) %></td>
+      edit_section_content_path(@section.id, content), id: "edit-content-#{content.id}" %></td>
     </tr>
   <% end %>
   </tbody>
 </table>
+<br>
+
+<%= link_to 'Nova notícia', new_section_content_path(@section.id), id: 'new-content' %>

@@ -1,14 +1,24 @@
 <%= simple_form_for ([@section, @content]) do |f| %>
-  <% if Cas::SectionForm.new(@section.site.name, @section.name, 'cas.yml').has_field?(:title) %>
-    <%= f.input :title %>
+  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:title) %>
+    <p>
+      <%= f.input :title, label: 'Título:' %>
+    </p>
   <% end %>
 
-  <%= f.input :summary %>
- 
-  <%= f.text :text %>
-  
+  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:summary) %>
+    <p>
+      <%= f.input :summary, as: :text, label: 'Resumo' %>
+    </p>
+  <% end %>
+
+  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:text) %>
+    <p>
+      <%= f.input :text, as: :text, label: 'Texto' %>
+    </p>
+  <% end %>
+
   <div class="actions">
     <%= f.submit "Salvar", id: 'submit' %>
   </div>
-    
+
 <% end %>

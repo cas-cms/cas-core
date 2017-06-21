@@ -42,7 +42,7 @@ module Cas
     private
 
     def content_params
-      params.require(:content).permit(:title, :summary, :text, :author_id)
+      params.require(:content).permit(:title, :summary, :text)
     end
   end
 end
