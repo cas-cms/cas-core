@@ -8,9 +8,8 @@ module Cas
 
           # setup
           subject = Cas::SectionForm.new(
-            "ponet",
-            "Notícias",
-            "spec/fixtures/cas.yml"
+            "mysite",
+            "news"
           )
           
           # execução
@@ -24,9 +23,8 @@ module Cas
       context 'when a section has a field ' do
         it 'returns true' do
           subject = Cas::SectionForm.new(
-            "ponet",
-            "Notícias",
-            "spec/fixtures/cas.yml"
+            "mysite",
+            "news"
           )
           
           # execução

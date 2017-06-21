@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :site, class: Cas::Site do
-    name "website"
+    name "mysite"
   end
 end

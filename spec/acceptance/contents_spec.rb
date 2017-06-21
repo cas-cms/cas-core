@@ -1,32 +1,41 @@
 require "rails_helper"
 
-Rspec.feature 'Contents' do
+RSpec.feature 'Contents' do
   let(:user) { create(:user) }
   let!(:section) { create(:section) }
   let!(:category) { create(:category, section: section) }
-  let!(:content) { create(:content) }
+  let!(:content) { create(:content, section: section, author: user) }
 
   context 'As admin' do
     background do
       login(user)
     end
-  end
 
-  scenario 'I create a content' do
-    
-  end
+    scenario 'I create a content in a section news' do
+      visit sections_path
+      click_link 'new-content'
+      fill_in 'content[title]', with: content.title
+      fill_in 'content[summary]', with: content.summary
+      fill_in 'content[text]', with: content.text
 
-  context 'As admin in the contents' do
-    background do
-      visit section_contents_path(@section.id)
+      expect do
+        click_on 'submit'
+      end.to change(::Cas::Content, :count).by(1)
     end
 
-    scenario 'I can see form for new contents' do
-      expect(page).to have_content 'Listing Contents'
-    end
+    scenario "I edit a content in a section news" do
+      click_link "manage-section-#{section.id}"
+      click_link "edit-content-#{content.id}"
 
-    scenario 'I can create a new content' do
-      fill_in 
+      fill_in 'content[title]', with: 'new title 2'
+
+
+      expect do
+        click_on 'submit'
+      end.to_not change(::Cas::Content, :count)
+
+      expect(current_path).to eq section_contents_path(section)
+      expect(page).to have_content 'new title 2'
     end
   end
 end

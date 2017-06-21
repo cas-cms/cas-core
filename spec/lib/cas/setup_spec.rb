@@ -11,7 +11,7 @@ module Cas
           subject.install
           expect(Cas::Site.count).to eq 1
           site = Cas::Site.first
-          expect(site.name).to eq "ponet"
+          expect(site.name).to eq "mysite"
 
         end
 
@@ -22,14 +22,14 @@ module Cas
           subject.install
           expect(Cas::Section.count).to eq 3
           section = Cas::Section.all
-          expect(section[0].name).to eq "Notícias"
-          expect(section[0].site.name).to eq "ponet"
+          expect(section[0].name).to eq "news"
+          expect(section[0].site.name).to eq "mysite"
           expect(section[0].section_type).to eq "content"
           expect(section[1].name).to eq "Túnel do Tempo"
-          expect(section[1].site.name).to eq "ponet"
+          expect(section[1].site.name).to eq "mysite"
           expect(section[1].section_type).to eq "content"
           expect(section[2].name).to eq "Biografia"
-          expect(section[2].site.name).to eq "ponet"
+          expect(section[2].site.name).to eq "mysite"
           expect(section[2].section_type).to eq "content"
         end
       end

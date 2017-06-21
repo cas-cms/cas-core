@@ -13,7 +13,6 @@ require 'awesome_print'
 require 'factory_girl_rails'
 
 Dir[Rails.root.join('../support/**/*.rb')].each   { |f| require f }
-Dir[Rails.root.join('../factories/**/*.rb')].each { |f| require f }
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
