@@ -1,10 +1,11 @@
 sites: 
   mysite:
     sections:
-      noticias:
+      news:
         name: news
         type: content
         fields:
+          - category
           - title
           - summary
           - text

@@ -2,13 +2,13 @@ require_dependency "cas/application_controller"
 
 module Cas
   class Sections::ContentsController < Sections::ApplicationController
-
     def index
       @contents = @section.contents
     end
 
     def new
       @content = Cas::Content.new
+      @categories = @section.categories
     end
 
     def create
@@ -26,6 +26,7 @@ module Cas
     def edit
       @section = Section.find(params[:section_id])
       @content = Cas::Content.find(params[:id])
+      @categories = @section.categories
     end
 
     def update
@@ -42,7 +43,7 @@ module Cas
     private
 
     def content_params
-      params.require(:content).permit(:title, :summary, :text)
+      params.require(:content).permit(:category_id, :title, :summary, :text)
     end
   end
 end

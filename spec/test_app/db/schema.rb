@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170616011202) do
+ActiveRecord::Schema.define(version: 20170623182702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,19 +28,20 @@ ActiveRecord::Schema.define(version: 20170616011202) do
   end
 
   create_table "cas_contents", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid     "section_id",                null: false
+    t.uuid     "section_id",                 null: false
     t.string   "title"
     t.text     "text"
-    t.uuid     "author_id",                 null: false
+    t.uuid     "author_id",                  null: false
     t.datetime "date"
     t.boolean  "published"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "pageviews"
-    t.jsonb    "metadata",   default: "{}"
+    t.jsonb    "metadata",    default: "{}"
     t.text     "summary"
-    t.jsonb    "details",    default: "{}"
+    t.jsonb    "details",     default: "{}"
     t.string   "slug"
+    t.uuid     "category_id"
     t.index ["author_id"], name: "index_cas_contents_on_author_id", using: :btree
     t.index ["published"], name: "index_cas_contents_on_published", using: :btree
     t.index ["section_id"], name: "index_cas_contents_on_section_id", using: :btree

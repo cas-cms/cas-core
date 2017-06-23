@@ -4,7 +4,7 @@ RSpec.feature 'Contents' do
   let(:user) { create(:user) }
   let!(:section) { create(:section) }
   let!(:category) { create(:category, section: section) }
-  let!(:content) { create(:content, section: section, author: user) }
+  let!(:content) { create(:content, section: section, author: user, category: category) }
 
   context 'As admin' do
     background do
@@ -14,6 +14,8 @@ RSpec.feature 'Contents' do
     scenario 'I create a content in a section news' do
       visit sections_path
       click_link 'new-content'
+
+      select('sports', from: 'content_category_id')
       fill_in 'content[title]', with: content.title
       fill_in 'content[summary]', with: content.summary
       fill_in 'content[text]', with: content.text
@@ -28,7 +30,6 @@ RSpec.feature 'Contents' do
       click_link "edit-content-#{content.id}"
 
       fill_in 'content[title]', with: 'new title 2'
-
 
       expect do
         click_on 'submit'

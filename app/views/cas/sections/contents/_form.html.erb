@@ -1,4 +1,11 @@
 <%= simple_form_for ([@section, @content]) do |f| %>
+
+  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:category) %>
+    <p>
+      <%= f.input :category_id, collection: @categories.map { |c| [c.name, c.id] } %>
+    </p>
+  <% end %>
+
   <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:title) %>
     <p>
       <%= f.input :title, label: 'Título:' %>

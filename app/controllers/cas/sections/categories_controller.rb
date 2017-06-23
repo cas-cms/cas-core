@@ -5,7 +5,7 @@ module Cas
     before_action :set_category, only: [:edit, :update, :destroy]
 
     def index
-      @categories = Cas::Category.all
+      @categories = @section.categories
     end
 
     def new
