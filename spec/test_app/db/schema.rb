@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20170623182702) do
     t.string   "slug"
     t.uuid     "category_id"
     t.index ["author_id"], name: "index_cas_contents_on_author_id", using: :btree
+    t.index ["category_id"], name: "index_cas_contents_on_category_id", using: :btree
     t.index ["published"], name: "index_cas_contents_on_published", using: :btree
     t.index ["section_id"], name: "index_cas_contents_on_section_id", using: :btree
     t.index ["slug"], name: "index_cas_contents_on_slug", using: :btree
@@ -51,18 +52,23 @@ ActiveRecord::Schema.define(version: 20170623182702) do
   create_table "cas_media_files", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid     "attachable_id"
     t.string   "attachable_type"
-    t.uuid     "author_id",       null: false
-    t.string   "service",         null: false
+    t.uuid     "author_id"
+    t.string   "service",                         null: false
     t.text     "title"
     t.string   "url"
     t.string   "mime_type"
     t.string   "original_name"
     t.integer  "size"
     t.text     "file_data"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "cover",           default: false, null: false
+    t.integer  "order",           default: 1
+    t.text     "text"
+    t.jsonb    "metadata",        default: {}
     t.index ["attachable_id", "attachable_type"], name: "index_cas_media_files_on_attachable_id_and_attachable_type", using: :btree
     t.index ["author_id"], name: "index_cas_media_files_on_author_id", using: :btree
+    t.index ["cover"], name: "index_cas_media_files_on_cover", using: :btree
   end
 
   create_table "cas_sections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -80,7 +86,9 @@ ActiveRecord::Schema.define(version: 20170623182702) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "slug"
     t.index ["name"], name: "index_cas_sites_on_name", using: :btree
+    t.index ["slug"], name: "index_cas_sites_on_slug", using: :btree
   end
 
   create_table "cas_users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -90,7 +98,7 @@ ActiveRecord::Schema.define(version: 20170623182702) do
     t.string   "roles",                  default: [],              array: true
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.string   "email",                  default: "", null: false
+    t.string   "email"
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -100,8 +108,10 @@ ActiveRecord::Schema.define(version: 20170623182702) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.jsonb    "metadata",               default: {}
     t.index ["author_id"], name: "index_cas_users_on_author_id", using: :btree
     t.index ["email"], name: "index_cas_users_on_email", unique: true, using: :btree
+    t.index ["encrypted_password"], name: "index_cas_users_on_encrypted_password", using: :btree
     t.index ["reset_password_token"], name: "index_cas_users_on_reset_password_token", unique: true, using: :btree
   end
 

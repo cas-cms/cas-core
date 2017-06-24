@@ -7,12 +7,12 @@ module Cas
     end
 
     def new
-      @content = Cas::Content.new
+      @content = ::Cas::Content.new
       @categories = @section.categories
     end
 
     def create
-      @content = Cas::Content.new(content_params)
+      @content = ::Cas::Content.new(content_params)
       @content.author_id = current_user.id
       @content.section_id = @section.id
 
@@ -25,13 +25,13 @@ module Cas
 
     def edit
       @section = Section.find(params[:section_id])
-      @content = Cas::Content.find(params[:id])
+      @content = ::Cas::Content.find(params[:id])
       @categories = @section.categories
     end
 
     def update
       @section = Section.find(params[:section_id])
-      @content = Cas::Content.find(params[:id])
+      @content = ::Cas::Content.find(params[:id])
  
       if @content.update(content_params)
         redirect_to section_contents_path
