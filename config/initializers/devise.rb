@@ -4,7 +4,7 @@ require 'devise/custom_failure'
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-  config.secret_key = 'c86b5f3b837aec9df6fc5c0ba9dc3a1f3b0351408af133f110f8c95714e837823843ad025b4e6a6ae7a0dadace28ffb70eec397776081412d410d0357e6a9bc5'
+  config.secret_key = ENV.fetch("SECRET_KEY", "123")
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -104,10 +104,10 @@ Devise.setup do |config|
   # a value less than 10 in other environments. Note that, for bcrypt (the default
   # algorithm), the cost increases exponentially with the number of stretches (e.g.
   # a value of 20 is already extremely slow: approx. 60 seconds for 1 calculation).
-  config.stretches = Rails.env.test? ? 1 : 11
+  config.stretches = Rails.env.test? ? 1 : 10
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = 'a23a078b2769edbee1f9274d8cfa673e1e49d53a2b5263aba242c02a49252af41b7d455024ccd1c62a511555d1d4f7606119be68512557e4aded6a812d123253'
+  # config.pepper = ENV.fetch("password_peper", "123")
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false

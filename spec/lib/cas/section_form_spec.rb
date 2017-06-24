@@ -7,7 +7,7 @@ module Cas
         it 'returns false' do
 
           # setup
-          subject = Cas::SectionForm.new(
+          subject = ::Cas::SectionForm.new(
             "mysite",
             "news"
           )
@@ -22,7 +22,7 @@ module Cas
 
       context 'when a section has a field ' do
         it 'returns true' do
-          subject = Cas::SectionForm.new(
+          subject = ::Cas::SectionForm.new(
             "mysite",
             "news"
           )
