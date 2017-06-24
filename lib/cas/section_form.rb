@@ -11,8 +11,8 @@ module Cas
       sites = config["sites"]
       site = sites[@namesite]
       section = site["sections"]
-      section.find { |key, value| 
-        value["name"] == @namesection 
+      section.find { |key, value|
+        value["name"] == @namesection
       }[1]["fields"].include?(field.to_s)
     end
 
