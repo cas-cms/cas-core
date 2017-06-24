@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170623182702) do
+ActiveRecord::Schema.define(version: 20170624024648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,8 +54,8 @@ ActiveRecord::Schema.define(version: 20170623182702) do
     t.string   "attachable_type"
     t.uuid     "author_id"
     t.string   "service",                         null: false
-    t.text     "title"
-    t.string   "url"
+    t.text     "description"
+    t.string   "path"
     t.string   "mime_type"
     t.string   "original_name"
     t.integer  "size"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 20170623182702) do
     t.integer  "order",           default: 1
     t.text     "text"
     t.jsonb    "metadata",        default: {}
+    t.string   "media_type",                      null: false
     t.index ["attachable_id", "attachable_type"], name: "index_cas_media_files_on_attachable_id_and_attachable_type", using: :btree
     t.index ["author_id"], name: "index_cas_media_files_on_author_id", using: :btree
     t.index ["cover"], name: "index_cas_media_files_on_cover", using: :btree

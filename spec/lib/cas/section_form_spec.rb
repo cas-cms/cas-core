@@ -11,7 +11,7 @@ module Cas
             "mysite",
             "news"
           )
-          
+
           # execução
           has_field = subject.has_field?(:blab)
 
@@ -26,15 +26,14 @@ module Cas
             "mysite",
             "news"
           )
-          
+
           # execução
           has_field = subject.has_field?(:title)
-          
+
           #verificação
           expect(has_field).to eq true
         end
       end
-
     end
   end
 end
