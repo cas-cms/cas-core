@@ -16,13 +16,20 @@ RSpec.feature 'Contents' do
       click_link 'new-content'
 
       select('sports', from: 'content_category_id')
-      fill_in 'content[title]', with: content.title
-      fill_in 'content[summary]', with: content.summary
-      fill_in 'content[text]', with: content.text
+      fill_in 'content_title', with: content.title
+      fill_in 'content_summary', with: content.summary
+      fill_in 'content_text', with: content.text
+      fill_in 'content_tag_list', with: 'tag1 tag2'
 
       expect do
         click_on 'submit'
       end.to change(::Cas::Content, :count).by(1)
+
+      last_content = Cas::Content.last
+      expect(last_content.title).to eq content.title
+      expect(last_content.summary).to eq content.summary
+      expect(last_content.text).to eq content.text
+      expect(last_content.tag_list).to match_array ['tag1', 'tag2']
     end
 
     scenario "I edit a content in a section news" do
@@ -30,6 +37,7 @@ RSpec.feature 'Contents' do
       click_link "edit-content-#{content.id}"
 
       fill_in 'content[title]', with: 'new title 2'
+      fill_in 'content_tag_list', with: 'edited-tag1 tag2'
 
       expect do
         click_on 'submit'
@@ -37,6 +45,10 @@ RSpec.feature 'Contents' do
 
       expect(current_path).to eq section_contents_path(section)
       expect(page).to have_content 'new title 2'
+
+      last_content = Cas::Content.last
+      expect(last_content.title).to eq 'new title 2'
+      expect(last_content.tag_list).to match_array ['edited-tag1', 'tag2']
     end
   end
 end

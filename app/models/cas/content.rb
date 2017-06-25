@@ -2,6 +2,7 @@ module Cas
   class Content < ApplicationRecord
     extend ::FriendlyId
     friendly_id :title, use: :slugged
+    acts_as_taggable
 
     belongs_to :section
     belongs_to :category

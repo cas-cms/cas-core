@@ -24,6 +24,8 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails"
   s.add_dependency "simple_form"
   s.add_dependency "friendly_id"
+  s.add_dependency 'acts-as-taggable-on'
+  s.add_dependency "select2-rails"
 
   s.add_development_dependency "awesome_print"
   s.add_development_dependency "sqlite3"
@@ -33,4 +35,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "capybara"
   s.add_development_dependency "pry-rails"
   s.add_development_dependency 'factory_girl_rails', '~> 4.0'
+  s.add_development_dependency 'launchy'
 end

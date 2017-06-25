@@ -6,6 +6,7 @@ require 'devise'
 require 'simple_form'
 require 'friendly_id'
 require 'jquery-rails'
+require 'acts-as-taggable-on'
 
 module Cas
 end
