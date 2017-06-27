@@ -3,7 +3,7 @@ require_dependency "cas/application_controller"
 module Cas
   class Sections::ContentsController < Sections::ApplicationController
     def index
-      @contents = @section.contents.order('created_at desc')
+      @contents = @section.contents.order('created_at desc').page(params[:page]).per(25)
     end
 
     def new
