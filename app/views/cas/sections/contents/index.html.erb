@@ -3,7 +3,9 @@
     <h1><%= @section.name %></h1>
   </div>
   <div class="col-1-2 section-options">
-    <%= link_to "Categorias", section_categories_path(@section), id: 'manage-categories' %>
+    <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:category) %>
+      <%= link_to "Categorias", section_categories_path(@section), id: 'manage-categories' %>
+    <% end %>
   </div>
 </div>
 
@@ -25,4 +27,4 @@
 </table>
 <br>
 
-<%= link_to 'Nova notícia', new_section_content_path(@section.id), id: 'new-content' %>
+<%= link_to 'Novo conteúdo', new_section_content_path(@section.id), id: 'new-content' %>
