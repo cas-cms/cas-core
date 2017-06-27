@@ -1,0 +1,55 @@
+.progress-status
+  //height: 25px
+  border-radius: 5px
+  width: 100%
+  margin-top: 10px
+  min-height: 20px
+  max-width: 300px
+  overflow: hidden
+  border: 1px solid #f4f4f4
+  background: #fafafa
+  position: relative
+  .name
+    z-index: 2
+    display: table
+    padding: 3px 0
+    color: #999
+    width: 100%
+    background: transparent
+    text-align: center
+    position: relative
+    top: 0
+  .progress-bar
+    position: absolute
+    top: 0
+    background: green
+    width: 1%
+    height: 100%
+
+.progress-status .progress-bar
+  background: $green
+  background: -webkit-linear-gradient(left, $green, $secondary-green)
+  background: -o-linear-gradient(left, $green, $secondary-green)
+  background: -moz-linear-gradient(left, $green, $secondary-green)
+  background: linear-gradient(left, $green, $secondary-green)
+
+form
+  .images
+    width: 100%
+    display: table
+    .image
+      position: relative
+      width: 200px
+      height: 150px
+      display: table
+      float: left
+      margin: 10px
+      background-size: cover
+      background-position: center
+      .options
+        text-align: center
+        display: table
+        width: 100%
+        background: rgba(255, 255, 255, 0.8)
+        position: absolute
+        bottom: 0

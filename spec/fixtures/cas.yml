@@ -10,17 +10,9 @@ sites:
           - summary
           - text
           - images
-          - files    
-      tunel_do_tempo:  
-        name: Túnel do Tempo
-        type: content
-        fields:
-          - title
-          - text
-          - date
-          - images 
-      biografia:
-        name: Biografia
+          - files
+      biography:
+        name: Biography
         type: content
         fields:
           - title

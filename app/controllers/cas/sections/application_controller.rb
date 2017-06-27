@@ -5,7 +5,7 @@ module Cas
     private
 
     def load_section
-      @section ||= Cas::Section.find(params[:section_id])
+      @section ||= ::Cas::Section.find(params[:section_id])
     end
   end
 end

@@ -2,7 +2,10 @@
 
   <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:category) %>
     <p>
-      <%= f.input :category_id, collection: @categories.map { |c| [c.name, c.id] } %>
+      <%= f.input :category_id,
+        collection: @categories.map { |c| [c.name, c.id] },
+        input_html: { class: 'js-select2' }
+      %>
     </p>
   <% end %>
 
@@ -18,10 +21,50 @@
     </p>
   <% end %>
 
+  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:tags) %>
+    <% autocomplete = ActsAsTaggableOn::Tag.all.map { |t| {value: t.name, text: t.name} } %>
+    <%= f.input :tag_list,
+      as: :string,
+      required: false,
+      input_html: {
+        value: f.object.tag_list.join(", "),
+        class: "js-tags",
+        data: { autocomplete: autocomplete.to_json }
+      }
+    %>
+  <% end %>
+
   <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:text) %>
     <p>
       <%= f.input :text, as: :text, label: 'Texto' %>
     </p>
+  <% end %>
+
+  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:images) %>
+    <%= f.input :file,
+      as: :file,
+      type: :string,
+      label: "Imagens",
+      input_html: {
+        parent_entity: "inventory_item",
+        accept: "image/png, image/jpg",
+        multiple: "multiple",
+        images: "#js-item-images"
+      } %>
+    <div class="images" id="js-item-images">
+      <% if @content.images.present? %>
+        <% @content.images.each do |image| %>
+          <div class="image js-image" data-id="<%= image.id %>" style="background-image: url('<%= image.url %>')">
+    <div class="options"><a href="javascript: void(0)" class="js-delete-image">Excluir</a></div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <% if Rails.env.test? %>
+      <%= hidden_field_tag "files[][id]", "", class: "js-media-file", id: "test_file_1" %>
+      <%= hidden_field_tag "files[][id]", "", class: "js-media-file", id: "test_file_2" %>
+    <% end %>
   <% end %>
 
   <div class="actions">
