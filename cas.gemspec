@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "sass-rails"
   s.add_dependency "jquery-rails"
   s.add_dependency "simple_form"
+  s.add_dependency "kaminari", '~> 0.17.0'
 
   s.add_development_dependency "awesome_print"
   s.add_development_dependency "sqlite3"

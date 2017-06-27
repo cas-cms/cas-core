@@ -3,7 +3,7 @@ require_dependency "cas/application_controller"
 module Cas
   class Sections::ContentsController < Sections::ApplicationController
     def index
-      @contents = @section.contents
+      @contents = @section.contents.page(params[:page]).per(25)
     end
 
     def new
@@ -43,7 +43,7 @@ module Cas
     private
 
     def content_params
-      params.require(:content).permit(:category_id, :title, :summary, :text)
+      params.require(:content).permit(:page, :category_id, :title, :summary, :text)
     end
   end
 end
