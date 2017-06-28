@@ -4,6 +4,9 @@ sites:
       news:
         name: news
         type: content
+        list_fields:
+          - title
+          - category
         fields:
           - category
           - title

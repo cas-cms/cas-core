@@ -1,6 +1,6 @@
 require "cas/engine"
 require "cas/setup"
-require "cas/section_form"
+require "cas/section_config"
 
 require 'devise'
 require 'simple_form'
