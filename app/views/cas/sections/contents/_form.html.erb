@@ -1,6 +1,6 @@
 <%= simple_form_for ([@section, @content]) do |f| %>
 
-  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:category) %>
+  <% if Cas::SectionForm.new(@section).has_field?(:category) %>
     <p>
       <%= f.input :category_id,
         collection: @categories.map { |c| [c.name, c.id] },
@@ -9,19 +9,19 @@
     </p>
   <% end %>
 
-  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:title) %>
+  <% if Cas::SectionForm.new(@section).has_field?(:title) %>
     <p>
       <%= f.input :title, label: 'Título:' %>
     </p>
   <% end %>
 
-  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:summary) %>
+  <% if Cas::SectionForm.new(@section).has_field?(:summary) %>
     <p>
       <%= f.input :summary, as: :text, label: 'Resumo' %>
     </p>
   <% end %>
 
-  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:tags) %>
+  <% if Cas::SectionForm.new(@section).has_field?(:tags) %>
     <% autocomplete = ActsAsTaggableOn::Tag.all.map { |t| {value: t.name, text: t.name} } %>
     <%= f.input :tag_list,
       as: :string,
@@ -34,13 +34,13 @@
     %>
   <% end %>
 
-  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:text) %>
+  <% if Cas::SectionForm.new(@section).has_field?(:text) %>
     <p>
       <%= f.input :text, as: :text, label: 'Texto' %>
     </p>
   <% end %>
 
-  <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:images) %>
+  <% if Cas::SectionForm.new(@section).has_field?(:images) %>
     <%= f.input :file,
       as: :file,
       type: :string,
@@ -70,5 +70,4 @@
   <div class="actions">
     <%= f.submit "Salvar", id: 'submit' %>
   </div>
-
 <% end %>

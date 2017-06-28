@@ -1,18 +1,17 @@
 module Cas
   class SectionForm
 
-    def initialize(namesite, namesection)
-      @namesite = namesite
-      @namesection = namesection
+    def initialize(section)
+      @section = section
     end
 
     def has_field?(field)
       config = YAML.load_file(filename)
       sites = config["sites"]
-      site = sites[@namesite]
+      site = sites[@section.site.slug]
       section = site["sections"]
       section.find { |key, value|
-        value["name"] == @namesection
+        key == @section.slug
       }[1]["fields"].include?(field.to_s)
     end
 

@@ -3,7 +3,7 @@
     <h1><%= @section.name %></h1>
   </div>
   <div class="col-1-2 section-options">
-    <% if Cas::SectionForm.new(@section.site.name, @section.name).has_field?(:category) %>
+    <% if Cas::SectionForm.new(@section).has_field?(:category) %>
       <%= link_to "Categorias", section_categories_path(@section), id: 'manage-categories' %>
     <% end %>
   </div>

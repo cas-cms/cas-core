@@ -1,14 +1,10 @@
 
 module Cas
   class Setup
-    def initialize(filename)
-      @filename = filename
-    end
-
     def install
-      config = YAML.load_file(@filename)
-      config["sites"].each do |site_name, site_config|
-        site = ::Cas::Site.where(name: site_name).first_or_create
+      config = YAML.load_file(filename)
+      config["sites"].each do |site_slug, site_config|
+        site = ::Cas::Site.where(slug: site_slug).first_or_create
 
         site_config["sections"].each do |key, section|
           ::Cas::Section.where(
@@ -19,6 +15,16 @@ module Cas
             section_type: section["type"]
           )
         end
+      end
+    end
+
+    private
+
+    def filename
+      if Rails.env.test?
+        "spec/fixtures/cas.yml"
+      else
+        "cas.yml"
       end
     end
   end
