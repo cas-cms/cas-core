@@ -28,7 +28,7 @@
       <% Cas::SectionConfig.new(@section).list_fields.each do |field| %>
         <td>
           <% if field == 'created_at' %>
-            <% value = l(Time.now, format: :short) %>
+            <% value = content.created_at.strftime("%d%b %H:%M") %>
           <% else %>
             <% value = content.public_send(field) %>
           <% end %>
