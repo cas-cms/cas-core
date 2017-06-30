@@ -38,7 +38,14 @@ module Cas
         render 'edit'
       end
     end
- 
+
+    def destroy
+      @content = ::Cas::Content.friendly.find(params[:id])
+      @content.destroy
+
+      redirect_to section_contents_path
+    end
+
     private
 
     def content_params

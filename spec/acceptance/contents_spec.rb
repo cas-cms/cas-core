@@ -50,5 +50,17 @@ RSpec.feature 'Contents' do
       expect(last_content.title).to eq 'new title 2'
       expect(last_content.tag_list).to match_array ['edited-tag1', 'tag2']
     end
+
+    scenario 'I delete a content in a section news' do
+      click_link "manage-section-#{section.id}"
+
+      expect(::Cas::Content.count).to eq 1
+      expect(page).to have_content 'new content'
+
+      click_link "delete-content-#{content.id}"
+
+      expect(::Cas::Content.count).to eq 0
+      expect(page).to_not have_content 'new content'
+    end
   end
 end

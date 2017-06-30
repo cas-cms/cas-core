@@ -17,6 +17,7 @@
   <thead>
     <tr>
       <th colspan="<%= Cas::SectionConfig.new(@section).list_fields.count %>">Título</th>
+      <th></th>
     </tr>
   </thead>
 
@@ -28,7 +29,7 @@
       <% Cas::SectionConfig.new(@section).list_fields.each do |field| %>
         <td>
           <% if field == 'created_at' %>
-            <% value = l(Time.now, format: :short) %>
+            <% value = l(content.created_at, format: :short) %>
           <% else %>
             <% value = content.public_send(field) %>
           <% end %>
@@ -44,6 +45,12 @@
           <% column_no += 1 %>
         </td>
       <% end %>
+      <td>
+        <%= link_to 'Excluir', section_content_path(@section.id, content),
+          method: :delete,
+          data: { confirm: 'Tem certeza?' },
+          id: "delete-content-#{content.id}" %>
+      </td>
     </tr>
   <% end %>
   </tbody>
