@@ -8,6 +8,8 @@ require 'friendly_id'
 require 'jquery-rails'
 require 'kaminari'
 require 'acts-as-taggable-on'
+require 'tinymce-rails'
+require 'tinymce-rails-langs'
 
 module Cas
 end

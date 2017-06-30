@@ -27,6 +27,8 @@ Gem::Specification.new do |s|
   s.add_dependency "friendly_id"
   s.add_dependency 'acts-as-taggable-on'
   s.add_dependency "select2-rails"
+  s.add_dependency "tinymce-rails"
+  s.add_dependency 'tinymce-rails-langs'
 
   s.add_development_dependency "awesome_print"
   s.add_development_dependency "sqlite3"

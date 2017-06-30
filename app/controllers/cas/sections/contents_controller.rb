@@ -25,13 +25,11 @@ module Cas
     end
 
     def edit
-      @section = Section.find(params[:section_id])
       @content = ::Cas::Content.friendly.find(params[:id])
       @categories = @section.categories
     end
 
     def update
-      @section = Section.find(params[:section_id])
       @content = ::Cas::Content.friendly.find(params[:id])
 
       if @content.update(content_params)

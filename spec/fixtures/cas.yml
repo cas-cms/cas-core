@@ -1,4 +1,4 @@
-sites: 
+sites:
   mysite:
     sections:
       news:
@@ -14,6 +14,7 @@ sites:
           - text
           - images
           - files
+          - tags
       biography:
         name: Biography
         type: content

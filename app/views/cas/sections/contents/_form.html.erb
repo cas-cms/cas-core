@@ -36,7 +36,7 @@
 
   <% if Cas::SectionConfig.new(@section).form_has_field?(:text) %>
     <p>
-      <%= f.input :text, as: :text, label: 'Texto' %>
+      <%= f.input :text, as: :text, label: 'Texto', input_html: { class: 'editor' } %>
     </p>
   <% end %>
 

@@ -9,10 +9,11 @@ PATH
       kaminari (~> 0.17.0)
       pg
       rails (~> 5.0.1)
-      rails-i18n
       sass-rails
       select2-rails
       simple_form
+      tinymce-rails
+      tinymce-rails-langs
 
 GEM
   remote: https://rubygems.org/
@@ -148,9 +149,6 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
-    rails-i18n (5.0.4)
-      i18n (~> 0.7)
-      railties (~> 5.0)
     railties (5.0.1)
       actionpack (= 5.0.1)
       activesupport (= 5.0.1)
@@ -202,6 +200,10 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.7)
+    tinymce-rails (4.6.4)
+      railties (>= 3.1.1)
+    tinymce-rails-langs (4.20160310)
+      tinymce-rails (~> 4.1, >= 4.1.10)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
     warden (1.2.7)
