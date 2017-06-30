@@ -9,6 +9,7 @@ sites:
           - category
         fields:
           - category
+          - tags
           - title
           - summary
           - text
