@@ -10,6 +10,12 @@ module Cas
       end
     end
 
+    config.after_initialize do
+      Dir.glob("#{config.root}/app/uploaders/**/*.rb").each do |c|
+        require_dependency(c)
+      end
+    end
+
     config.active_record.primary_key = :uuid
     config.generators do |g|
       g.test_framework :rspec

@@ -10,6 +10,7 @@ require 'kaminari'
 require 'acts-as-taggable-on'
 require 'tinymce-rails'
 require 'tinymce-rails-langs'
+require 'shrine'
 
 module Cas
 end

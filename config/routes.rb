@@ -1,4 +1,6 @@
 Cas::Engine.routes.draw do
+  mount FileUploader::UploadEndpoint => "/files"
+
   devise_for :users,
     class_name: "Cas::User",
     module: :devise,

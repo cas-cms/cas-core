@@ -1,5 +1,7 @@
 module Cas
   class MediaFile < ApplicationRecord
+    include FileUploader[:file]
+
     belongs_to :attachable, polymorphic: true
 
     def url

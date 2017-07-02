@@ -29,6 +29,12 @@ Gem::Specification.new do |s|
   s.add_dependency "select2-rails"
   s.add_dependency "tinymce-rails"
   s.add_dependency 'tinymce-rails-langs'
+  s.add_dependency 'sidekiq'
+
+  # File uploads
+  s.add_dependency 'shrine' # for uploading files
+  s.add_dependency 'roda' # for shrine
+  s.add_dependency "aws-sdk", "~> 2.1" # for file uploads
 
   s.add_development_dependency "awesome_print"
   s.add_development_dependency "sqlite3"
