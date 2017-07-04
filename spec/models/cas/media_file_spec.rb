@@ -2,6 +2,50 @@ require 'rails_helper'
 
 module Cas
   RSpec.describe MediaFile, type: :model do
-    pending "add some examples to (or delete) #{__FILE__}"
+    describe "callbacks" do
+      describe "setting media_type" do
+        it 'is set upon validation' do
+          file = described_class.new(mime_type: 'image/jpg/')
+          file.valid?
+          expect(file.media_type).to eq 'image'
+        end
+      end
+    end
+
+    describe '#url' do
+      context 'when S3' do
+        subject { build(:file) }
+
+        context 'when no CDN exists' do
+          before do
+            allow(ENV).to receive(:fetch).with("CDN_HOST", nil) { "" }
+          end
+
+          it 'returns S3 url' do
+            expect(subject.url).to match "https://s3.amazonaws.com/com.bucket/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
+          end
+        end
+
+        context 'when CDN exists' do
+          before do
+            allow(ENV).to receive(:fetch).with("CDN_HOST", nil) { "http://cdn/" }
+          end
+
+          context 'when uploaded with shrine' do
+            it 'returns shrine URL with CDN as host' do
+              expect(subject.url).to match "http://cdn/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
+            end
+          end
+
+          context 'when only path is present' do
+            subject { build(:file, file_data: "{}", path: 'custom-path') }
+
+            it 'returns CDN host + path' do
+              expect(subject.url).to eq "http://cdn/custom-path"
+            end
+          end
+        end
+      end
+    end
   end
 end

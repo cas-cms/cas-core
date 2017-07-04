@@ -4,6 +4,8 @@ require 'rails/all'
 
 Bundler.require(*Rails.groups)
 require "cas"
+require 'dotenv-rails'
+Dotenv::Railtie.load
 
 module TestApp
   class Application < Rails::Application

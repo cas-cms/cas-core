@@ -1,5 +1,4 @@
 <%= simple_form_for ([@section, @content]) do |f| %>
-
   <% if Cas::SectionConfig.new(@section).form_has_field?(:category) %>
     <p>
       <%= f.input :category_id,
@@ -41,30 +40,7 @@
   <% end %>
 
   <% if Cas::SectionConfig.new(@section).form_has_field?(:images) %>
-    <%= f.input :file,
-      as: :file,
-      type: :string,
-      label: "Imagens",
-      input_html: {
-        parent_entity: "inventory_item",
-        accept: "image/png, image/jpg",
-        multiple: "multiple",
-        images: "#js-item-images"
-      } %>
-    <div class="images" id="js-item-images">
-      <% if @content.images.present? %>
-        <% @content.images.each do |image| %>
-          <div class="image js-image" data-id="<%= image.id %>" style="background-image: url('<%= image.url %>')">
-    <div class="options"><a href="javascript: void(0)" class="js-delete-image">Excluir</a></div>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-
-    <% if Rails.env.test? %>
-      <%= hidden_field_tag "files[][id]", "", class: "js-media-file", id: "test_file_1" %>
-      <%= hidden_field_tag "files[][id]", "", class: "js-media-file", id: "test_file_2" %>
-    <% end %>
+    <%= render 'form_images', f: f %>
   <% end %>
 
   <div class="actions">

@@ -1,5 +1,5 @@
 Cas::Engine.routes.draw do
-  mount FileUploader::UploadEndpoint => "/files"
+  mount ::FileUploader::UploadEndpoint => "/files"
 
   devise_for :users,
     class_name: "Cas::User",
@@ -13,5 +13,10 @@ Cas::Engine.routes.draw do
     resources :contents, controller: 'sections/contents'
     resources :categories, controller: 'sections/categories'
   end
+
+  namespace :api, module: "api" do
+    resources :files, only: [:create, :destroy]
+  end
+
   root 'sections#index'
 end

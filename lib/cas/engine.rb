@@ -16,9 +16,18 @@ module Cas
       end
     end
 
+    config.assets.precompile += ["cas/fileupload_manifest.js"]
+
     config.active_record.primary_key = :uuid
     config.generators do |g|
       g.test_framework :rspec
+    end
+
+    def self.mounted_path
+      route = Rails.application.routes.routes.detect do |current_route|
+        current_route.app == self
+      end
+      route && route.path
     end
   end
 end

@@ -15,5 +15,9 @@ module Cas
       end
       model_relation
     end
+
+    def load_categories
+      @categories ||= @section.categories
+    end
   end
 end
