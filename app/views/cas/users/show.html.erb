@@ -1,0 +1,7 @@
+Nome: <%= @user.name %></p>
+Email: <%= @user.email %></p>
+Cargo: <%= @user.roles.join %></p>
+<% if current_user == @user || current_user.admin? %>
+  <%= link_to "Editar", edit_user_path %><br />
+<% end %>
+<%= link_to "Voltar", users_path %>

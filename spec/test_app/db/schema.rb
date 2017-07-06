@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20170625192124) do
     t.string   "slug"
     t.uuid     "category_id"
     t.index ["author_id"], name: "index_cas_contents_on_author_id", using: :btree
+    t.index ["category_id"], name: "index_cas_contents_on_category_id", using: :btree
     t.index ["published"], name: "index_cas_contents_on_published", using: :btree
     t.index ["section_id"], name: "index_cas_contents_on_section_id", using: :btree
     t.index ["slug"], name: "index_cas_contents_on_slug", using: :btree

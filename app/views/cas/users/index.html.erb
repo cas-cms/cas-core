@@ -1,0 +1,9 @@
+<% provide(:title, 'Pessoas') %>
+<p><h1>Lista Usuários</h1>
+  <%= link_to "Novo Usuário", new_user_path if current_user.admin? %>
+</p>
+
+
+<% @users.each do |user| %>
+  <%= link_to user.name, edit_user_path(user), id: "edit-user-#{user.id}"  %><p>
+<% end %>
