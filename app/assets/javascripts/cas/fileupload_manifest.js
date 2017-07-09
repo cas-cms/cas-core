@@ -3,6 +3,7 @@
 //= require cas/vendor/file_upload/jquery.ui.widget
 //= require cas/vendor/file_upload/jquery.iframe-transport
 //= require cas/vendor/file_upload/jquery.fileupload
+//= require cas/plugins/cas_image_gallery
 //= require_self
 
 $(function() {
@@ -72,4 +73,15 @@ $(function() {
       });
     }
   });
+
+  var gallery = new CasImageGallery({
+    element: $(".cas-image-gallery"),
+    selectionEnabled: true,
+    onDelete: function(ids) {
+      console.log("onDelete", ids);
+    }
+  });
+  gallery.init();
+  $(".image-container:nth(2)").click();
+  $(".image-container:nth(3)").click();
 });

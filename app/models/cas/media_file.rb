@@ -3,6 +3,7 @@ module Cas
     include FileUploader::Attachment.new(:file)
 
     class UnknownPath < StandardError; end
+    class UnknownFileService < StandardError; end
 
     belongs_to :attachable, polymorphic: true
     belongs_to :author, class_name: "Cas::User"
@@ -14,8 +15,25 @@ module Cas
 
     def url(use_cdn: true)
       cdn = ENV.fetch("CDN_HOST", nil) if use_cdn
+
+      # When `path` is present, it means no gem was used for uploads, therefore
+      # the image has to be treat as raw URL.
       if path.present?
-        [cdn, path].join("/").gsub(/([^:])\/\//, '\1/')
+        if service.downcase == "s3"
+          bucket = ENV.fetch('S3_BUCKET')
+          region = ENV.fetch('S3_REGION', "s3")
+          if cdn
+            host = cdn
+          else
+            host = "https://s3-#{region}.amazonaws.com/#{bucket}"
+          end
+
+          [host, path].join("/").gsub(/([^:])\/\//, '\1/')
+        else
+          raise UnknownFileService
+        end
+
+      # Shrine gem uses `file_data`
       elsif JSON.parse(file_data).present?
         if cdn.present?
           file_url(host: cdn)

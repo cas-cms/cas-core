@@ -1,23 +1,63 @@
 <% content_for(:upload, true) %>
 
-<%= f.input :file,
-  as: :file,
-  type: :string,
-  label: "Imagens",
-  input_html: {
-    accept: "image/png, image/jpg",
-    multiple: "multiple",
-    images: "#js-item-images"
-  } %>
+<div class="cas-image-gallery">
+  <div class="container">
+    <div class="upload-input">
+      <%= f.input :file,
+        as: :file,
+        type: :string,
+        label: "Imagens",
+        input_html: {
+          accept: "image/png, image/jpg",
+          multiple: "multiple",
+          images: "#js-item-images"
+        } %>
+    </div>
 
-<div class="images" id="js-item-images">
-  <% if @content.images.present? %>
-    <% @content.images.each do |file| %>
-      <div class="image js-image" data-id="<%= file.id %>" style="background-image: url('<%= file.url(use_cdn: false) %>')">
-<div class="options"><a href="javascript: void(0)" class="js-delete-image">Excluir</a></div>
+    <% if @content.images.present? %>
+      <div class="edit-buttons">
+        <div class="when-selection-disabled">
+          <a href="javascript: void(0);" class="js-toggle-selection btn">Selecionar</a>
+        </div>
+
+        <div class="when-selection-enabled">
+          Selecionados:
+          <a href="javascript: void(0);" class="js-delete-image btn">Excluir</a>
+          <a href="javascript: void(0);" class="js-toggle-selection btn">Cancelar</a>
+        </div>
       </div>
     <% end %>
-  <% end %>
+
+    <div class="images">
+      <% if @content.images.present? %>
+        <% @content.images.each do |file| %>
+          <div class="image-container" data-id="<%= file.id %>">
+            <div class="image-margin">
+              <div class="unselected-but-selectable">
+                <div class="check"></div>
+              </div>
+              <div class="selection">
+                <div class="overlay"></div>
+                <div class="check"></div>
+              </div>
+              <div class="image js-image"
+                style="background-image: url('<%= file.url(use_cdn: false) %>')">
+
+                <div class="image-options">
+                  <div class="overlay"></div>
+                  <div class="buttons">
+                    <a href="javascript: void(0)" class="js-mark-as-cover btn">Definir capa</a>
+                    <a href="javascript: void(0)" class="js-delete-image btn">Excluir</a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
 </div>
 
 <% if Rails.env.test? %>

@@ -13,8 +13,33 @@ module Cas
     end
 
     describe '#url' do
+      before do
+        allow(ENV).to receive(:fetch).with("CDN_HOST", nil) { "http://cdn/" }
+      end
+
       context 'when S3' do
         subject { build(:file) }
+
+        before do
+          allow(ENV).to receive(:fetch).with("S3_BUCKET") { "com.bucket" }
+          allow(ENV).to receive(:fetch).with("S3_REGION", "s3") { "us-east-1" }
+        end
+
+        context 'when no CDN should be used' do
+          context 'when path is present' do
+            subject { build(:file, :with_path) }
+
+            it 'returns full URL' do
+              expect(subject.url(use_cdn: false)).to match "https://s3-us-east-1.amazonaws.com/com.bucket/fc8ff0798fee2a486cf335de777f3a0d.jpg"
+            end
+          end
+
+          context 'when no path is present' do
+            it 'returns full URL' do
+              expect(subject.url(use_cdn: false)).to match "https://s3.amazonaws.com/com.bucket/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
+            end
+          end
+        end
 
         context 'when no CDN exists' do
           before do

@@ -1,0 +1,87 @@
+.cas-image-gallery
+  display: table
+  background: #efefef
+  border-radius: 3px
+  width: 100%
+  & > .container
+    margin: 15px
+
+  .upload-input
+    padding: 10px 0
+  .edit-buttons
+    padding-bottom: 10px
+
+  .images
+    width: 100%
+    display: table
+
+  .image-container
+    position: relative
+    display: table
+    float: left
+    width: 33.3%
+    & > .image-margin
+      margin: 2px 1px
+    .unselected-but-selectable
+      .check
+        background-color: rgba(255, 255, 255, 0.05)
+        border: 1px solid rgba(255, 255, 255, 0.3)
+    .selection
+      display: none
+      width: 100%
+      height: 100%
+      position: absolute
+      top: 0
+      bottom: 0
+      .check
+        background-image: asset-url("cas/check.svg")
+        background-color: #11ce70
+    .overlay
+      width: 100%
+      height: 100%
+      background-color: rgba(255, 255, 255, 0.5)
+      position: absolute
+      z-index: 9
+    .check
+      width: 20px
+      height: 20px
+      position: absolute
+      bottom: 15px
+      right: 15px
+      background-repeat: no-repeat
+      background-position: center
+      background-size: 20px
+      border-radius: 50px
+      border: 1px solid white
+      z-index: 10
+  .image
+    position: relative
+    width: 100%
+    padding-bottom: 75%
+    display: table
+    float: left
+    margin: 0px
+    background-size: cover
+    background-position: center
+
+    .image-options
+      width: 100%
+      height: 100%
+
+      .buttons
+        z-index: 10
+        display: table
+        position: absolute
+        bottom: 0px
+        margin-left: 50%
+        width: 140px
+        left: -70px
+        .btn
+          text-align: center
+          width: 140px
+          display: table
+          padding: 6px 0px
+          border-radius: 3px
+          background: rgba(255, 255, 255, 0.8)
+          margin-bottom: 10px
+
