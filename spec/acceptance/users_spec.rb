@@ -61,5 +61,9 @@ RSpec.feature 'User' do
       expect(writer.email).to eq "asd2345@asd.com"
       expect(writer.password).to eq "123456"
     end
+
+    scenario 'I cannot see other people list' do
+      expect(page).to_not have_selector "#list-people"
+    end
   end
 end
