@@ -13,11 +13,11 @@ module Cas
     def create
       @user = Cas::User.new(user_params)
       @user.roles = [user_params[:roles]]
-        if @user.save
-          redirect_to users_path
-        else
-          render :new
-        end
+      if @user.save
+        redirect_to users_path
+      else
+        render :new
+      end
     end
 
     def edit
@@ -26,11 +26,11 @@ module Cas
 
     def update
       @user = Cas::User.find(params[:id])
-        if @user.update_attributes(user_params)
-          redirect_to users_path
-        else
-          render 'edit'
-        end
+      if @user.update_attributes(user_params)
+        redirect_to users_path
+      else
+        render 'edit'
+      end
     end
 
     private

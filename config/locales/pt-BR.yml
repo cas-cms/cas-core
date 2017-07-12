@@ -1,5 +1,11 @@
 ---
 pt-BR:
+  simple_form:
+    labels:
+      user:
+        name: 'Nome'
+        password: 'Senha'
+        password_confirmation: 'Confirmação de Password'
   views:
     pagination:
       first: "&laquo; Primeira"
