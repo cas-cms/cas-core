@@ -5,6 +5,8 @@ Cas::Engine.routes.draw do
     controllers: { sessions: "cas/devise/sessions" },
     skip: :registrations
 
+  resources :users, controller: 'users'
+
   resources :sections, only: [:index] do
     resources :contents, controller: 'sections/contents'
     resources :categories, controller: 'sections/categories'

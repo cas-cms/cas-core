@@ -1,5 +1,17 @@
 ---
 pt-BR:
+  activerecord:
+    attributes:
+      cas/user:
+        name: 'Nome'
+        password: 'Senha'
+        password_confirmation: 'Confirmação de Senha'
+    errors:
+      messages:
+        record_invalid: 'A validação falhou: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Não é possível excluir o registro pois existe um %{record} dependente
+          has_many: Não é possível excluir o registro pois existem %{record} dependentes
   views:
     pagination:
       first: "&laquo; Primeira"
@@ -16,13 +28,6 @@ pt-BR:
           other: "Displaying <b>all %{count}</b> %{entry_name}"
       more_pages:
         display_entries: "Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total"
-  activerecord:
-    errors:
-      messages:
-        record_invalid: 'A validação falhou: %{errors}'
-        restrict_dependent_destroy:
-          has_one: Não é possível excluir o registro pois existe um %{record} dependente
-          has_many: Não é possível excluir o registro pois existem %{record} dependentes
   date:
     abbr_day_names:
     - Dom

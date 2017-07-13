@@ -16,18 +16,27 @@
         </h1>
       </div>
       <div class="col-1-2 secondary">
-        <%= link_to "Sair", cas.destroy_user_session_path, method: :delete %>
+        <% if user_signed_in? %>
+          <span class="profile">
+            <%= link_to current_user.name, cas.edit_user_path(current_user), id: "edit-profile"%>
+          </span>
+          <span class="sign-out"%>
+            <%= link_to "Sair", cas.destroy_user_session_path, method: :delete %>
+          </span>
+        <% end %>
       </div>
     </div>
 
     <nav class="grid">
       <ul>
-        <li>
-          <%= link_to "Conteúdo", cas.root_path %>
-        </li>
-        <li class="secondary">
-          <%= link_to "Pessoas", cas.root_path %>
-        </li>
+          <% if user_signed_in? %>
+            <li><%= link_to "Conteúdo", cas.root_path %></li>
+          <% else %>
+          <% end %>
+          <% if user_signed_in? && current_user.admin? %>
+            <li><%= link_to "Pessoas", cas.users_path, id: "list-people" %></li>
+          <% end %>
+        </ul>
       </ul>
     </nav>
   </header>

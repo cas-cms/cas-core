@@ -1,0 +1,11 @@
+<%= simple_form_for(@user) do |f| %>
+  <%= f.input :name %><br />
+  <%= f.input :email %><br />
+  <% if current_user.admin? %>
+    <%= f.collection_select :roles, Cas::User::ROLES, :to_s, :humanize %></p>
+  <% end %>
+  <%= f.input :password %><br />
+  <%= f.input :password_confirmation %><br />
+
+  <%= f.button :submit, id: "save-form" %><br />
+<% end %>
