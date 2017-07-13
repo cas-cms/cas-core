@@ -1,15 +1,51 @@
 // jquery already loaded
+//= require jquery-ui/widgets/sortable
+//= require cas/vendor/jquery.ui.touch-punch.min.js
 //
-//= require cas/vendor/file_upload/jquery.ui.widget
+// widget needs only when jquery ui is not included
+// require cas/vendor/file_upload/jquery.ui.widget
+//= require cas/vendor/file_upload/load-image.all.min
+//= require cas/vendor/file_upload/canvas-to-blob.min
 //= require cas/vendor/file_upload/jquery.iframe-transport
 //= require cas/vendor/file_upload/jquery.fileupload
+//= require cas/vendor/file_upload/jquery.fileupload-process
+//= require cas/vendor/file_upload/jquery.fileupload-image
 //= require cas/plugins/cas_image_gallery
 //= require_self
 
 $(function() {
+  var gallery = new CasImageGallery({
+    element: $(".cas-image-gallery"),
+    selectionEnabled: false,
+    preloadedImagesElements: $(".cas-image-gallery .cas-gallery-preloaded"),
+    onDelete: function(ids) {
+      if (confirm("Tem certeza disso?")) {
+        return $.ajax("" + paths.deleteImages.path + "/" + ids.join(), {
+          method: paths.deleteImages.method
+        });
+      } else {
+        return false;
+      }
+    }
+  });
+  gallery.init();
+
+  $(".cas-image-gallery .images").sortable({
+    stop: function() {
+      gallery.resetImagesOrder();
+    }
+  });
+
   $('[type=file]').fileupload({
     maxChunkSize: 10000000, // 10000000 = 10mb
+    dropZone: $('.dropzone'),
+    dataType: 'json',
+    disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
+    imageMaxWidth:  1920,
+    imageMaxHeight: 1920,
     add: function(e, data) {
+      $.blueimp.fileupload.prototype.options.add.call(this, e, data);
+
       data.progressBar = $('<div class="progress-status"><span class="name">&nbsp;</span><div class="progress-bar"></div></div>');
       $(this).after(data.progressBar);
 
@@ -33,7 +69,8 @@ $(function() {
     fail: function(e, data) {
       console.log("error", e);
       console.log("data", data);
-      alert('Falha ao enviar arquivo.');
+      data.progressBar.remove();
+      alert('Falha ao enviar arquivo: '+data.files[0].name);
     },
     done: function(e, data) {
       data.progressBar.remove();
@@ -58,30 +95,20 @@ $(function() {
           data: {
             attributes: {
               metadata: file
+            },
+            relationships: {
+              data: {
+                type: gallery.attachable().type,
+                id:   gallery.attachable().id
+              }
             }
           }
         }
       }).done(function(response) {
         var id = response.data.id;
-        var imageUrl = response.data.attributes.url;
-        console.log("response", response);
-        fileInput.after("<input type='hidden' name='files[][id]' value='"+id+"' />");
-
-        var image = $('<div class="image js-image" data-id="'+id+'" style="background-image: url(\''+imageUrl+'\');"></div>');
-        $(".images").append(image);
-        console.log("upload done");
+        var url = response.data.attributes.url;
+        gallery.addImage(url, id);
       });
     }
   });
-
-  var gallery = new CasImageGallery({
-    element: $(".cas-image-gallery"),
-    selectionEnabled: true,
-    onDelete: function(ids) {
-      console.log("onDelete", ids);
-    }
-  });
-  gallery.init();
-  $(".image-container:nth(2)").click();
-  $(".image-container:nth(3)").click();
 });

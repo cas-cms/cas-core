@@ -85,16 +85,22 @@ module Cas
     end
 
     def associate_images(item)
-      Array.wrap(params[:files]).each do |file|
-        next if file[:id].blank?
-        begin
-          image = ::Cas::MediaFile.find(file[:id])
-          if image.attachable.blank?
-            image.update!(attachable: item)
-          elsif image.attachable != item
-            raise ImageBelongsToAnotherAttachable, "Image already belongs to #{item.attachable.id}"
+      ActiveRecord::Base.transaction do
+        params[:images][:files].to_unsafe_h.each do |key, value|
+          next if value["id"].blank?
+          begin
+            new_order = key.to_i + 1
+            is_cover = params[:images][:cover_id] == value["id"]
+            image = ::Cas::MediaFile.find(value["id"])
+            if image.attachable.blank?
+              image.update!(cover: is_cover, order: new_order, attachable: item)
+            elsif image.order.to_i != new_order || image.cover != is_cover
+              image.update!(cover: is_cover, order: new_order)
+            elsif image.attachable != item
+              raise ImageBelongsToAnotherAttachable, "Image already belongs to #{item.attachable.id}"
+            end
+          rescue ActiveRecord::RecordNotFound
           end
-        rescue ActiveRecord::RecordNotFound
         end
       end
     end

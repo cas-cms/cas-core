@@ -1,10 +1,43 @@
+.cas-gallery-preloaded
+  display: none
 .cas-image-gallery
   display: table
-  background: #efefef
+  +screen(not-mobile)
+    background: #efefef
   border-radius: 3px
   width: 100%
   & > .container
-    margin: 15px
+    +screen(not-mobile)
+      margin: 15px
+  &.dropzone.in
+    min-height: 250px
+    background-color: #c7ecff
+    position: relative
+    .dropzone-description
+      display: block
+      color: white
+      border-radius: 3px
+      position: absolute
+      z-index: 500
+      width: 100%
+      height: 100%
+      background-color: black
+      & *
+        pointer-events: none
+      & > .container
+        text-align: center
+        margin: 40px
+        display: block
+        min-height: 100px
+        padding-top: 90px
+        background-color: black
+        background-image: asset-url("cas/dropzone-in.svg")
+        background-repeat: no-repeat
+        background-position: center 0
+        background-size: 60px
+
+  .dropzone-description
+    display: none
 
   .upload-input
     padding: 10px 0
@@ -19,7 +52,18 @@
     position: relative
     display: table
     float: left
-    width: 33.3%
+    +screen(mobile)
+      width: 50% !important
+    +screen(not-mobile)
+      width: 33.3%
+    +screen(desktop)
+      width: 25%
+    +screen(desktop-hd)
+      width: 20%
+    background-image: asset-url("cas/loading.gif")
+    background-repeat: no-repeat
+    background-position: center
+    background-size: 20px
     & > .image-margin
       margin: 2px 1px
     .unselected-but-selectable
@@ -36,6 +80,32 @@
       .check
         background-image: asset-url("cas/check.svg")
         background-color: #11ce70
+    &[data-is-cover=true]
+      .cover-indication
+        display: block
+    .cover-indication
+      display: none
+    .cover-indication
+      display: none
+      width: 100%
+      height: 100%
+      position: absolute
+      top: 0
+      bottom: 0
+      .cover-symbol
+        background-image: asset-url("cas/white-star.svg")
+        background-color: #1da7ee
+        width: 20px
+        height: 20px
+        position: absolute
+        bottom: 15px
+        left: 15px
+        background-repeat: no-repeat
+        background-position: center
+        background-size: 24px
+        border-radius: 50px
+        border: 1px solid white
+        z-index: 10
     .overlay
       width: 100%
       height: 100%
@@ -67,6 +137,7 @@
     .image-options
       width: 100%
       height: 100%
+      display: none
 
       .buttons
         z-index: 10
@@ -84,4 +155,3 @@
           border-radius: 3px
           background: rgba(255, 255, 255, 0.8)
           margin-bottom: 10px
-

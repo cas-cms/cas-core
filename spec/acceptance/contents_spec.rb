@@ -65,6 +65,41 @@ RSpec.feature 'Contents' do
       expect(content.tag_list).to match_array ['edited-tag1', 'tag2']
     end
 
+    scenario "I edit the order of the images" do
+      file1 = create(:file, order: 1, attachable: content, cover: true)
+      file2 = create(:file, order: 2, attachable: content, cover: false)
+      file3 = create(:file, order: 3, attachable: nil)
+
+      click_link "manage-section-#{section.id}"
+      click_link "edit-content-#{content.id}"
+
+      find("#test_file_1", visible: false).set(file2.id)
+      find("#test_file_2", visible: false).set(file3.id)
+      find("#test_file_3", visible: false).set(file1.id)
+      find("#test_file_cover_id", visible: false).set(file2.id)
+
+      expect(file1).to be_cover
+      expect(file2).to_not be_cover
+      click_on 'submit'
+
+      expect(file1.reload.order).to eq 3
+      expect(file2.reload.order).to eq 1
+      expect(file3.reload.order).to eq 2
+      expect(file3.attachable).to eq content
+      expect(file2).to be_cover
+      expect(file1).to_not be_cover
+
+      click_link "edit-content-#{content.id}"
+      find("#test_file_1", visible: false).set(file2.id)
+      find("#test_file_2", visible: false).set(file3.id)
+      find("#test_file_3", visible: false).set(file1.id)
+      # new file as cover
+      find("#test_file_cover_id", visible: false).set(file1.id)
+      click_on 'submit'
+      expect(file1.reload).to be_cover
+      expect(file2.reload).to_not be_cover
+    end
+
     context 'invalid data' do
       scenario "I see errors on the screen" do
         visit sections_path

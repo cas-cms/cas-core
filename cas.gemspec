@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "devise"
   s.add_dependency "sass-rails"
   s.add_dependency "jquery-rails"
+  s.add_dependency 'jquery-ui-rails'
   s.add_dependency "simple_form"
   s.add_dependency "kaminari", '~> 0.17.0'
   s.add_dependency "friendly_id"

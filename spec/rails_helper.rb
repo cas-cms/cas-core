@@ -33,4 +33,9 @@ RSpec.configure do |config|
   config.include Cas::Engine.routes.url_helpers
   config.include AcceptanceOperations
   config.include FactoryGirl::Syntax::Methods
+  config.include DeviseSupport, type: :request
+end
+
+def json(r = response)
+  ActiveSupport::JSON.decode(r.body)
 end

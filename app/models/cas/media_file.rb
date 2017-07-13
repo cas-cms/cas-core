@@ -9,6 +9,7 @@ module Cas
     belongs_to :author, class_name: "Cas::User"
 
     before_validation :set_media_type
+    before_save :set_image_as_unique_cover
 
     scope :cover, ->{ where(cover: true) }
     scope :non_cover, ->{ where(cover: false) }
@@ -38,7 +39,7 @@ module Cas
         if cdn.present?
           file_url(host: cdn)
         else
-          file_url
+          file_url.gsub(/\?.*/, "")
         end
       else
         raise UnknownPath
@@ -49,6 +50,18 @@ module Cas
 
     def set_media_type
       self.media_type = mime_type.scan(/([a-z]*)\/.*/)[0][0]
+    end
+
+    def set_image_as_unique_cover
+      cover_file = MediaFile
+        .where(attachable: self.attachable, cover: true)
+        .where.not(id: id)
+
+      if cover?
+        cover_file.update_all(cover: false)
+      elsif cover_file.blank?
+        self.cover = true
+      end
     end
   end
 end

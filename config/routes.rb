@@ -1,5 +1,12 @@
+require 'sidekiq/web'
+Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
+
 Cas::Engine.routes.draw do
   mount ::FileUploader::UploadEndpoint => "/files"
+
+  authenticate :user, ->(u){ u.roles.include?('admin') } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   devise_for :users,
     class_name: "Cas::User",
