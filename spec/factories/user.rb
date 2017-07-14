@@ -10,6 +10,10 @@ FactoryGirl.define do
       roles ['admin']
     end
 
+    trait :editor do
+      roles ['editor']
+    end
+
     trait :writer do
       roles ['writer']
     end

@@ -21,7 +21,7 @@ RSpec.feature 'User' do
       expect do
         click_on 'save-form'
       end.to change(::Cas::User, :count).by(1)
-      expect(admin.roles).to eq "admin"
+      expect(admin.roles).to eq ["admin"]
     end
 
     scenario 'I edit an user' do
@@ -38,7 +38,7 @@ RSpec.feature 'User' do
       writer.reload
       expect(writer.name).to eq "asd2345"
       expect(writer.email).to eq "asd2345@asd.com"
-      expect(writer.roles).to eq "admin"
+      expect(writer.roles).to eq ["admin"]
       expect(writer.password).to eq "123456"
     end
   end
