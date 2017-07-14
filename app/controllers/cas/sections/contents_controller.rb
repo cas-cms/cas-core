@@ -3,10 +3,7 @@ require_dependency "cas/application_controller"
 module Cas
   class Sections::ContentsController < Sections::ApplicationController
     def index
-      @contents = @section.contents
-      if !current_user.admin? && !current_user.editor?
-        @contents = @contents.where(author_id: current_user.id)
-      end
+      @contents = scope_content_by_role(@section.contents)
       @contents = @contents.order('created_at desc').page(params[:page]).per(25)
     end
 
@@ -29,12 +26,12 @@ module Cas
     end
 
     def edit
-      @content = ::Cas::Content.friendly.find(params[:id])
+      @content = scope_content_by_role.friendly.find(params[:id])
       @categories = @section.categories
     end
 
     def update
-      @content = ::Cas::Content.friendly.find(params[:id])
+      @content = scope_content_by_role.friendly.find(params[:id])
 
       if @content.update(content_params)
         redirect_to section_contents_path
@@ -44,7 +41,7 @@ module Cas
     end
 
     def destroy
-      @content = ::Cas::Content.friendly.find(params[:id])
+      @content = scope_content_by_role.friendly.find(params[:id])
       @content.destroy
 
       redirect_to section_contents_path

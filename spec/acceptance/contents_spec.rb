@@ -85,6 +85,11 @@ RSpec.feature 'Contents' do
       expect(page).to have_content content.title
       expect(page).to have_content someone_else_content.title
     end
+
+    scenario "I am able to go to edit someone else's content by id" do
+      visit edit_section_content_path(someone_else_content.section, someone_else_content)
+
+    end
   end
 
   context 'As writer' do
@@ -95,6 +100,13 @@ RSpec.feature 'Contents' do
       click_link "manage-section-#{section.id}"
       expect(page).to have_content content.title
       expect(page).to_not have_content someone_else_content.title
+    end
+
+    scenario "I am not able to go to edit someone else's content by id" do
+      expect do
+        visit edit_section_content_path(someone_else_content.section, someone_else_content)
+      end.to raise_error ActiveRecord::RecordNotFound
+
     end
   end
 end
