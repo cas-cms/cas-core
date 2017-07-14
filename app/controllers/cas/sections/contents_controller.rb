@@ -80,6 +80,7 @@ module Cas
         :title,
         :summary,
         :text,
+        :url,
         :tag_list,
       )
     end
