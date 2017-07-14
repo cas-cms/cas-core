@@ -21,6 +21,7 @@ RSpec.feature 'User' do
       expect do
         click_on 'save-form'
       end.to change(::Cas::User, :count).by(1)
+      expect(admin.roles).to eq ["admin"]
     end
 
     scenario 'I edit an user' do

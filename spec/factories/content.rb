@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :content, class: Cas::Content do
     association :author, factory: :user
     association :section
-    title 'new content'
+    sequence(:title) { |n| "Content #{n}" }
     summary 'summary content'
     text 'new text'
   end
