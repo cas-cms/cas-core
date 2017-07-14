@@ -13,6 +13,7 @@ module Cas
 
     scope :cover, ->{ where(cover: true) }
     scope :non_cover, ->{ where(cover: false) }
+    scope :usable, -> { where.not(attachable_id: nil) }
 
     def url(use_cdn: true)
       cdn = ENV.fetch("CDN_HOST", nil) if use_cdn

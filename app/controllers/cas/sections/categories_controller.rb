@@ -9,14 +9,14 @@ module Cas
     end
 
     def new
-      @category = Cas::Category.new
+      @category = ::Cas::Category.new
     end
 
     def edit
     end
 
     def create
-      @category = Cas::Category.new(category_params)
+      @category = ::Cas::Category.new(category_params)
       @category.section = @section
 
       if @category.save
@@ -37,7 +37,7 @@ module Cas
     private
 
     def set_category
-      @category = Cas::Category.find(params[:id])
+      @category = ::Cas::Category.find(params[:id])
     end
 
     def category_params
