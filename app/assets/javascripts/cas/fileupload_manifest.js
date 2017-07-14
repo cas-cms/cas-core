@@ -73,6 +73,7 @@ $(function() {
       alert('Falha ao enviar arquivo: '+data.files[0].name);
     },
     done: function(e, data) {
+      console.log("done! posting to /admin/api/files");
       data.progressBar.remove();
 
       var file = {
@@ -89,6 +90,7 @@ $(function() {
       var fileInputName = $(this).attr("name");
       var fileImagesGallery = $(fileInput.data("images"));
 
+      console.log("posting to /admin/api/files");
       $.ajax("/admin/api/files", {
         method: 'POST',
         data: {
