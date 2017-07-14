@@ -164,5 +164,29 @@ RSpec.feature 'Contents' do
         visit edit_section_content_path(someone_else_content.section, someone_else_content)
       end.to raise_error ActiveRecord::RecordNotFound
     end
+
+    let!(:section) { create(:section, name: 'agenda') }
+    let!(:content) { create(:content, local: 'new local', section: section, author: user, category: category) }
+
+    scenario 'I create a content in a section agenda' do
+
+      visit sections_path
+      click_link 'new-content'
+      fill_in 'content_title', with: content.title
+      fill_in 'content_local', with: content.local
+      select '13',  from: 'content[date(3i)]'
+      select 'Julho', from: 'content[date(2i)]'
+      select '2017', from: 'content[date(1i)]'
+      fill_in 'content_text', with: content.text
+
+      expect do
+        click_on 'submit'
+      end.to change(::Cas::Content, :count).by(1)
+
+      last_content = Cas::Content.last
+      expect(last_content.title).to eq content.title
+      expect(last_content.local).to eq content.local
+      expect(last_content.text).to eq content.text
+    end
   end
 end

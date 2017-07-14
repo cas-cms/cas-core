@@ -10,13 +10,27 @@
 
   <% if Cas::SectionConfig.new(@section).form_has_field?(:title) %>
     <p>
-      <%= f.input :title, label: 'Título:' %>
+      <%= f.input :title, as: :string, label: 'Título:' %>
     </p>
   <% end %>
 
   <% if Cas::SectionConfig.new(@section).form_has_field?(:summary) %>
     <p>
       <%= f.input :summary, as: :text, label: 'Resumo' %>
+    </p>
+  <% end %>
+
+  <% if Cas::SectionConfig.new(@section).form_has_field?(:local) %>
+    <p>
+      <%= f.input :local, as: :string, label: 'Local:' %>
+    </p>
+  <% end %>
+
+  <% if Cas::SectionConfig.new(@section).form_has_field?(:date) %>
+    <p>
+      <%= f.input :date, as: :datetime, label: 'Data:',
+        start_year: Date.today.year,
+        order: [:day, :month, :year] %>
     </p>
   <% end %>
 

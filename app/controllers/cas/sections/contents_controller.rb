@@ -78,7 +78,9 @@ module Cas
       params.require(:content).permit(
         :category_id,
         :title,
+        :local,
         :summary,
+        :date,
         :text,
         :url,
         :embedded,

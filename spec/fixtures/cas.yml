@@ -27,3 +27,14 @@ sites:
           - title
           - text
           - image
+      agenda:
+        name: Agenda
+        type: content
+        list_fields:
+         - title
+         - date
+        fields:
+         - title
+         - local
+         - date
+         - text
