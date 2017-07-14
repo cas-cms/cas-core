@@ -1,0 +1,80 @@
+<% content_for(:upload, true) %>
+
+<div class="cas-image-gallery dropzone">
+  <div class="dropzone-description">
+    <div class="container">
+      Solte seus arquivos para fazer upload.
+    </div>
+  </div>
+  <div class="container">
+    <div class="upload-input">
+      <%= f.input :file,
+        as: :file,
+        type: :string,
+        label: "Imagens",
+        input_html: {
+          accept: "image/png, image/jpg",
+          multiple: "multiple",
+          images: "#js-item-images",
+        } %>
+    </div>
+
+    <script id="cas-gallery-image-template" type="text/x-custom-template">
+      <div class="image-container" data-id="" data-is-cover="">
+        <div class="image-margin">
+          <div class="unselected-but-selectable">
+            <div class="check"></div>
+          </div>
+          <div class="selection">
+            <div class="overlay"></div>
+            <div class="check"></div>
+          </div>
+          <div class="cover-indication">
+            <div class="cover-symbol"></div>
+          </div>
+          <div class="image js-image"
+            style="background-image: url('')">
+
+            <div class="image-options">
+              <div class="overlay"></div>
+              <div class="buttons">
+                <a href="javascript: void(0)" class="js-mark-as-cover btn">Definir capa</a>
+                <a href="javascript: void(0)" class="js-delete-image btn">Excluir</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <div class="edit-buttons">
+      <div class="when-selection-disabled">
+        <a href="javascript: void(0);" class="js-toggle-selection btn">Selecionar</a>
+      </div>
+
+      <div class="when-selection-enabled">
+        Selecionados:
+        <a href="javascript: void(0);" class="js-delete-image btn">Excluir</a>
+        <a href="javascript: void(0);" class="js-toggle-selection btn">Cancelar</a>
+      </div>
+    </div>
+
+    <% @content.images.order("cas_media_files.order asc").each do |file| %>
+      <img class="cas-gallery-preloaded"
+      data-src="<%= file.url(use_cdn: false) %>"
+      data-id="<%= file.id %>"
+      data-is-cover="<%= file.cover.to_s %>">
+    <% end %>
+
+    <div class="images">
+    </div>
+  </div>
+</div>
+
+<% if Rails.env.test? %>
+  <%= hidden_field_tag "images[files][0][id]", "", id: "test_file_1" %>
+  <%= hidden_field_tag "images[files][1][id]", "", id: "test_file_2" %>
+  <%= hidden_field_tag "images[files][2][id]", "", id: "test_file_3" %>
+  <%= hidden_field_tag "images[cover_id]", "", id: "test_file_cover_id" %>
+<% end %>

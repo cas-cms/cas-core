@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "devise"
   s.add_dependency "sass-rails"
   s.add_dependency "jquery-rails"
+  s.add_dependency 'jquery-ui-rails'
   s.add_dependency "simple_form"
   s.add_dependency "kaminari", '~> 0.17.0'
   s.add_dependency "friendly_id"
@@ -29,6 +30,12 @@ Gem::Specification.new do |s|
   s.add_dependency "select2-rails"
   s.add_dependency "tinymce-rails"
   s.add_dependency 'tinymce-rails-langs'
+  s.add_dependency 'sidekiq'
+
+  # File uploads
+  s.add_dependency 'shrine' # for uploading files
+  s.add_dependency 'roda' # for shrine
+  s.add_dependency "aws-sdk", "~> 2.1" # for file uploads
 
   s.add_development_dependency "awesome_print"
   s.add_development_dependency "sqlite3"
@@ -39,4 +46,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pry-rails"
   s.add_development_dependency 'factory_girl_rails', '~> 4.0'
   s.add_development_dependency 'launchy'
+  s.add_development_dependency 'dotenv-rails'
 end

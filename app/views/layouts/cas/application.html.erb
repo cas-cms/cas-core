@@ -4,6 +4,22 @@
   <title>Cas</title>
   <%= stylesheet_link_tag    "cas/application", media: "all" %>
   <%= javascript_include_tag "cas/application" %>
+
+  <% if content_for?(:upload) %>
+    <%= javascript_include_tag "cas/fileupload_manifest" %>
+  <% end %>
+
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+
+  <script type="text/javascript">
+    var paths = {
+      deleteFile: {
+        path: "<%= cas.api_files_path %>",
+        method: "delete"
+      }
+    };
+  </script>
+
   <%= csrf_meta_tags %>
 </head>
 <body>

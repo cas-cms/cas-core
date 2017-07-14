@@ -4,6 +4,11 @@ body
   padding: 0
   background: $body-background-color
 
+body > section.grid
+  +screen(mobile)
+    padding-left: 0 !important
+    padding-right: 0 !important
+
 body > header
   background: $general-background-color
   color: white

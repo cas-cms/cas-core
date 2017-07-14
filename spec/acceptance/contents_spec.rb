@@ -9,6 +9,7 @@ RSpec.feature 'Contents' do
   let!(:category) { create(:category, section: section) }
   let!(:content) { create(:content, section: section, author: user, category: category) }
   let!(:someone_else_content) { create(:content, section: section, author: someone_else, category: category) }
+  let!(:file_orphan) { create(:file, attachable: nil) }
 
   background do
     login(user)
@@ -28,6 +29,8 @@ RSpec.feature 'Contents' do
       fill_in 'content_text', with: 'text'
       fill_in 'content_tag_list', with: 'tag1 tag2'
 
+      find("#test_file_1", visible: false).set(file_orphan.id)
+
       expect do
         click_on 'submit'
       end.to change(::Cas::Content, :count).by(1)
@@ -37,6 +40,7 @@ RSpec.feature 'Contents' do
       expect(last_content.summary).to eq 'summary'
       expect(last_content.text).to eq 'text'
       expect(last_content.tag_list).to match_array ['tag1', 'tag2']
+      expect(last_content.images).to match_array [file_orphan]
     end
 
     scenario "I edit a content in a section news" do
@@ -45,6 +49,9 @@ RSpec.feature 'Contents' do
 
       fill_in 'content[title]', with: 'new title 2'
       fill_in 'content_tag_list', with: 'edited-tag1 tag2'
+      find("#test_file_1", visible: false).set(file_orphan.id)
+
+      expect(content.images).to be_blank
 
       expect do
         click_on 'submit'
@@ -53,8 +60,59 @@ RSpec.feature 'Contents' do
       expect(current_path).to eq section_contents_path(section)
       expect(page).to have_content 'new title 2'
 
-      expect(content.reload.title).to eq 'new title 2'
+      expect(content.reload.images).to be_present
+      expect(content.title).to eq 'new title 2'
       expect(content.tag_list).to match_array ['edited-tag1', 'tag2']
+    end
+
+    scenario "I edit the order of the images" do
+      file1 = create(:file, order: 1, attachable: content, cover: true)
+      file2 = create(:file, order: 2, attachable: content, cover: false)
+      file3 = create(:file, order: 3, attachable: nil)
+
+      click_link "manage-section-#{section.id}"
+      click_link "edit-content-#{content.id}"
+
+      find("#test_file_1", visible: false).set(file2.id)
+      find("#test_file_2", visible: false).set(file3.id)
+      find("#test_file_3", visible: false).set(file1.id)
+      find("#test_file_cover_id", visible: false).set(file2.id)
+
+      expect(file1).to be_cover
+      expect(file2).to_not be_cover
+      click_on 'submit'
+
+      expect(file1.reload.order).to eq 3
+      expect(file2.reload.order).to eq 1
+      expect(file3.reload.order).to eq 2
+      expect(file3.attachable).to eq content
+      expect(file2).to be_cover
+      expect(file1).to_not be_cover
+
+      click_link "edit-content-#{content.id}"
+      find("#test_file_1", visible: false).set(file2.id)
+      find("#test_file_2", visible: false).set(file3.id)
+      find("#test_file_3", visible: false).set(file1.id)
+      # new file as cover
+      find("#test_file_cover_id", visible: false).set(file1.id)
+      click_on 'submit'
+      expect(file1.reload).to be_cover
+      expect(file2.reload).to_not be_cover
+    end
+
+    context 'invalid data' do
+      scenario "I see errors on the screen" do
+        visit sections_path
+        click_link 'new-content'
+
+        select('sports', from: 'content_category_id')
+
+        expect do
+          click_on 'submit'
+        end.to change(::Cas::Content, :count).by(0)
+
+        expect(page).to have_content "can't be blank"
+      end
     end
 
     scenario 'I delete a content in a section news' do
@@ -88,7 +146,6 @@ RSpec.feature 'Contents' do
 
     scenario "I am able to go to edit someone else's content by id" do
       visit edit_section_content_path(someone_else_content.section, someone_else_content)
-
     end
   end
 
@@ -106,7 +163,6 @@ RSpec.feature 'Contents' do
       expect do
         visit edit_section_content_path(someone_else_content.section, someone_else_content)
       end.to raise_error ActiveRecord::RecordNotFound
-
     end
   end
 end

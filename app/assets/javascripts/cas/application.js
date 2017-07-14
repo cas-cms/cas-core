@@ -2,7 +2,7 @@
 //= require jquery_ujs
 //= require tinymce-jquery
 //= require cas/vendor/selectize.min
-//= require_tree .
+//= require_self
 
 $(document).ready(function() {
   $(".js-tags").selectize({
