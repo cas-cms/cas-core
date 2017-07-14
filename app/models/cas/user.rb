@@ -26,6 +26,10 @@ module Cas
       roles.include?("admin")
     end
 
+    def editor?
+      roles.include?("editor")
+    end
+
     private
 
     def email_required?

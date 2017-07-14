@@ -3,7 +3,11 @@ require_dependency "cas/application_controller"
 module Cas
   class Sections::ContentsController < Sections::ApplicationController
     def index
-      @contents = @section.contents.order('created_at desc').page(params[:page]).per(25)
+      @contents = @section.contents
+      if !current_user.admin? && !current_user.editor?
+        @contents = @contents.where(author_id: current_user.id)
+      end
+      @contents = @contents.order('created_at desc').page(params[:page]).per(25)
     end
 
     def new

@@ -1,14 +1,15 @@
 require "rails_helper"
 
 RSpec.feature 'Contents' do
-  let(:user) { create(:user) }
+  let(:admin) { create(:admin) }
+  let!(:writer) { create(:writer) }
   let!(:section) { create(:section) }
   let!(:category) { create(:category, section: section) }
   let!(:content) { create(:content, section: section, author: user, category: category) }
 
   context 'As admin' do
     background do
-      login(user)
+      login(admin)
     end
 
     scenario 'I create a content in a section news' do
@@ -61,6 +62,22 @@ RSpec.feature 'Contents' do
 
       expect(::Cas::Content.count).to eq 0
       expect(page).to_not have_content 'new content'
+    end
+
+    scenario 'I am able to see everyones news' do
+      click_link "manage-section-#{section.id}"
+      # teste inacabado
+    end
+  end
+
+  context 'As Writer' do
+    background do
+      login(writer)
+    end
+
+    scenario 'I am able to see only my own news' do
+      click_link "manage-section-#{section.id}"
+      # teste inacabado
     end
   end
 end

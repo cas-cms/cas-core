@@ -12,7 +12,7 @@ module Cas
 
     def create
       @user = Cas::User.new(user_params)
-      @user.roles = [user_params[:roles]]
+      @user.roles = user_params[:roles]
       if @user.save
         redirect_to users_path
       else
