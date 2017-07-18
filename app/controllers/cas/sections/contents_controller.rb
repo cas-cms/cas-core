@@ -86,6 +86,8 @@ module Cas
     end
 
     def associate_images(item)
+      return if params[:images].blank?
+
       ActiveRecord::Base.transaction do
         params[:images][:files].to_unsafe_h.each do |key, value|
           next if value["id"].blank?

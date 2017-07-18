@@ -38,7 +38,7 @@ module Cas
       # Shrine gem uses `file_data`
       elsif JSON.parse(file_data).present?
         if cdn.present?
-          file_url(host: cdn)
+          file_url(host: cdn, public: true)
         else
           file_url.gsub(/\?.*/, "")
         end
