@@ -13,6 +13,10 @@ if Rails.env.test?
     bucket:            'com.bucket'
   }
 else
+  if ENV["S3_ACCESS_KEY_ID"].blank?
+    puts "You need to configure S3 credentials. See the README.md for more details."
+  end
+
   s3_options = {
     access_key_id:     ENV.fetch("S3_ACCESS_KEY_ID"),
     secret_access_key: ENV.fetch("S3_SECRET_ACCESS_KEY"),
@@ -20,10 +24,11 @@ else
     bucket:            ENV.fetch("S3_BUCKET"),
   }
 end
-  Shrine.storages = {
-    cache: Shrine::Storage::S3.new(prefix: "cache", **s3_options),
-    store: Shrine::Storage::S3.new(prefix: "store", **s3_options),
-  }
+
+Shrine.storages = {
+  cache: Shrine::Storage::S3.new(prefix: "cache", **s3_options),
+  store: Shrine::Storage::S3.new(prefix: "store", **s3_options),
+}
 
 Shrine::Attacher.promote do |data|
   Rails.logger.info "Shrine promoting file scheduled"
