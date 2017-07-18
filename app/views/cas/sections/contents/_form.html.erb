@@ -45,6 +45,12 @@
     </p>
   <% end %>
 
+  <% if Cas::SectionConfig.new(@section).form_has_field?(:embedded) %>
+    <p>
+      <%= f.input :embedded, label: 'URL:' %>
+    </p>
+  <% end %>
+
   <% if Cas::SectionConfig.new(@section).form_has_field?(:images) %>
     <%= render 'form_images', f: f %>
   <% end %>
