@@ -81,6 +81,7 @@ module Cas
         :summary,
         :text,
         :url,
+        :embedded,
         :tag_list,
       )
     end
