@@ -33,15 +33,15 @@
     %>
   <% end %>
 
-  <% if Cas::SectionConfig.new(@section).form_has_field?(:text) %>
-    <p>
-      <%= f.input :text, as: :text, label: 'Texto', input_html: { class: 'editor' } %>
-    </p>
-  <% end %>
-
   <% if Cas::SectionConfig.new(@section).form_has_field?(:url) %>
     <p>
       <%= f.input :url, label: 'URL:' %>
+    </p>
+  <% end %>
+
+  <% if Cas::SectionConfig.new(@section).form_has_field?(:text) %>
+    <p>
+      <%= f.input :text, as: :text, label: 'Texto', input_html: { class: 'editor' } %>
     </p>
   <% end %>
 
