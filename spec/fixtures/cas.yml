@@ -31,10 +31,12 @@ sites:
         name: Agenda
         type: content
         list_fields:
-         - title
-         - date
+          - title
+          - date
+        list_order_by:
+          - order_field
         fields:
-         - title
-         - local
-         - date
-         - text
+          - title
+          - local
+          - date
+          - text

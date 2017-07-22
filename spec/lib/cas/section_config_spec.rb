@@ -38,5 +38,14 @@ module Cas
         end
       end
     end
+
+    describe '#list_order_by' do
+      context 'when a section has field date' do
+        it 'return the date in event' do
+          expect(subject.list_order_by).to eq ['15-07-2019']
+        end
+      end
+    end
+
   end
 end

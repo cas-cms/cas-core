@@ -4,6 +4,19 @@ module Cas
       @section = section
     end
 
+    def list_order_by
+      config = YAML.load_file(filename)
+      sites = config["sites"]
+      site = sites[@section.site.slug]
+      section = site["sections"]
+
+      order_field = section.find { |key, value|
+        key == @section.slug
+      }[1]['list_order_by']
+
+      order_field || ['created_at']
+    end
+
     def list_fields
       config = YAML.load_file(filename)
       sites = config["sites"]
