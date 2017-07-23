@@ -15,6 +15,7 @@ class Cas::Api::FilesController < Cas::ApplicationController
       attachable: attachable_record
     )
     file.save
+    Cas::RemoteCallbacks.callbacks[:after_file_upload].call(file)
     render json: {
       data: {
         id: file.id.to_s,
@@ -24,40 +25,6 @@ class Cas::Api::FilesController < Cas::ApplicationController
         }
       }
     }
-  end
-
-  #def update
-  #  file = ::Cas::MediaFile.find(params[:id])
-
-  #  if file.update(resource_params)
-  #    response = {
-  #      data: {
-  #        id: file.id,
-  #        type: "media-files",
-  #        attributes: {
-  #          url: file.url(use_cdn: false).to_s,
-  #          cover: file.cover?
-  #        }
-  #      }
-  #    }
-  #    render json: response
-  #  else
-  #    render json: { errors: file.errors.full_messages.join }, status: 400
-  #  end
-  #end
-
-  def destroy
-    files = ::Cas::MediaFile.where(id: params[:id].split(","))
-    success = nil
-    ActiveRecord::Base.transaction do
-      success = files.each(&:destroy).all?
-    end
-
-    if success
-      render json: {}, status: 204
-    else
-      render json: {}, status: 400
-    end
   end
 
   private
@@ -94,7 +61,7 @@ class Cas::Api::FilesController < Cas::ApplicationController
     rel = resource_params[:relationships]
     if rel.present?
       attachable = resource_params[:relationships][:attachable][:data]
-      if attachable[:type] == 'contents'
+      if attachable[:type] == 'contents' && attachable[:id].present?
         @attachable ||= Cas::Content.find(attachable[:id])
       end
     end

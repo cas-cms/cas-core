@@ -1,7 +1,4 @@
 config:
-  uploads:
-    cache_directory_prefix: 'cache'
-    store_directory_prefix: 'uploads'
 sites:
   mysite:
     sections:

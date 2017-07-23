@@ -4,13 +4,18 @@ Shrine.plugin :activerecord
 Shrine.plugin :direct_upload
 Shrine.plugin :backgrounding
 
-require "shrine/storage/s3"
 if Rails.env.test?
   s3_options = {
     access_key_id:     'access_key_id',
     secret_access_key: 'secret_access_key',
     region:            'us-east-1',
     bucket:            'com.bucket'
+  }
+  require "shrine/storage/file_system"
+
+  Shrine.storages = {
+    cache: Shrine::Storage::FileSystem.new("tmp/uploads", prefix: "cache"),
+    store: Shrine::Storage::FileSystem.new("tmp/uploads", prefix: "store")
   }
 else
   if ENV["S3_ACCESS_KEY_ID"].blank?
@@ -23,12 +28,14 @@ else
     region:            ENV.fetch("S3_REGION"),
     bucket:            ENV.fetch("S3_BUCKET"),
   }
-end
 
-Shrine.storages = {
-  cache: Shrine::Storage::S3.new(prefix: "cache", **s3_options),
-  store: Shrine::Storage::S3.new(prefix: "store", **s3_options),
-}
+  require "shrine/storage/s3"
+  config = Cas::Config.new.uploads
+  Shrine.storages = {
+    cache: Shrine::Storage::S3.new(prefix: config[:cache_directory_prefix], **s3_options),
+    store: Shrine::Storage::S3.new(prefix: config[:store_directory_prefix], **s3_options),
+  }
+end
 
 Shrine::Attacher.promote do |data|
   Rails.logger.info "Shrine promoting file scheduled"

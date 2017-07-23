@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170625192124) do
+ActiveRecord::Schema.define(version: 20170718201535) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,8 @@ ActiveRecord::Schema.define(version: 20170625192124) do
     t.jsonb    "details",     default: "{}"
     t.string   "slug"
     t.uuid     "category_id"
+    t.string   "url"
+    t.string   "embedded"
     t.index ["author_id"], name: "index_cas_contents_on_author_id", using: :btree
     t.index ["category_id"], name: "index_cas_contents_on_category_id", using: :btree
     t.index ["published"], name: "index_cas_contents_on_published", using: :btree

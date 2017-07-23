@@ -1,4 +1,6 @@
 require "cas/engine"
+require "cas/config"
+require "cas/remote_callbacks"
 require "cas/setup"
 require "cas/section_config"
 

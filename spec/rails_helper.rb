@@ -6,11 +6,10 @@ require File.expand_path('../test_app/config/environment', __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'spec_helper'
 require 'rspec/rails'
-require 'pry'
 require 'capybara/rspec'
 require 'capybara/rails'
-require 'awesome_print'
 require 'factory_girl_rails'
+require 'database_cleaner'
 
 Dir[Rails.root.join('../support/**/*.rb')].each   { |f| require f }
 
@@ -34,6 +33,18 @@ RSpec.configure do |config|
   config.include AcceptanceOperations
   config.include FactoryGirl::Syntax::Methods
   config.include DeviseSupport, type: :request
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) do |example|
+    Cas::RemoteCallbacks.reset
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
 end
 
 def json(r = response)

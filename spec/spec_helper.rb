@@ -1,4 +1,6 @@
-require 'database_cleaner'
+ENV['RAILS_ENV'] ||= 'test'
+require 'pry'
+require 'awesome_print'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -10,15 +12,4 @@ RSpec.configure do |config|
   end
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
-
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
 end

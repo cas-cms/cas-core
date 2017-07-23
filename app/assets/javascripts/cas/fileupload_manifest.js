@@ -99,9 +99,11 @@ $(function() {
               metadata: file
             },
             relationships: {
-              data: {
-                type: gallery.attachable().type,
-                id:   gallery.attachable().id
+              attachable: {
+                data: {
+                  type: gallery.attachable().type,
+                  id:   gallery.attachable().id
+                }
               }
             }
           }

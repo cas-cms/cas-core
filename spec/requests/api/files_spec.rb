@@ -35,48 +35,66 @@ RSpec.describe "API /media_files" do
       }
     end
 
-    it 'creates a new file' do
-      expect(Cas::MediaFile.count).to eq 0
-      post "/admin/api/files", params: payload
-      expect(Cas::MediaFile.count).to eq 1
-      expect(Cas::MediaFile.first.service).to eq "s3"
-      expect(Cas::MediaFile.first.size).to eq 1
-      expect(Cas::MediaFile.first.original_name).to eq "file1.jpg"
-      expect(Cas::MediaFile.first.mime_type).to eq "image/jpeg"
-      expect(Cas::MediaFile.first.media_type).to eq "image"
-      expect(Cas::MediaFile.first.attachable).to eq content
-      expect(Cas::MediaFile.first.file_data).to eq({
-        id: "filename1.jpg",
-        storage: "cache",
-        metadata: {
-          size: "1",
-          filename: "file1.jpg",
-          mime_type: "image/jpeg",
-        }
-      }.to_json)
+    context 'when relationship is passed in' do
+      it 'creates a new file' do
+        expect(Cas::MediaFile.count).to eq 0
+        post "/admin/api/files", params: payload
+        expect(Cas::MediaFile.count).to eq 1
 
-      expect(json).to eq({
-        data: {
-          id: Cas::MediaFile.last.id.to_s,
-          type: "media-files",
-          attributes: {
-            url: "https://s3.amazonaws.com/com.bucket/cache/filename1.jpg"
+        new_file = Cas::MediaFile.first
+        expect(new_file.service).to eq "s3"
+        expect(new_file.size).to eq 1
+        expect(new_file.original_name).to eq "file1.jpg"
+        expect(new_file.mime_type).to eq "image/jpeg"
+        expect(new_file.media_type).to eq "image"
+        expect(new_file.attachable).to eq content
+        expect(new_file.file_data).to eq({
+          id: "filename1.jpg",
+          storage: "cache",
+          metadata: {
+            size: "1",
+            filename: "file1.jpg",
+            mime_type: "image/jpeg",
           }
-        }
-      }.deep_stringify_keys)
+        }.to_json)
+
+        expect(json).to eq({
+          data: {
+            id: new_file.id.to_s,
+            type: "media-files",
+            attributes: {
+              url: "/cache/filename1.jpg"
+            }
+          }
+        }.deep_stringify_keys)
+      end
     end
-  end
 
-  describe 'DELETE /api/files/:id' do
-    let!(:file1) { create(:file) }
-    let!(:file2) { create(:file) }
-    let!(:file3) { create(:file) }
+    context 'when no relationship is passed in' do
+      it 'creates the file without attachable' do
+        payload[:data][:relationships][:attachable][:data][:id] = ""
+        payload[:data][:relationships][:attachable][:data][:type] = "contents"
+        expect(Cas::MediaFile.count).to eq 0
+        post "/admin/api/files", params: payload
+        expect(Cas::MediaFile.count).to eq 1
 
-    it 'deletes multiple files' do
-      expect(Cas::MediaFile.count).to eq 3
-      ids = [file1, file2, file3].map(&:id)
-      delete "/admin/api/files/#{ids.join(",")}", params: {}
-      expect(Cas::MediaFile.count).to eq 0
+        new_file = Cas::MediaFile.last
+        expect(new_file.attachable).to eq nil
+      end
+    end
+
+    it "calls remote callbacks" do
+      called_callback = false
+      Cas::RemoteCallbacks.callbacks = {
+        after_file_upload: ->(file) {
+          called_callback = true
+          expect(file.original_name).to eq "file1.jpg"
+        }
+      }
+
+      post "/admin/api/files", params: payload
+
+      expect(called_callback).to eq true
     end
   end
 end
