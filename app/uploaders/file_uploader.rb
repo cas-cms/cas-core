@@ -3,7 +3,9 @@ class ::FileUploader < Shrine
   plugin :processing
 
   process(:store) do |io, context|
-    {original: io}
+    result = Cas::RemoteCallbacks.callbacks[:uploaded_image_versions].call(io, context)
+    result = result.merge(original: io) unless result.keys.include?(:original)
+    result
   end
 
   def generate_location(io, context)
