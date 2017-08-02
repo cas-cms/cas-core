@@ -12,8 +12,18 @@ module Cas
 
     validates :title, presence: true
 
+    before_validation :set_published_at
+
     def date_year
       date.year
+    end
+
+    private
+
+    def set_published_at
+      if published_at.blank? && published
+        self.published_at = Time.now
+      end
     end
   end
 end
