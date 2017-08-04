@@ -62,7 +62,7 @@
 
     <% @content.images.order("cas_media_files.order asc").each do |file| %>
       <img class="cas-gallery-preloaded"
-      data-src="<%= file.url(use_cdn: false) %>"
+      data-src="<%= file.url(version: :original, use_cdn: false) %>"
       data-id="<%= file.id %>"
       data-is-cover="<%= file.cover.to_s %>">
     <% end %>

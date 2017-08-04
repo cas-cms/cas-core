@@ -15,7 +15,7 @@ module Cas
     scope :non_cover, ->{ where(cover: false) }
     scope :usable, -> { where.not(attachable_id: nil) }
 
-    def url(use_cdn: true)
+    def url(version:, use_cdn: true)
       cdn = ENV.fetch("CDN_HOST", nil) if use_cdn
 
       # When `path` is present, it means no gem was used for uploads, therefore
@@ -38,9 +38,9 @@ module Cas
       # Shrine gem uses `file_data`
       elsif JSON.parse(file_data).present?
         if cdn.present?
-          file_url(host: cdn, public: true)
+          file[version].url(host: cdn, public: true)
         else
-          file_url.gsub(/\?.*/, "")
+          file[version].url.gsub(/\?.*/, "")
         end
       else
         raise UnknownPath
