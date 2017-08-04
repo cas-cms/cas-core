@@ -4,7 +4,8 @@ class ::FileUploader < Shrine
 
   process(:store) do |io, context|
     result = Cas::RemoteCallbacks.callbacks[:uploaded_image_versions].call(io, context)
-    result = result.merge(original: io) unless result.keys.include?(:original)
+    original = (io.respond_to?(:[]) && io[:original]) ? io[:original] : io
+    result = result.merge(original: original) unless result.keys.include?(:original)
     result
   end
 
