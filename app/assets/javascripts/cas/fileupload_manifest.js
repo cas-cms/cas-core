@@ -54,6 +54,7 @@ $(function() {
         _: Date.now(),                                       // prevent caching
       }
       $.getJSON('/admin/files/cache/presign', options, function(result) {
+        console.log("presign result", result);
         data.formData = result['fields'];
         data.url = result['url'];
         data.paramName = 'file';
@@ -73,16 +74,18 @@ $(function() {
       alert('Falha ao enviar arquivo: '+data.files[0].name);
     },
     done: function(e, data) {
-      console.log("done! posting to /admin/api/files");
+      console.log("Upload done! Now posting to /admin/api/files");
       data.progressBar.remove();
 
       var file = {
-        id: data.formData.key.match(/cache\/(.+)/)[1], // we have to remove the prefix part
-        storage: 'cache',
-        metadata: {
-          size:      data.files[0].size,
-          filename:  data.files[0].name.match(/[^\/\\]*$/)[0], // IE returns full path
-          mime_type: data.files[0].type
+        original: {
+          id: data.formData.key.match(/cache\/(.+)/)[1], // we have to remove the prefix part
+          storage: 'cache',
+          metadata: {
+            size:      data.files[0].size,
+            filename:  data.files[0].name.match(/[^\/\\]*$/)[0], // IE returns full path
+            mime_type: data.files[0].type
+          }
         }
       }
 

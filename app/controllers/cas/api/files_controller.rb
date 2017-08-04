@@ -8,9 +8,9 @@ class Cas::Api::FilesController < Cas::ApplicationController
     metadata = resource_params[:attributes][:metadata]
     file = ::Cas::MediaFile.new(
       service: service,
-      size: metadata[:metadata][:size].to_i,
-      original_name: metadata[:metadata][:filename],
-      mime_type: metadata[:metadata][:mime_type],
+      size: metadata[:original][:metadata][:size].to_i,
+      original_name: metadata[:original][:metadata][:filename],
+      mime_type: metadata[:original][:metadata][:mime_type],
       file: metadata.to_json,
       attachable: attachable_record
     )
@@ -21,7 +21,7 @@ class Cas::Api::FilesController < Cas::ApplicationController
         id: file.id.to_s,
         type: "media-files",
         attributes: {
-          url: file.url(use_cdn: false).to_s
+          url: file.url(version: :original, use_cdn: false).to_s
         }
       }
     }
@@ -36,9 +36,11 @@ class Cas::Api::FilesController < Cas::ApplicationController
         attributes: [
           :cover,
           metadata: [
-            :id,
-            :storage,
-            metadata: [:size, :filename, :mime_type, 'mime-type']
+            original: [
+              :id,
+              :storage,
+              metadata: [:size, :filename, :mime_type, 'mime-type']
+            ]
           ]
         ],
         relationships: [
@@ -49,10 +51,10 @@ class Cas::Api::FilesController < Cas::ApplicationController
       )
 
     if r[:attributes][:metadata].present?
-      if r[:attributes][:metadata][:metadata][:mime_type].blank?
-        r[:attributes][:metadata][:metadata][:mime_type] = r[:attributes][:metadata][:metadata][:"mime-type"]
+      if r[:attributes][:metadata][:original][:metadata][:mime_type].blank?
+        r[:attributes][:metadata][:original][:metadata][:mime_type] = r[:attributes][:metadata][:original][:metadata][:"mime-type"]
       end
-      r[:attributes][:metadata][:metadata].delete(:"mime-type")
+      r[:attributes][:metadata][:original][:metadata].delete(:"mime-type")
     end
     r
   end
