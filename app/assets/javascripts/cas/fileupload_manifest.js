@@ -20,8 +20,8 @@ $(function() {
     preloadedImagesElements: $(".cas-image-gallery .cas-gallery-preloaded"),
     onDelete: function(ids) {
       if (confirm("Tem certeza disso?")) {
-        return $.ajax("" + paths.deleteImages.path + "/" + ids.join(), {
-          method: paths.deleteImages.method
+        return $.ajax("" + paths.deleteFile.path + "/" + ids.join(), {
+          method: paths.deleteFile.method
         });
       } else {
         return false;
@@ -43,6 +43,7 @@ $(function() {
     disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
     imageMaxWidth:  1920,
     imageMaxHeight: 1920,
+    imageOrientation: true,
     add: function(e, data) {
       $.blueimp.fileupload.prototype.options.add.call(this, e, data);
 
@@ -53,6 +54,7 @@ $(function() {
         extension: data.files[0].name.match(/(\.\w+)?$/)[0], // set extension
         _: Date.now(),                                       // prevent caching
       }
+
       $.getJSON('/admin/files/cache/presign', options, function(result) {
         console.log("presign result", result);
         data.formData = result['fields'];

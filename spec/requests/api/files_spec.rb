@@ -101,5 +101,17 @@ RSpec.describe "API /media_files" do
       expect(called_callback).to eq true
     end
   end
-end
 
+  describe 'DELETE /api/files/:id' do
+    let!(:file1) { create(:file) }
+    let!(:file2) { create(:file) }
+    let!(:file3) { create(:file) }
+
+    it 'deletes multiple files' do
+      expect(Cas::MediaFile.count).to eq 3
+      ids = [file1, file2, file3].map(&:id)
+      delete "/admin/api/files/#{ids.join(",")}", params: {}
+      expect(Cas::MediaFile.count).to eq 0
+    end
+  end
+end

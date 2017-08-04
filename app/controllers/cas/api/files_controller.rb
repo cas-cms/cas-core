@@ -27,6 +27,20 @@ class Cas::Api::FilesController < Cas::ApplicationController
     }
   end
 
+  def destroy
+    files = ::Cas::MediaFile.where(id: params[:id].split(","))
+    success = nil
+    ActiveRecord::Base.transaction do
+      success = files.each(&:destroy).all?
+    end
+
+    if success
+      render json: {}, status: 204
+    else
+      render json: {}, status: 400
+    end
+  end
+
   private
 
   def resource_params
