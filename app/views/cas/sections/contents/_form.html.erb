@@ -32,8 +32,9 @@
       <%= f.input :date,
         as: (field.format.map(&:to_s).include?("hour") ? :datetime : :date),
         label: 'Data:',
-        start_year: Date.today.year,
-        order: field.format %>
+        order: field.format,
+        default: @default_date
+      %>
     </p>
   <% end %>
 

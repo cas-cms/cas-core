@@ -40,6 +40,13 @@ module Cas
 
     def edit
       @content = scope_content_by_role.friendly.find(params[:id])
+
+      if @content.created_at.present? && @content.date.blank?
+        @default_date = @content.created_at
+      else
+        @default_date = @content.date
+      end
+
       load_categories
     end
 
