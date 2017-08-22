@@ -11,8 +11,8 @@ module Cas
       context 'when file has contents' do
         it 'returns what is in the file' do
           expect(subject.uploads).to eq({
-            cache_directory: 'cache',
-            store_directory: 'uploads'
+            cache_directory_prefix: 'cache',
+            store_directory_prefix: 'uploads'
           })
         end
       end

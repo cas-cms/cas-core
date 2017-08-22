@@ -137,30 +137,34 @@ RSpec.feature 'Contents' do
 
     context 'when visit agenda' do
       let!(:section) { create(:section, name: 'agenda', slug: 'agenda') }
-      let!(:content) { create(:content,
-                              local: 'new local',
-                              section: section,
-                              author: user,
-                              category: category) }
+      let!(:content) do
+        create(
+          :content,
+          location: 'old location',
+          section: section,
+          author: user,
+          category: category
+        )
+      end
 
       scenario 'I create a content in a section agenda' do
         visit sections_path
         click_link 'new-content'
-        fill_in 'content_title', with: content.title
-        fill_in 'content_local', with: content.local
+        fill_in 'content_title', with: "new content"
+        fill_in 'content_location', with: "new location"
         select '13',  from: 'content_date_3i'
         select 'July', from: 'content_date_2i'
         select '2017', from: 'content_date_1i'
-        fill_in 'content_text', with: content.text
+        fill_in 'content_text', with: "new content text"
 
         expect do
           click_on 'submit'
         end.to change(::Cas::Content, :count).by(1)
 
-        last_content = Cas::Content.last
-        expect(last_content.title).to eq content.title
-        expect(last_content.local).to eq content.local
-        expect(last_content.text).to eq content.text
+        last_content = Cas::Content.where(title: 'new content').first
+        expect(last_content.title).to eq "new content"
+        expect(last_content.location).to eq "new location"
+        expect(last_content.text).to eq "new content text"
       end
 
       scenario "I edit a content in a section agenda" do
@@ -182,14 +186,15 @@ RSpec.feature 'Contents' do
 
       scenario 'I delete a content in a section agenda' do
         click_link "manage-section-#{section.id}"
+        title = content.title
 
-        expect(::Cas::Content.count).to eq 1
-        expect(page).to have_content 'new content'
+        expect(::Cas::Content.count).to eq 2
+        expect(page).to have_content title
 
         click_link "delete-content-#{content.id}"
 
-        expect(::Cas::Content.count).to eq 0
-        expect(page).to_not have_content 'new content'
+        expect(::Cas::Content.count).to eq 1
+        expect(page).to_not have_content title
       end
     end
   end

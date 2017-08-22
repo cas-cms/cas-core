@@ -20,6 +20,7 @@ sites:
           - images
           - files
           - tags
+          - date
       biography:
         name: Biography
         type: content
@@ -32,11 +33,16 @@ sites:
         type: content
         list_fields:
           - title
-          - date
+          - date_time
         list_order_by:
           - order_field
         fields:
           - title
-          - local
-          - date
+          - location
+          - date:
+              language: pt-br
+              format:
+                - day
+                - month
+                - year
           - text

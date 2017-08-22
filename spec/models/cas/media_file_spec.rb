@@ -42,7 +42,7 @@ module Cas
 
     describe '#url' do
       before do
-        allow(ENV).to receive(:fetch).with("CDN_HOST", nil) { "http://cdn/" }
+        allow(ENV).to receive(:fetch).with("CDN_HOST", nil) { "http://cdn" }
       end
 
       context 'when S3' do
@@ -58,13 +58,15 @@ module Cas
             subject { build(:file, :with_path) }
 
             it 'returns full URL' do
-              expect(subject.url(use_cdn: false)).to match "https://s3-us-east-1.amazonaws.com/com.bucket/fc8ff0798fee2a486cf335de777f3a0d.jpg"
+              expect(subject.url(version: "original", use_cdn: false)).to match "https://s3-us-east-1.amazonaws.com/com.bucket/fc8ff0798fee2a486cf335de777f3a0d.jpg"
             end
           end
 
           context 'when no path is present' do
             it 'returns full URL' do
-              expect(subject.url(use_cdn: false)).to match "https://s3.amazonaws.com/com.bucket/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
+              # In test env, Shrine is not configured with S3 so it's not
+              # returning the host here, but when S3 is configured it is.
+              expect(subject.url(version: "original", use_cdn: false)).to match "/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
             end
           end
         end
@@ -75,18 +77,18 @@ module Cas
           end
 
           it 'returns S3 url' do
-            expect(subject.url).to match "https://s3.amazonaws.com/com.bucket/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
+            expect(subject.url(version: "original")).to match "/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
           end
         end
 
         context 'when CDN exists' do
           before do
-            allow(ENV).to receive(:fetch).with("CDN_HOST", nil) { "http://cdn/" }
+            allow(ENV).to receive(:fetch).with("CDN_HOST", nil) { "http://cdn" }
           end
 
           context 'when uploaded with shrine' do
             it 'returns shrine URL with CDN as host' do
-              expect(subject.url).to match "http://cdn/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
+              expect(subject.url(version: :original)).to match "http://cdn/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
             end
           end
 
@@ -94,7 +96,7 @@ module Cas
             subject { build(:file, file_data: "{}", path: 'custom-path') }
 
             it 'returns CDN host + path' do
-              expect(subject.url).to eq "http://cdn/custom-path"
+              expect(subject.url(version: :original)).to eq "http://cdn/custom-path"
             end
           end
         end

@@ -33,9 +33,17 @@ module Cas
       sites = config["sites"]
       site = sites[@section.site.slug]
       section = site["sections"]
-      section.find { |key, value|
+      section_fields = section.find { |key, value|
         key == @section.slug
-      }[1]["fields"].include?(field.to_s)
+      }[1]["fields"]
+
+      section_fields.any? do |section_field|
+        if section_field.is_a?(Hash)
+          section_field.keys.map(&:to_s).include?(field.to_s)
+        else
+          section_field.to_s == field.to_s
+        end
+      end
     end
 
     private

@@ -1,5 +1,5 @@
 <%= simple_form_for ([@section, @content]) do |f| %>
-  <% if Cas::SectionConfig.new(@section).form_has_field?(:category) %>
+  <% if display_field?(:category) %>
     <p>
       <%= f.input :category_id,
         collection: @categories.map { |c| [c.name, c.id] },
@@ -8,33 +8,36 @@
     </p>
   <% end %>
 
-  <% if Cas::SectionConfig.new(@section).form_has_field?(:title) %>
+  <% if display_field?(:title) %>
     <p>
       <%= f.input :title, as: :string, label: 'Título:' %>
     </p>
   <% end %>
 
-  <% if Cas::SectionConfig.new(@section).form_has_field?(:summary) %>
+  <% if display_field?(:summary) %>
     <p>
       <%= f.input :summary, as: :text, label: 'Resumo' %>
     </p>
   <% end %>
 
-  <% if Cas::SectionConfig.new(@section).form_has_field?(:local) %>
+  <% if display_field?(:location) %>
     <p>
-      <%= f.input :local, as: :string, label: 'Local:' %>
+      <%= f.input :location, as: :string, label: 'Local:' %>
     </p>
   <% end %>
 
-  <% if Cas::SectionConfig.new(@section).form_has_field?(:date) %>
+  <% if display_field?(:date) %>
+    <% field = field_properties(:date) %>
     <p>
-      <%= f.input :date, as: :datetime, label: 'Data:',
+      <%= f.input :date,
+        as: (field.format.map(&:to_s).include?("hour") ? :datetime : :date),
+        label: 'Data:',
         start_year: Date.today.year,
-        order: [:day, :month, :year] %>
+        order: field.format %>
     </p>
   <% end %>
 
-  <% if Cas::SectionConfig.new(@section).form_has_field?(:tags) %>
+  <% if display_field?(:tags) %>
     <% autocomplete = ActsAsTaggableOn::Tag.all.map { |t| {value: t.name, text: t.name} } %>
     <%= f.input :tag_list,
       as: :string,
@@ -47,25 +50,25 @@
     %>
   <% end %>
 
-  <% if Cas::SectionConfig.new(@section).form_has_field?(:url) %>
+  <% if display_field?(:url) %>
     <p>
       <%= f.input :url, label: 'URL:' %>
     </p>
   <% end %>
 
-  <% if Cas::SectionConfig.new(@section).form_has_field?(:text) %>
+  <% if display_field?(:text) %>
     <p>
       <%= f.input :text, as: :text, label: 'Texto', input_html: { class: 'editor' } %>
     </p>
   <% end %>
 
-  <% if Cas::SectionConfig.new(@section).form_has_field?(:embedded) %>
+  <% if display_field?(:embedded) %>
     <p>
       <%= f.input :embedded, label: 'URL:' %>
     </p>
   <% end %>
 
-  <% if Cas::SectionConfig.new(@section).form_has_field?(:images) %>
+  <% if display_field?(:images) %>
     <%= render 'form_images', f: f %>
   <% end %>
 

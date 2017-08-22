@@ -19,7 +19,7 @@ module Cas
           subject = Setup.new
           subject.install
           subject.install
-          expect(Section.count).to eq 2
+          expect(Section.count).to eq 3
           section = Section.all
           expect(section[0].name).to eq "news"
           expect(section[0].slug).to eq "news"
@@ -29,6 +29,10 @@ module Cas
           expect(section[1].slug).to eq "biography"
           expect(section[1].site.slug).to eq "mysite"
           expect(section[1].section_type).to eq "content"
+          expect(section[2].name).to eq "Agenda"
+          expect(section[2].slug).to eq "agenda"
+          expect(section[2].site.slug).to eq "mysite"
+          expect(section[2].section_type).to eq "content"
         end
       end
 

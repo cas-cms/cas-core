@@ -30,6 +30,14 @@
         <td>
           <% if field == 'created_at' %>
             <% value = l(content.created_at, format: :short) %>
+          <% elsif field == 'date_year' %>
+            <% value = content.date.year %>
+          <% elsif field == 'date' %>
+            <% value = content.date.strftime("%d/%m/%Y") %>
+          <% elsif field == 'date_time' %>
+            <% if content.date.present? %>
+              <% value = l(content.date, format: :short) %>
+            <% end %>
           <% else %>
             <% value = content.public_send(field) %>
           <% end %>

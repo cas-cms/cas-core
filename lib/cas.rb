@@ -3,6 +3,7 @@ require "cas/config"
 require "cas/remote_callbacks"
 require "cas/setup"
 require "cas/section_config"
+require "cas/form_field"
 
 require 'devise'
 require 'simple_form'
