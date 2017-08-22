@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 20170801175407) do
     t.string   "url"
     t.string   "embedded"
     t.datetime "published_at"
+    t.string   "location"
     t.index ["author_id"], name: "index_cas_contents_on_author_id", using: :btree
     t.index ["category_id"], name: "index_cas_contents_on_category_id", using: :btree
     t.index ["published"], name: "index_cas_contents_on_published", using: :btree

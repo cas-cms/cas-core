@@ -20,6 +20,7 @@ sites:
           - images
           - files
           - tags
+          - date
       biography:
         name: Biography
         type: content
@@ -27,3 +28,21 @@ sites:
           - title
           - text
           - image
+      agenda:
+        name: Agenda
+        type: content
+        list_fields:
+          - title
+          - date_time
+        list_order_by:
+          - order_field
+        fields:
+          - title
+          - location
+          - date:
+              language: pt-br
+              format:
+                - day
+                - month
+                - year
+          - text

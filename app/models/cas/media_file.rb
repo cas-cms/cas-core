@@ -38,9 +38,9 @@ module Cas
       # Shrine gem uses `file_data`
       elsif JSON.parse(file_data).present?
         if cdn.present?
-          file[version].url(host: cdn, public: true)
+          file_url(version.to_sym, host: cdn, public: true)
         else
-          file[version].url.gsub(/\?.*/, "")
+          file_url(version.to_sym, public: true).gsub(/\?.*/, "")
         end
       else
         raise UnknownPath

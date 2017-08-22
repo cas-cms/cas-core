@@ -78,12 +78,14 @@ module Cas
       params.require(:content).permit(
         :category_id,
         :title,
+        :location,
         :summary,
+        :date,
         :text,
         :url,
         :embedded,
-        :tag_list,
-      )
+        :tag_list
+      ).merge(published: true)
     end
 
     def associate_images(item)
