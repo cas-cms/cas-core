@@ -2,7 +2,7 @@ require_dependency "cas/application_controller"
 
 module Cas
   class Sections::ContentsController < Sections::ApplicationController
-    class ImageBelongsToAnotherAttachable < StandardError; end
+    class FileBelongsToAnotherAttachable < StandardError; end
 
     def index
       @contents = scope_content_by_role(@section.contents)
@@ -24,7 +24,8 @@ module Cas
           @content.section_id = @section.id
           @content.tag_list = content_params[:tag_list]
           success = @content.save!
-          associate_images(@content)
+          associate_files(@content, :images)
+          associate_files(@content, :attachments)
         end
       rescue ActiveRecord::RecordInvalid
         success = nil
@@ -58,7 +59,8 @@ module Cas
         ActiveRecord::Base.transaction do
           @content.tag_list = content_params[:tag_list]
           success = @content.update!(content_params)
-          associate_images(@content)
+          associate_files(@content, :images)
+          associate_files(@content, :attachments)
         end
       rescue ActiveRecord::RecordInvalid
         success = nil
@@ -95,22 +97,23 @@ module Cas
       ).merge(published: true)
     end
 
-    def associate_images(item)
-      return if params[:images].blank?
+    # form_key_name could be :images or :attachments
+    def associate_files(item, form_key_name)
+      return if params[form_key_name].blank?
 
       ActiveRecord::Base.transaction do
-        params[:images][:files].to_unsafe_h.each do |key, value|
+        params[form_key_name][:files].to_unsafe_h.each do |key, value|
           next if value["id"].blank?
           begin
             new_order = key.to_i + 1
-            is_cover = params[:images][:cover_id] == value["id"]
+            is_cover = params[form_key_name][:cover_id] == value["id"]
             image = ::Cas::MediaFile.find(value["id"])
             if image.attachable.blank?
               image.update!(cover: is_cover, order: new_order, attachable: item)
             elsif image.order.to_i != new_order || image.cover != is_cover
               image.update!(cover: is_cover, order: new_order)
             elsif image.attachable != item
-              raise ImageBelongsToAnotherAttachable, "Image already belongs to #{item.attachable.id}"
+              raise FileBelongsToAnotherAttachable, "File already belongs to #{item.attachable.id}"
             end
           rescue ActiveRecord::RecordNotFound
           end

@@ -13,6 +13,7 @@ RSpec.describe "API /media_files" do
         data: {
           attributes: {
             service: "s3",
+            media_type: 'custom-media-type',
             metadata: {
               original: {
                 id: "filename1.jpg",
@@ -48,7 +49,7 @@ RSpec.describe "API /media_files" do
         expect(new_file.size).to eq 1
         expect(new_file.original_name).to eq "file1.jpg"
         expect(new_file.mime_type).to eq "image/jpeg"
-        expect(new_file.media_type).to eq "image"
+        expect(new_file.media_type).to eq "custom-media-type"
         expect(new_file.attachable).to eq content
         expect(new_file.file_data).to eq({
           original: {

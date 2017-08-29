@@ -50,7 +50,14 @@ module Cas
     private
 
     def set_media_type
-      self.media_type = mime_type.scan(/([a-z]*)\/.*/)[0][0]
+      if self.media_type.blank?
+        nature = mime_type.scan(/([a-z]*)\/.*/)[0][0]
+        if nature == 'image'
+          self.media_type = 'image'
+        else
+          self.media_type = 'attachment'
+        end
+      end
     end
 
     def set_image_as_unique_cover

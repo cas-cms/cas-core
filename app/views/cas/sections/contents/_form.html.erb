@@ -2,6 +2,7 @@
   <% if display_field?(:category) %>
     <p>
       <%= f.input :category_id,
+        label: "Categoria:",
         collection: @categories.map { |c| [c.name, c.id] },
         input_html: { class: 'js-select2' }
       %>
@@ -43,6 +44,7 @@
     <%= f.input :tag_list,
       as: :string,
       required: false,
+      label: "Tags",
       input_html: {
         value: f.object.tag_list.join(", "),
         class: "js-tags",
@@ -67,6 +69,10 @@
     <p>
       <%= f.input :embedded, label: 'URL:' %>
     </p>
+  <% end %>
+
+  <% if display_field?(:attachments) %>
+    <%= render 'form_attachments', f: f %>
   <% end %>
 
   <% if display_field?(:images) %>

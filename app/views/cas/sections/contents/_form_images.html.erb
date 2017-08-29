@@ -73,8 +73,12 @@
 </div>
 
 <% if Rails.env.test? %>
-  <%= hidden_field_tag "images[files][0][id]", "", id: "test_file_1" %>
-  <%= hidden_field_tag "images[files][1][id]", "", id: "test_file_2" %>
-  <%= hidden_field_tag "images[files][2][id]", "", id: "test_file_3" %>
-  <%= hidden_field_tag "images[cover_id]", "", id: "test_file_cover_id" %>
+  <%= hidden_field_tag "images[files][0][id]", "", id: "test_image_1" %>
+  <%= hidden_field_tag "images[files][1][id]", "", id: "test_image_2" %>
+  <%= hidden_field_tag "images[files][2][id]", "", id: "test_image_3" %>
+  <%= hidden_field_tag "images[cover_id]", "",     id: "test_image_cover_id" %>
+
+  <%= hidden_field_tag "attachments[files][0][id]", "", id: "test_attachment_1" %>
+  <%= hidden_field_tag "attachments[files][1][id]", "", id: "test_attachment_2" %>
+  <%= hidden_field_tag "attachments[files][2][id]", "", id: "test_attachment_3" %>
 <% end %>

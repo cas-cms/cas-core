@@ -30,7 +30,7 @@ RSpec.feature 'Contents' do
         fill_in 'content_text', with: 'text'
         fill_in 'content_tag_list', with: 'tag1 tag2'
 
-        find("#test_file_1", visible: false).set(file_orphan.id)
+        find("#test_image_1", visible: false).set(file_orphan.id)
 
         expect do
           click_on 'submit'
@@ -50,7 +50,7 @@ RSpec.feature 'Contents' do
 
         fill_in 'content[title]', with: 'new title 2'
         fill_in 'content_tag_list', with: 'edited-tag1 tag2'
-        find("#test_file_1", visible: false).set(file_orphan.id)
+        find("#test_image_1", visible: false).set(file_orphan.id)
 
         expect(content.images).to be_blank
 
@@ -67,38 +67,48 @@ RSpec.feature 'Contents' do
       end
 
       scenario "I edit the order of the images" do
-        file1 = create(:file, order: 1, attachable: content, cover: true)
-        file2 = create(:file, order: 2, attachable: content, cover: false)
-        file3 = create(:file, order: 3, attachable: nil)
+        image1 = create(:file, order: 1, attachable: content, cover: true)
+        image2 = create(:file, order: 2, attachable: content, cover: false)
+        image3 = create(:file, order: 3, attachable: nil)
+        attachment1 = create(:file, order: 1, attachable: content)
+        attachment2 = create(:file, order: 2, attachable: content)
+        attachment3 = create(:file, order: 3, attachable: nil)
 
         click_link "manage-section-#{section.id}"
         click_link "edit-content-#{content.id}"
 
-        find("#test_file_1", visible: false).set(file2.id)
-        find("#test_file_2", visible: false).set(file3.id)
-        find("#test_file_3", visible: false).set(file1.id)
-        find("#test_file_cover_id", visible: false).set(file2.id)
+        find("#test_image_1", visible: false).set(image2.id)
+        find("#test_image_2", visible: false).set(image3.id)
+        find("#test_image_3", visible: false).set(image1.id)
+        find("#test_image_cover_id", visible: false).set(image2.id)
+        find("#test_attachment_1", visible: false).set(attachment2.id)
+        find("#test_attachment_2", visible: false).set(attachment3.id)
+        find("#test_attachment_3", visible: false).set(attachment1.id)
 
-        expect(file1).to be_cover
-        expect(file2).to_not be_cover
+        expect(image1).to be_cover
+        expect(image2).to_not be_cover
         click_on 'submit'
 
-        expect(file1.reload.order).to eq 3
-        expect(file2.reload.order).to eq 1
-        expect(file3.reload.order).to eq 2
-        expect(file3.attachable).to eq content
-        expect(file2).to be_cover
-        expect(file1).to_not be_cover
+        expect(image1.reload.order).to eq 3
+        expect(image2.reload.order).to eq 1
+        expect(image3.reload.order).to eq 2
+        expect(image3.attachable).to eq content
+        expect(image2).to be_cover
+        expect(image1).to_not be_cover
+        expect(attachment1.reload.order).to eq 3
+        expect(attachment2.reload.order).to eq 1
+        expect(attachment3.reload.order).to eq 2
+        expect(attachment3.attachable).to eq content
 
         click_link "edit-content-#{content.id}"
-        find("#test_file_1", visible: false).set(file2.id)
-        find("#test_file_2", visible: false).set(file3.id)
-        find("#test_file_3", visible: false).set(file1.id)
+        find("#test_image_1", visible: false).set(image2.id)
+        find("#test_image_2", visible: false).set(image3.id)
+        find("#test_image_3", visible: false).set(image1.id)
         # new file as cover
-        find("#test_file_cover_id", visible: false).set(file1.id)
+        find("#test_image_cover_id", visible: false).set(image1.id)
         click_on 'submit'
-        expect(file1.reload).to be_cover
-        expect(file2.reload).to_not be_cover
+        expect(image1.reload).to be_cover
+        expect(image2.reload).to_not be_cover
       end
 
       context 'invalid data' do
@@ -180,8 +190,8 @@ RSpec.feature 'Contents' do
         expect(current_path).to eq section_contents_path(section)
         expect(page).to have_content 'new title 2'
 
-        last_content = Cas::Content.last
-        expect(last_content.title).to eq 'new title 2'
+        last_content = Cas::Content.where(title: "new title 2").first
+        expect(last_content).to be_present
       end
 
       scenario 'I delete a content in a section agenda' do

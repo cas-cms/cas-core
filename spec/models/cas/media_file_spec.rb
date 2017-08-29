@@ -4,10 +4,24 @@ module Cas
   RSpec.describe MediaFile, type: :model do
     describe "callbacks" do
       describe "setting media_type" do
-        it 'is set upon validation' do
-          file = described_class.new(mime_type: 'image/jpg/')
-          file.valid?
-          expect(file.media_type).to eq 'image'
+        context 'when image' do
+          let(:mime_type) { 'image/jpg/' }
+
+          it 'is set upon validation' do
+            file = described_class.new(mime_type: mime_type)
+            file.valid?
+            expect(file.media_type).to eq 'image'
+          end
+        end
+
+        context 'when not image' do
+          let(:mime_type) { 'document/pdf/' }
+
+          it 'sets media type as attachment' do
+            file = described_class.new(mime_type: mime_type)
+            file.valid?
+            expect(file.media_type).to eq 'attachment'
+          end
         end
       end
 

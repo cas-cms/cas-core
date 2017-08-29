@@ -11,6 +11,7 @@ class Cas::Api::FilesController < Cas::ApplicationController
       size: metadata[:original][:metadata][:size].to_i,
       original_name: metadata[:original][:metadata][:filename],
       mime_type: metadata[:original][:metadata][:mime_type],
+      media_type: resource_params[:attributes][:media_type],
       file: metadata.to_json,
       attachable: attachable_record
     )
@@ -21,7 +22,8 @@ class Cas::Api::FilesController < Cas::ApplicationController
         id: file.id.to_s,
         type: "media-files",
         attributes: {
-          url: file.url(version: :original, use_cdn: false).to_s
+          url: file.url(version: :original, use_cdn: false).to_s,
+          "original-name": file.original_name
         }
       }
     }
@@ -49,6 +51,7 @@ class Cas::Api::FilesController < Cas::ApplicationController
       .permit(
         attributes: [
           :cover,
+          :media_type,
           metadata: [
             original: [
               :id,

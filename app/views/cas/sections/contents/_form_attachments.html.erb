@@ -1,0 +1,42 @@
+<% content_for(:upload, true) %>
+
+<div class="cas-attachments dropzone" data-attachable-type="contents" data-attachable-id="<%= @content.id %>">
+  <div class="dropzone-description">
+    <div class="container">
+      Solte seus arquivos para fazer upload.
+    </div>
+  </div>
+  <div class="container">
+    <div class="upload-input">
+      <%= f.input :file,
+        as: :file,
+        type: :string,
+        label: "Anexos",
+        input_html: {
+          multiple: "multiple",
+          images: "#js-item-images",
+        } %>
+    </div>
+
+    <script id="cas-attachments-template" type="text/x-custom-template">
+      <%= render "form_attachments_template",
+        file_id: '',
+        file_name: '' %>
+    </script>
+
+    <div id="attachments-list">
+      <% @content.attachments.order("cas_media_files.order asc").each do |file| %>
+        <%= render "form_attachments_template",
+          file_id: file.id,
+          file_name: file.original_name %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<% if Rails.env.test? %>
+  <%= hidden_field_tag "images[files][0][id]", "", id: "test_file_1" %>
+  <%= hidden_field_tag "images[files][1][id]", "", id: "test_file_2" %>
+  <%= hidden_field_tag "images[files][2][id]", "", id: "test_file_3" %>
+  <%= hidden_field_tag "images[cover_id]", "", id: "test_file_cover_id" %>
+<% end %>
