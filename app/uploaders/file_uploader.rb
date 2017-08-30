@@ -16,9 +16,10 @@ class ::FileUploader < Shrine
     Rails.logger.info "FileUploader#generate_location"
     year  = Time.now.strftime("%Y")
     month = Time.now.strftime("%m")
+    original_filename = context[:metadata]["filename"]
 
     # the default unique identifier
-    name = "#{SecureRandom.hex[0..6]}-#{context[:record].original_name}"
+    name = "#{SecureRandom.hex[0..6]}-#{original_filename}"
 
     [year, month, name].compact.join("/")
   end

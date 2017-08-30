@@ -21,6 +21,8 @@ Cas::Engine.routes.draw do
     resources :categories, controller: 'sections/categories'
   end
 
+  # used by tinymce editor
+  resources :file_uploads, only: :create
   namespace :api, module: "api" do
     resources :files, only: [:create, :destroy]
   end

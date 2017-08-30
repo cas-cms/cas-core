@@ -46,6 +46,9 @@ $(document).ready(function() {
     extended_valid_elements : "embed,param,object,iframe",
     //	entity_encoding: "raw",
     language : "pt_BR",
-    plugins : 'image,imagetools,code,paste,pagebreak,table,wordcount'
+    plugins : 'image,imagetools,code,paste,pagebreak,table,wordcount',
+    images_upload_url: paths.fileUpload.path,
+    //images_upload_base_path: '/some/basepath',
+    images_upload_credentials: true
   });
 });
