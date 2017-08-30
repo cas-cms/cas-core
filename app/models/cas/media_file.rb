@@ -60,7 +60,9 @@ module Cas
       end
     end
 
+    # Only images can have a `cover`
     def set_image_as_unique_cover
+      return unless media_type == 'image'
       cover_file = MediaFile
         .where(attachable: self.attachable, cover: true)
         .where.not(id: id)

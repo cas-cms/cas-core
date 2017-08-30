@@ -3,7 +3,10 @@ class ::FileUploader < Shrine
   plugin :processing
 
   process(:store) do |io, context|
-    result = Cas::RemoteCallbacks.callbacks[:uploaded_image_versions].call(io, context)
+    result = {}
+    if context[:record].media_type == 'image'
+      result = Cas::RemoteCallbacks.callbacks[:uploaded_image_versions].call(io, context)
+    end
     original = (io.respond_to?(:[]) && io[:original]) ? io[:original] : io
     result = result.merge(original: original) unless result.keys.include?(:original)
     result
@@ -13,7 +16,9 @@ class ::FileUploader < Shrine
     Rails.logger.info "FileUploader#generate_location"
     year  = Time.now.strftime("%Y")
     month = Time.now.strftime("%m")
-    name  = super # the default unique identifier
+
+    # the default unique identifier
+    name = "#{SecureRandom.hex[0..6]}-#{context[:record].original_name}"
 
     [year, month, name].compact.join("/")
   end

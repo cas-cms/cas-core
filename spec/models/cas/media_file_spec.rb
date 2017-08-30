@@ -51,6 +51,16 @@ module Cas
             expect(first_file_for_content).to be_cover
           end
         end
+
+        context 'when creating attachment' do
+          it 'does not set as cover' do
+            existing_content_file  = create(:file, :attachment, attachable: content)
+            first_file_for_content = create(:file, :attachment)
+
+            expect(existing_content_file).to_not be_cover
+            expect(first_file_for_content).to_not be_cover
+          end
+        end
       end
     end
 

@@ -19,6 +19,14 @@ FactoryGirl.define do
       }.to_json
     }
 
+    trait :image do
+      media_type 'image'
+    end
+
+    trait :attachment do
+      media_type 'attachment'
+    end
+
     trait :with_path do
       path "fc8ff0798fee2a486cf335de777f3a0d.jpg"
     end
