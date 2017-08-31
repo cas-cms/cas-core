@@ -4,6 +4,27 @@ module Cas
   RSpec.describe Content, type: :model do
     describe "callbacks" do
 
+      describe 'tags_cache' do
+        subject { create(:content) }
+
+        it 'saves the tags in tags_cache' do
+          expect(subject.tags_cache).to be_blank
+          subject.tag_list = "tag1, tag2"
+          subject.save
+          subject.reload
+          expect(subject.tags_cache).to eq "tag1, tag2"
+        end
+
+        it 'saves the category name in tags_cache' do
+          expect(subject.tags_cache).to be_blank
+          subject.tag_list = "tag1, tag2"
+          subject.category = create(:category, name: 'category_name')
+          subject.save
+          subject.reload
+          expect(subject.tags_cache).to eq "tag1, tag2, category_name"
+        end
+      end
+
       describe "published_at" do
         subject { build(:content, published_at: published_at, published: published) }
 

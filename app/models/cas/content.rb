@@ -1,6 +1,8 @@
 module Cas
   class Content < ApplicationRecord
+    include ::PgSearch
     extend ::FriendlyId
+
     friendly_id :title, use: :slugged
     acts_as_taggable
 
@@ -14,6 +16,15 @@ module Cas
     validates :title, presence: true
 
     before_validation :set_published_at
+    before_save :cache_tags
+
+    pg_search_scope :search, ->(query) do
+      {
+        query: query,
+        against: [:title, :text, :location, :tags_cache],
+        order_within_rank: "cas_contents.published_at DESC"
+      }
+    end
 
     def date_year
       date.year
@@ -25,6 +36,12 @@ module Cas
       if published_at.blank? && published
         self.published_at = Time.now
       end
+    end
+
+    # so we can fulltext search appropriatelly with pg_search
+    def cache_tags
+      category_name = "#{category.name if category.present?}"
+      self.tags_cache = (tag_list + category_name).flatten.join(", ")
     end
   end
 end

@@ -16,6 +16,7 @@ require 'tinymce-rails'
 require 'tinymce-rails-langs'
 require 'shrine'
 require 'sidekiq'
+require 'pg_search'
 
 module Cas
 end

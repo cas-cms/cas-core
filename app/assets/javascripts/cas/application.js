@@ -33,22 +33,18 @@ $(document).ready(function() {
 
   tinyMCE.init({
     selector: 'textarea.editor',
-    //theme : "advanced",
     mode : "exact",
     relative_urls : false,
     convert_urls : 0, // default 1
-    //elements : "jseditor" + elementsToLoad,
     pagebreak_separator : '<br clear="all" class="pagebreak" />',
     height : '350',
     convert_fonts_to_spans : true,
     font_size_style_values : "8pt,10pt,12pt,14pt,18pt,24pt,36pt",
     inline_styles: false,
     extended_valid_elements : "embed,param,object,iframe",
-    //	entity_encoding: "raw",
     language : "pt_BR",
     plugins : 'image,imagetools,code,paste,pagebreak,table,wordcount',
     images_upload_url: paths.fileUpload.path,
-    //images_upload_base_path: '/some/basepath',
     images_upload_credentials: true
   });
 });

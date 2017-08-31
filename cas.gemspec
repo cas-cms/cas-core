@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 5.0.1"
   s.add_dependency "pg"
+  s.add_dependency 'pg_search'
   s.add_dependency "devise"
   s.add_dependency "sass-rails"
   s.add_dependency "jquery-rails"
