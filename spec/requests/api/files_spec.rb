@@ -68,7 +68,8 @@ RSpec.describe "API /media_files" do
             id: new_file.id.to_s,
             type: "media-files",
             attributes: {
-              url: "/cache/filename1.jpg"
+              url: "/cache/filename1.jpg",
+              "original-name": "file1.jpg"
             }
           }
         }.deep_stringify_keys)

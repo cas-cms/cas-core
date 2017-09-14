@@ -6,6 +6,8 @@ module Cas
     friendly_id :title, use: :slugged
     acts_as_taggable
 
+    serialize :metadata
+
     belongs_to :section
     belongs_to :category
     belongs_to :author, class_name: Cas::User
@@ -28,6 +30,14 @@ module Cas
 
     def date_year
       date.year
+    end
+
+    def metadata
+      if self[:metadata].is_a?(String)
+        JSON.parse(self[:metadata])
+      else
+        super
+      end
     end
 
     private
