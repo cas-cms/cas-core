@@ -2,7 +2,7 @@ require 'sidekiq/web'
 Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
 
 Cas::Engine.routes.draw do
-  mount ::FileUploader::UploadEndpoint => "/files"
+  mount Shrine.presign_endpoint(:cache) => "/files/cache/presign"
 
   authenticate :user, ->(u){ u.roles.include?('admin') } do
     mount Sidekiq::Web => '/sidekiq'

@@ -49,14 +49,12 @@
 
     <nav class="grid">
       <ul>
-          <% if user_signed_in? %>
-            <li><%= link_to "Conteúdo", cas.root_path %></li>
-          <% else %>
-          <% end %>
-          <% if user_signed_in? && current_user.admin? %>
-            <li><%= link_to "Pessoas", cas.users_path, id: "list-people" %></li>
-          <% end %>
-        </ul>
+        <% if user_signed_in? %>
+          <li><%= link_to "Conteúdo", cas.root_path %></li>
+        <% end %>
+        <% if user_signed_in? && current_user.admin? %>
+          <li><%= link_to "Pessoas", cas.users_path, id: "list-people" %></li>
+        <% end %>
       </ul>
     </nav>
   </header>

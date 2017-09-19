@@ -1,7 +1,7 @@
 require 'shrine'
 
 Shrine.plugin :activerecord
-Shrine.plugin :direct_upload
+Shrine.plugin :presign_endpoint
 Shrine.plugin :backgrounding
 
 if Rails.env.test?
@@ -19,7 +19,9 @@ if Rails.env.test?
   }
 else
   if ENV["S3_ACCESS_KEY_ID"].blank?
-    puts "You need to configure S3 credentials. See the README.md for more details."
+    msg = "You need to configure S3 credentials. See the README.md for more details."
+    puts msg
+    Rails.logger.error msg
   end
 
   s3_options = {

@@ -52,7 +52,7 @@ var ImageGalleryUploadFunctions = {
       }
     }
 
-    $.blueimp.fileupload.prototype.options.add.call(this, e, data);
+    var that = this;
 
     data.progressBar = $('<div class="progress-status"><span class="name">&nbsp;</span><div class="progress-bar"></div></div>');
     $(this).after(data.progressBar);
@@ -64,14 +64,16 @@ var ImageGalleryUploadFunctions = {
 
     $.getJSON('/admin/files/cache/presign', options, function(result) {
       console.log("image: presign result", result);
+      console.log("image: now will submit file to S3 URL: ", result["url"]);
       data.formData = result['fields'];
       data.url = result['url'];
       data.paramName = 'file';
+      $.blueimp.fileupload.prototype.options.add.call(that, e, data);
       data.submit();
     });
   },
   done: function(e, data) {
-    console.log("Image: upload done! Now posting to /admin/api/files");
+    console.log("Image: upload done! Now posting to /admin/api/files", data.formData);
     data.progressBar.remove();
 
     var file = {
