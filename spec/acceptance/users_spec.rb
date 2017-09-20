@@ -31,15 +31,34 @@ RSpec.feature 'User' do
       fill_in 'user[name]', with: "asd2345"
       fill_in 'user[email]', with: "asd2345@asd.com"
       select 'Admin', from: :user_roles
-      fill_in 'user[password]', with: "123456"
-      fill_in 'user[password_confirmation]', with: "123456"
+      expect(writer.password).to eq "123456"
+      fill_in 'user[password]', with: "new passw"
+      fill_in 'user[password_confirmation]', with: "new passw"
 
       click_on "save-form"
+      expect(current_path).to eq users_path
       writer.reload
       expect(writer.name).to eq "asd2345"
       expect(writer.email).to eq "asd2345@asd.com"
       expect(writer.roles).to eq ["admin"]
-      expect(writer.password).to eq "123456"
+      expect(writer.valid_password?("new passw")).to eq true
+    end
+
+    scenario "I edit an user without touching their password" do
+      click_on "list-people"
+      click_on "edit-user-#{writer.id}"
+
+      fill_in 'user[name]', with: "new name"
+      fill_in 'user[email]', with: "asd2345@asd.com"
+      select 'Admin', from: :user_roles
+
+      click_on "save-form"
+      expect(current_path).to eq users_path
+      writer.reload
+      expect(writer.name).to eq "new name"
+      expect(writer.email).to eq "asd2345@asd.com"
+      expect(writer.roles).to eq ["admin"]
+      expect(writer.valid_password?("123456")).to eq true
     end
   end
 

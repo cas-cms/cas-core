@@ -1,12 +1,12 @@
 module Cas
   class User < ApplicationRecord
-    ROLES = %w[admin editor writer ].freeze
+    ROLES = %w[admin editor writer].freeze
 
     before_save { self.email = email.downcase }
     validates :name, presence: true, length: { maximum: 50 }
     validates :email, presence: true, length: { maximum: 255 },
                            uniqueness: { case_sensitive: false }
-    validates :password, presence: true, length: { minimum: 6 }
+    validates :password, presence: true, length: { minimum: 6 }, on: :create, allow_blank: true
 
     devise :database_authenticatable, #:recoverable,
            :rememberable, :trackable, :validatable
