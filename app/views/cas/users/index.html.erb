@@ -1,9 +1,34 @@
-<% provide(:title, 'Pessoas') %>
-<p><h1>Lista Usuários</h1>
-  <%= link_to "Novo Usuário", new_user_path if current_user.admin? %>
-</p>
+<div class="grid">
+  <div class="col-1-2">
+    <h1>Lista Usuários</h1>
+  </div>
+  <div class="col-1-2 section-options">
+  </div>
+</div>
 
+<%= link_to "Novo Usuário", new_user_path if current_user.admin? %>
 
-<% @users.each do |user| %>
-  <%= link_to user.name, edit_user_path(user), id: "edit-user-#{user.id}"  %><p>
-<% end %>
+<br />
+<br />
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+        <tr id="user-<%= user.id %>">
+          <td>
+            <%= link_to user.name,
+              edit_user_path(user),
+              id: "edit-user-#{user.id}" %>
+          </td>
+          <td><%= user.roles.join(", ") %></td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
