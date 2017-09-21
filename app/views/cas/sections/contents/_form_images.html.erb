@@ -20,7 +20,7 @@
     </div>
 
     <script id="cas-gallery-image-template" type="text/x-custom-template">
-      <div class="image-container" data-id="" data-is-cover="">
+      <div class="image-container" data-id="" data-is-cover="" data-filename="">
         <div class="image-margin">
           <div class="unselected-but-selectable">
             <div class="check"></div>
@@ -64,6 +64,8 @@
       <img class="cas-gallery-preloaded"
       data-src="<%= file.url(version: :original) %>"
       data-id="<%= file.id %>"
+      data-filename="<%= file.original_name %>"
+      data-original-order="<%= file.order %>"
       data-is-cover="<%= file.cover.to_s %>">
     <% end %>
 

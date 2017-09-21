@@ -114,7 +114,13 @@ var ImageGalleryUploadFunctions = {
     }).done(function(response) {
       var id = response.data.id;
       var url = response.data.attributes.url;
-      gallery.addImage(url, id);
+      var filename = response.data.attributes["original-name"];
+      gallery.addImage({
+        url: url,
+        id: id,
+        filename: filename,
+        orderBy: "filename"
+      });
     });
   }
 };
@@ -228,6 +234,7 @@ $(function() {
     imageMaxWidth:  1920,
     imageMaxHeight: 1920,
     imageOrientation: true,
+    prependFiles: true,
 
     // callbacks
     add: ImageGalleryUploadFunctions.add,

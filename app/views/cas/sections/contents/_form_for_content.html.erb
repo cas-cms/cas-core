@@ -11,7 +11,7 @@
 
   <% if display_field?(:title) %>
     <p>
-      <%= f.input :title, as: :string, label: 'Título:' %>
+      <%= f.input :title, required: true, as: :string, label: 'Título:' %>
     </p>
   <% end %>
 

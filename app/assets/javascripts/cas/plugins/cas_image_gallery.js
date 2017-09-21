@@ -1,3 +1,10 @@
+/**
+ * Guess what, Javascript doesn't have .sort() by integer out-of-the-box.
+ */
+function sortNumber(a, b) {
+  return parseInt(a) - parseInt(b);
+}
+
 function CasImage(element, gallery) {
   var image = this;
   image.element = element;
@@ -186,21 +193,101 @@ function CasImageGallery(options) {
       var image = $(value);
       var url = image.data("src");
       var id = image.data("id");
+      var filename = image.data("filename");
+      var originalOrder = image.data("original-order");
       var isCover = image.data("is-cover");
-      gallery.addImage(url, id, isCover);
+      gallery.addImage({
+        url: url,
+        id: id,
+        filename: filename,
+        orderBy: "order",
+        originalOrder: originalOrder,
+        isCover: isCover
+      });
     });
   };
 
   gallery.imageTemplate = $("#cas-gallery-image-template").html();
-  gallery.addImage = function(url, id, isCover) {
-    var finalHtml = $(gallery.imageTemplate);
+  gallery.addImage = function(options) {
+    var url = options.url,
+        id = options.id,
+        filename = options.filename,
+        orderBy = options.orderBy,
+        // order that comes from the server
+        originalOrder = options.originalOrder,
+        isCover = options.isCover;
 
+    /**
+     * The new image information/HTML code
+     */
+    var finalHtml = $(gallery.imageTemplate);
     finalHtml.attr("data-id", id);
+    finalHtml.attr("data-filename", filename);
+    finalHtml.attr("data-original-order", originalOrder);
     finalHtml.find(".image").css("backgroundImage", "url('"+url+"')");
 
-    var orderCount = String(gallery.element.find("input.js-image").length);
+    /**
+     * We need to add images in order by filename. The sorting algorithm
+     * compares current image with the new image, and when the new image is
+     * going to be the last one, the algorithm in the loop below doesn't
+     * add it to the list of images.
+     *
+     * So we create `addedImage` to false. In case it's still false after the
+     * loop, we append the file to the end of the list.
+     */
+    var addedImage = false;
+    gallery.allItems().each(function(index) {
+      var ordering;
 
-    gallery.element.find(".images").append(finalHtml);
+      if (orderBy == "filename") {
+        var listedItemFilename = $(this).data("filename");
+        ordering = [listedItemFilename, filename].sort();
+
+        /**
+         * We compare the crrent file name and new file name. We sort them
+         * both.
+         *
+         * Say current images are 3.jpg and 6.jpg and new image is 5.jpg.
+         * We compare ["3.jpg", "5.jpg"].sort() and see that element zero is not
+         * 5.jpg. We discard it.
+         *
+         * Then ["6.jpg", "5.jpg"].sort() and "5.jpg" is the first element,
+         * therefore we surpassed the position 5.jpg should be in. At this
+         * point we take 5.jpg and `insertBefore()` 6.jpg.
+         */
+        if (ordering[0] === filename) {
+          finalHtml.insertBefore($(this));
+          addedImage = true;
+          return;
+        }
+      } else if (orderBy == "order") {
+        var listedItemOrder = $(this).data("original-order");
+        ordering = [listedItemOrder, originalOrder].sort(sortNumber);
+
+        /**
+         * We compare the crrent file name and new file name. We sort them
+         * both.
+         *
+         * Say current images are 3.jpg and 6.jpg and new image is 5.jpg.
+         * We compare ["3.jpg", "5.jpg"].sort() and see that element zero is not
+         * 5.jpg. We discard it.
+         *
+         * Then ["6.jpg", "5.jpg"].sort() and "5.jpg" is the first element,
+         * therefore we surpassed the position 5.jpg should be in. At this
+         * point we take 5.jpg and `insertBefore()` 6.jpg.
+         */
+        if (ordering[0] === originalOrder) {
+          finalHtml.insertBefore($(this));
+          addedImage = true;
+          return;
+        }
+      }
+    });
+
+    if (addedImage === false) {
+      gallery.element.find(".images").append(finalHtml);
+    }
+
     gallery.refreshImagesFormInputs();
     gallery.unselectAll();
 
@@ -212,6 +299,7 @@ function CasImageGallery(options) {
   };
 
   gallery.refreshImagesFormInputs = function() {
+    $(".js-image-input").remove();
     gallery.allItems().each(function(index) {
       var image = new CasImage($(this), gallery);
       image.addOrderedInput(index);
@@ -237,8 +325,14 @@ function CasImageGallery(options) {
       gallery.updateUi();
     },
 
-    addImage: function(url, id, isCover) {
-      gallery.addImage(url, id, isCover);
+    addImage: function(options) {
+      gallery.addImage({
+        url: options.url,
+        id: options.id,
+        filename: options.filename,
+        orderBy: options.orderBy,
+        isCover: options.isCover
+      });
     },
 
     resetImagesOrder: function() {
