@@ -237,6 +237,9 @@ function CasImageGallery(options) {
      */
     var addedImage = false;
     gallery.allItems().each(function(index) {
+      if (addedImage === true) {
+        return false;
+      }
       var ordering;
 
       if (orderBy == "filename") {
