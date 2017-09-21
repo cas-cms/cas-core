@@ -1,0 +1,36 @@
+<%= simple_form_for ([@section, @content]) do |f| %>
+  <p>
+    <%= f.input :title, as: :string, label: 'Título:' %>
+  </p>
+
+  <% questions = @content.metadata.dig("survey", "questions") %>
+  <%= simple_fields_for "content[metadata]" do |o| %>
+    <% 4.times do |t| %>
+      <%= o.input "survey][questions][#{t}][text",
+        label: "Pergunta #{t+1}",
+        required: (t == 0 ? true : false),
+        input_html: {
+          id: "question_#{t+1}_text",
+          value: questions&.dig("#{t}", "text")
+        } %>
+
+      <%= o.input "survey][questions][#{t}][votes",
+        as: :hidden,
+        input_html: {
+          id: "question_#{t+1}_votes",
+          value: questions&.dig("#{t}", "votes") || 0
+        } %>
+    <% end %>
+  <% end %>
+
+  <p>
+    <%= f.input :published,
+      as: :boolean,
+      label: 'Publicado?',
+      input_html: { checked: true } %>
+  </p>
+
+  <div class="actions">
+    <%= f.submit "Salvar", id: 'submit' %>
+  </div>
+<% end %>

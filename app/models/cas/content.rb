@@ -20,6 +20,8 @@ module Cas
     before_validation :set_published_at
     before_save :cache_tags
 
+    scope :published, ->{ where(published: true) }
+
     pg_search_scope :search, ->(query) do
       {
         query: query,

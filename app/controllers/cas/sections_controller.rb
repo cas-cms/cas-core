@@ -3,7 +3,5 @@ module Cas
     def index
       @sections = Section.all
     end
-
-
   end
 end

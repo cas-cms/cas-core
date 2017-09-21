@@ -37,7 +37,7 @@ module Cas
         key == @section.slug
       }[1]["fields"]
 
-      section_fields.any? do |section_field|
+      Array.wrap(section_fields).any? do |section_field|
         if section_field.is_a?(Hash)
           section_field.keys.map(&:to_s).include?(field.to_s)
         else

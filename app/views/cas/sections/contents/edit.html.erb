@@ -1,6 +1,6 @@
 <p><%= @section.name %></p>
 <h1>Editar: <%= @content.title %></h1>
 
-<%= render 'form' %>
+<%= render "form_for_#{@content_type}" %>
 
 <%= link_to 'Voltar', section_contents_path %>

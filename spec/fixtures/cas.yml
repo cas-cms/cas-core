@@ -46,3 +46,6 @@ sites:
                 - month
                 - year
           - text
+      survey:
+        name: Survey
+        type: survey

@@ -19,7 +19,7 @@ module Cas
           subject = Setup.new
           subject.install
           subject.install
-          expect(Section.count).to eq 3
+          expect(Section.count).to eq 4
           section = Section.all
           expect(section[0].name).to eq "news"
           expect(section[0].slug).to eq "news"

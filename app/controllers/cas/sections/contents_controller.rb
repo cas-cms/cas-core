@@ -3,6 +3,7 @@ require_dependency "cas/application_controller"
 module Cas
   class Sections::ContentsController < Sections::ApplicationController
     class FileBelongsToAnotherAttachable < StandardError; end
+    before_action :set_content_type
 
     def index
       @contents = scope_content_by_role(@section.contents)
@@ -22,7 +23,7 @@ module Cas
         ActiveRecord::Base.transaction do
           @content.author_id = current_user.id
           @content.section_id = @section.id
-          @content.tag_list = content_params[:tag_list]
+          @content.tag_list = content_params[:tag_list] if content_params[:tag_list]
           success = @content.save!
           associate_files(@content, :images)
           associate_files(@content, :attachments)
@@ -83,18 +84,37 @@ module Cas
 
     private
 
+    def set_content_type
+      @content_type = @section.section_type
+    end
+
     def content_params
-      params.require(:content).permit(
-        :category_id,
-        :title,
-        :location,
-        :summary,
-        :date,
-        :text,
-        :url,
-        :embedded,
-        :tag_list
-      ).merge(published: true)
+      @content_params ||= begin
+        result = params.require(:content).permit(
+          :category_id,
+          :title,
+          :location,
+          :summary,
+          :published,
+          :date,
+          :text,
+          :url,
+          :embedded,
+          :tag_list
+        )
+
+        unless result.keys.include?(:published)
+          result.merge!(published: true)
+        end
+
+        if params.dig(:content, :metadata).present?
+          # TODO the survey is sending empty questions and these
+          # are being saved anyway. We need to filter these.
+          result[:metadata] = params.dig(:content, :metadata).to_unsafe_h
+        end
+
+        result
+      end
     end
 
     # form_key_name could be :images or :attachments

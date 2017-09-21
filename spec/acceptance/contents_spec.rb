@@ -6,6 +6,7 @@ RSpec.feature 'Contents' do
   let(:writer) { create(:user, :writer) }
 
   let!(:section) { create(:section) }
+  let!(:survey_section) { create(:section, :survey) }
   let!(:category) { create(:category, section: section) }
   let!(:content) { create(:content, section: section, author: user, category: category) }
   let!(:someone_else_content) { create(:content, section: section, author: someone_else, category: category) }
@@ -22,7 +23,7 @@ RSpec.feature 'Contents' do
     context 'when visit news' do
       scenario 'I create a content in a section news' do
         visit sections_path
-        click_link 'new-content'
+        click_link "new-content-#{section.id}"
 
         select('sports', from: 'content_category_id')
         fill_in 'content_title', with: 'new content'
@@ -114,7 +115,7 @@ RSpec.feature 'Contents' do
       context 'invalid data' do
         scenario "I see errors on the screen" do
           visit sections_path
-          click_link 'new-content'
+          click_link "new-content-#{section.id}"
 
           select('sports', from: 'content_category_id')
 
@@ -145,6 +146,87 @@ RSpec.feature 'Contents' do
       end
     end
 
+    context 'when managing a survey' do
+      let!(:survey) { create(:content, :survey, section: survey_section) }
+
+      scenario "I create questions" do
+        visit sections_path
+        click_link "new-content-#{survey_section.id}"
+
+        fill_in :content_title, with: "Survey title"
+        fill_in :question_1_text, with: "question 1"
+        fill_in :question_2_text, with: "question 2"
+        fill_in :question_3_text, with: "question 3"
+        fill_in :question_4_text, with: ""
+        click_on 'submit'
+
+        new_survey = survey_section.contents.reload.first
+        expect(new_survey.metadata).to eq({
+          "survey" => {
+            "questions" => {
+              "0" => {
+                "text" => "question 1",
+                "votes" => "0"
+              },
+              "1" => {
+                "text" => "question 2",
+                "votes" => "0"
+              },
+              "2" => {
+                "text" => "question 3",
+                "votes" => "0"
+              },
+              "3" => {
+                "text" => "",
+                "votes" => "0"
+              }
+            }
+          }
+        })
+      end
+
+      scenario "I edit questions" do
+        visit sections_path
+        click_link "manage-section-#{survey_section.id}"
+        click_link "edit-content-#{survey.id}"
+
+        expect(find("#question_1_text").value).to eq "question 1"
+        expect(find("#question_2_text").value).to eq "question 2"
+        expect(find("#question_3_text").value).to eq "question 3"
+        expect(find("#question_4_text").value).to eq ""
+
+        fill_in :content_title, with: "Survey title"
+        fill_in :question_1_text, with: "edited question 1"
+        fill_in :question_2_text, with: "question 2"
+        fill_in :question_3_text, with: ""
+        fill_in :question_4_text, with: "new question"
+        click_on 'submit'
+
+        expect(survey.reload.metadata).to eq({
+          "survey" => {
+            "questions" => {
+              "0" => {
+                "text" => "edited question 1",
+                "votes" => "1"
+              },
+              "1" => {
+                "text" => "question 2",
+                "votes" => "2"
+              },
+              "2" => {
+                "text" => "",
+                "votes" => "3"
+              },
+              "3" => {
+                "text" => "new question",
+                "votes" => "0"
+              }
+            }
+          }
+        })
+      end
+    end
+
     context 'when visit agenda' do
       let!(:section) { create(:section, name: 'agenda', slug: 'agenda') }
       let!(:content) do
@@ -159,7 +241,7 @@ RSpec.feature 'Contents' do
 
       scenario 'I create a content in a section agenda' do
         visit sections_path
-        click_link 'new-content'
+        click_link "new-content-#{section.id}"
         fill_in 'content_title', with: "new content"
         fill_in 'content_location', with: "new location"
         select '13',  from: 'content_date_3i'

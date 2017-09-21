@@ -4,5 +4,11 @@ FactoryGirl.define do
     name 'news'
     slug 'news'
     section_type 'content'
+
+    trait :survey do
+      name 'Survey'
+      slug 'survey'
+      section_type 'survey'
+    end
   end
 end

@@ -2,18 +2,25 @@
 module Cas
   class Setup
     def install
-      config = YAML.load_file(filename)
-      config["sites"].each do |site_slug, site_config|
-        site = ::Cas::Site.where(slug: site_slug).first_or_create
+      ActiveRecord::Base.transaction do
+        config = YAML.load_file(filename)
+        config["sites"].each do |site_slug, site_config|
+          site = ::Cas::Site.where(slug: site_slug).first_or_create
 
-        site_config["sections"].each do |key, section|
-          ::Cas::Section.where(
-            slug: key,
-            site_id: site.id
-          ).first_or_create!(
-            name: section["name"],
-            section_type: section["type"]
-          )
+          site_config["sections"].each do |key, section|
+            model = ::Cas::Section.where(
+              slug: key,
+              site_id: site.id
+            ).first_or_create!(
+              name: section["name"],
+              section_type: section["type"]
+            )
+
+            model.update!(
+              name: section["name"],
+              section_type: section["type"]
+            )
+          end
         end
       end
     end
