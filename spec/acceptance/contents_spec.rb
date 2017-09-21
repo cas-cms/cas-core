@@ -158,7 +158,10 @@ RSpec.feature 'Contents' do
         fill_in :question_2_text, with: "question 2"
         fill_in :question_3_text, with: "question 3"
         fill_in :question_4_text, with: ""
+        check :content_published
         click_on 'submit'
+
+        expect(survey).to be_published
 
         new_survey = survey_section.contents.reload.first
         expect(new_survey.metadata).to eq({
@@ -200,9 +203,12 @@ RSpec.feature 'Contents' do
         fill_in :question_2_text, with: "question 2"
         fill_in :question_3_text, with: ""
         fill_in :question_4_text, with: "new question"
+        uncheck :content_published
         click_on 'submit'
 
-        expect(survey.reload.metadata).to eq({
+        survey.reload
+        expect(survey).to_not be_published
+        expect(survey.metadata).to eq({
           "survey" => {
             "questions" => {
               "0" => {

@@ -5,6 +5,7 @@ FactoryGirl.define do
     sequence(:title) { |n| "Content #{n}" }
     summary 'summary content'
     text 'new text'
+    published true
 
     trait :survey do
       metadata({

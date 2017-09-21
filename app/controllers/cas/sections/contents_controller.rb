@@ -103,8 +103,8 @@ module Cas
           :tag_list
         )
 
-        unless result.keys.include?(:published)
-          result.merge!(published: true)
+        unless result.keys.map(&:to_sym).include?(:published)
+          result[:published] = true
         end
 
         if params.dig(:content, :metadata).present?
