@@ -2,7 +2,7 @@ module Cas
   class User < ApplicationRecord
     ROLES = %w[admin editor writer].freeze
 
-    before_save { self.email = email.downcase }
+    before_save { self.email = email.to_s.downcase }
     validates :name, presence: true, length: { maximum: 50 }
     validates :email, presence: true, length: { maximum: 255 },
                            uniqueness: { case_sensitive: false }

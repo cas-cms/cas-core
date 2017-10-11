@@ -28,6 +28,17 @@ module Cas
       fields || ['title', 'created_at']
     end
 
+    def accessible_by_user?(user)
+      roles = user.roles.map(&:to_s)
+      accessible_roles = load_field["accessible_roles"]
+
+      if accessible_roles.present?
+        (accessible_roles.map(&:to_s) & roles).compact.present?
+      else
+        true
+      end
+    end
+
     def form_has_field?(field)
       config = YAML.load_file(filename)
       sites = config["sites"]
@@ -53,6 +64,18 @@ module Cas
         "spec/fixtures/cas.yml"
       else
         "cas.yml"
+      end
+    end
+
+    def load_field
+      @config ||= begin
+        config_file = YAML.load_file(filename)
+        sites = config_file["sites"]
+        site = sites[@section.site.slug]
+        section = site["sections"]
+        section.find { |key, value|
+          key == @section.slug
+        }[1]
       end
     end
   end

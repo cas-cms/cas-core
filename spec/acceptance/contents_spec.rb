@@ -7,6 +7,7 @@ RSpec.feature 'Contents' do
 
   let!(:section) { create(:section) }
   let!(:survey_section) { create(:section, :survey) }
+  let!(:agenda_section) { create(:section, :agenda) }
   let!(:category) { create(:category, section: section) }
   let!(:content) { create(:content, section: section, author: user, category: category) }
   let!(:someone_else_content) { create(:content, section: section, author: someone_else, category: category) }
@@ -233,20 +234,13 @@ RSpec.feature 'Contents' do
       end
     end
 
-    context 'when visit agenda' do
+    context 'when visiting the agenda' do
       let!(:section) { create(:section, name: 'agenda', slug: 'agenda') }
-      let!(:content) do
-        create(
-          :content,
-          location: 'old location',
-          section: section,
-          author: user,
-          category: category
-        )
-      end
+      let(:new_content) { section.contents.reload.where(title: "new content").first }
 
-      scenario 'I create a content in a section agenda' do
+      before do
         visit sections_path
+
         click_link "new-content-#{section.id}"
         fill_in 'content_title', with: "new content"
         fill_in 'content_location', with: "new location"
@@ -255,44 +249,17 @@ RSpec.feature 'Contents' do
         select '2017', from: 'content_date_1i'
         fill_in 'content_text', with: "new content text"
 
+        $debug = true
         expect do
           click_on 'submit'
         end.to change(::Cas::Content, :count).by(1)
+      end
 
+      scenario 'I create a content in a section agenda' do
         last_content = Cas::Content.where(title: 'new content').first
         expect(last_content.title).to eq "new content"
         expect(last_content.location).to eq "new location"
         expect(last_content.text).to eq "new content text"
-      end
-
-      scenario "I edit a content in a section agenda" do
-        click_link "manage-section-#{section.id}"
-        click_link "edit-content-#{content.id}"
-
-        fill_in 'content[title]', with: 'new title 2'
-
-        expect do
-          click_on 'submit'
-        end.to_not change(::Cas::Content, :count)
-
-        expect(current_path).to eq section_contents_path(section)
-        expect(page).to have_content 'new title 2'
-
-        last_content = Cas::Content.where(title: "new title 2").first
-        expect(last_content).to be_present
-      end
-
-      scenario 'I delete a content in a section agenda' do
-        click_link "manage-section-#{section.id}"
-        title = content.title
-
-        expect(::Cas::Content.count).to eq 2
-        expect(page).to have_content title
-
-        click_link "delete-content-#{content.id}"
-
-        expect(::Cas::Content.count).to eq 1
-        expect(page).to_not have_content title
       end
     end
   end
@@ -317,6 +284,10 @@ RSpec.feature 'Contents' do
     let(:someone_else) { admin }
 
     scenario 'I am able to see only my own content' do
+      expect(page).to have_content "news"
+      expect(page).to_not have_content "Agenda"
+      expect(page).to have_content "Survey"
+
       click_link "manage-section-#{section.id}"
       expect(page).to have_content content.title
       expect(page).to_not have_content someone_else_content.title

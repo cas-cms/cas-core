@@ -31,6 +31,8 @@ sites:
       agenda:
         name: Agenda
         type: content
+        accessible_roles:
+          - admin
         list_fields:
           - title
           - date_time

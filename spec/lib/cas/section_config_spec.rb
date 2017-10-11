@@ -7,6 +7,48 @@ module Cas
 
     subject { described_class.new(section) }
 
+    describe '#accessible_by_user?' do
+      context 'when accessible by admin only' do
+        let(:section) { build(:section, :agenda) }
+
+        context 'when user is a admin' do
+          let(:user) { build(:user, :admin) }
+
+          it 'returns true' do
+            expect(subject).to be_accessible_by_user(user)
+          end
+        end
+
+        context 'when user is a writer' do
+          let(:user) { build(:user, :writer) }
+
+          it 'returns false' do
+            expect(subject).to_not be_accessible_by_user(user)
+          end
+        end
+      end
+
+      context 'when accessible by anyone' do
+        let(:section) { build(:section, :news) }
+
+        context 'when user is a admin' do
+          let(:user) { build(:user, :admin) }
+
+          it 'returns true' do
+            expect(subject).to be_accessible_by_user(user)
+          end
+        end
+
+        context 'when user is a writer' do
+          let(:user) { build(:user, :writer) }
+
+          it 'returns true' do
+            expect(subject).to be_accessible_by_user(user)
+          end
+        end
+      end
+    end
+
     describe '#list_fields' do
       context 'when it is defined' do
         it 'returns what is in the file' do
