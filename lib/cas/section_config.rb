@@ -73,9 +73,10 @@ module Cas
         sites = config_file["sites"]
         site = sites[@section.site.slug]
         section = site["sections"]
-        section.find { |key, value|
+        field = section.find { |key, value|
           key == @section.slug
-        }[1]
+        }
+        (field && field[1]) || {}
       end
     end
   end
