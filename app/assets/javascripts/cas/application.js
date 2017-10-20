@@ -41,7 +41,7 @@ $(document).ready(function() {
     convert_fonts_to_spans : true,
     font_size_style_values : "8pt,10pt,12pt,14pt,18pt,24pt,36pt",
     inline_styles: false,
-    extended_valid_elements : "embed,param,object,iframe",
+    extended_valid_elements: "embed,param,object,iframe[src|title|width|height|allowfullscreen|frameborder]",
     language : "pt_BR",
     plugins : 'image,imagetools,code,paste,pagebreak,table,wordcount',
     images_upload_url: paths.fileUpload.path,
