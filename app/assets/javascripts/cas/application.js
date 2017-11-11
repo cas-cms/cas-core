@@ -43,7 +43,8 @@ $(document).ready(function() {
     inline_styles: false,
     extended_valid_elements: "embed,param,object,iframe[src|title|width|height|allowfullscreen|frameborder]",
     language : "pt_BR",
-    plugins : 'image,imagetools,code,paste,pagebreak,table,wordcount',
+    plugins : 'image,imagetools,code,paste,pagebreak,table,wordcount,link',
+    default_link_target: "_blank",
     images_upload_url: paths.fileUpload.path,
     images_upload_credentials: true
   });
