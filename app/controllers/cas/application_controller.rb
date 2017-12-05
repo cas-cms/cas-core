@@ -9,5 +9,9 @@ module Cas
     def set_current_user
       @current_user = current_user
     end
+
+    def set_domain
+      @domain ||= (ENV["DOMAIN"] || request.domain)
+    end
   end
 end

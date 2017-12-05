@@ -1,53 +1,59 @@
-config:
-  uploads:
-    cache_directory_prefix: 'cache'
-    store_directory_prefix: 'uploads'
+default: &default
+  config:
+    uploads:
+      cache_directory_prefix: 'cache'
+      store_directory_prefix: 'uploads'
+  sites:
+    mysite:
+      sections:
+        news:
+          name: news
+          type: content
+          list_fields:
+            - title
+            - category
+          fields:
+            - category
+            - tags
+            - title
+            - summary
+            - text
+            - images
+            - files
+            - tags
+            - date
+        biography:
+          name: Biography
+          type: content
+          fields:
+            - title
+            - text
+            - image
+        agenda:
+          name: Agenda
+          type: content
+          accessible_roles:
+            - admin
+          list_fields:
+            - title
+            - date_time
+          list_order_by:
+            - order_field
+          fields:
+            - title
+            - location
+            - date:
+                language: pt-br
+                format:
+                  - day
+                  - month
+                  - year
+            - text
+        survey:
+          name: Survey
+          type: survey
 sites:
-  mysite:
-    sections:
-      news:
-        name: news
-        type: content
-        list_fields:
-          - title
-          - category
-        fields:
-          - category
-          - tags
-          - title
-          - summary
-          - text
-          - images
-          - files
-          - tags
-          - date
-      biography:
-        name: Biography
-        type: content
-        fields:
-          - title
-          - text
-          - image
-      agenda:
-        name: Agenda
-        type: content
-        accessible_roles:
-          - admin
-        list_fields:
-          - title
-          - date_time
-        list_order_by:
-          - order_field
-        fields:
-          - title
-          - location
-          - date:
-              language: pt-br
-              format:
-                - day
-                - month
-                - year
-          - text
-      survey:
-        name: Survey
-        type: survey
+  city:
+    <<: *default
+    domains:
+      - city.net
