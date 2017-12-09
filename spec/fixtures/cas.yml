@@ -54,6 +54,6 @@ config:
 sites:
   mysite:
     <<: *default
+    name: mysite.net
     domains:
       - mysite.net
-

@@ -6,7 +6,10 @@ module Cas
 
         config["sites"].each do |site_slug, site_config|
           site = ::Cas::Site.where(slug: site_slug).first_or_create
-          site.update!(domains: site_config["domains"])
+          site.update!(
+            domains: site_config["domains"],
+            name: site_config["name"]
+          )
 
           site_config["sections"].each do |key, section|
             model = ::Cas::Section.where(
