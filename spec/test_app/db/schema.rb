@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170919181809) do
+ActiveRecord::Schema.define(version: 20171201191059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,14 +46,13 @@ ActiveRecord::Schema.define(version: 20170919181809) do
     t.jsonb    "details",      default: "{}"
     t.string   "slug"
     t.uuid     "category_id"
+    t.string   "location"
     t.string   "url"
     t.string   "embedded"
     t.datetime "published_at"
-    t.string   "location"
     t.string   "tags_cache"
     t.index "((((to_tsvector('simple'::regconfig, COALESCE((title)::text, ''::text)) || to_tsvector('simple'::regconfig, COALESCE(text, ''::text))) || to_tsvector('simple'::regconfig, COALESCE((location)::text, ''::text))) || to_tsvector('simple'::regconfig, COALESCE((tags_cache)::text, ''::text))))", name: "cas_contents_search_with_fulltext", using: :gist
     t.index ["author_id"], name: "index_cas_contents_on_author_id", using: :btree
-    t.index ["category_id"], name: "index_cas_contents_on_category_id", using: :btree
     t.index ["published"], name: "index_cas_contents_on_published", using: :btree
     t.index ["published_at"], name: "index_cas_contents_on_published_at", using: :btree
     t.index ["section_id"], name: "index_cas_contents_on_section_id", using: :btree
@@ -96,9 +95,11 @@ ActiveRecord::Schema.define(version: 20170919181809) do
 
   create_table "cas_sites", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.string   "slug"
+    t.string   "domains",    default: [],              array: true
+    t.index ["domains"], name: "index_cas_sites_on_domains", using: :gin
     t.index ["name"], name: "index_cas_sites_on_name", using: :btree
     t.index ["slug"], name: "index_cas_sites_on_slug", using: :btree
   end

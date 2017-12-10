@@ -12,6 +12,8 @@ module Cas
           expect(Site.count).to eq 1
           site = Site.first
           expect(site.slug).to eq "mysite"
+          expect(site.domains).to eq ["mysite.net"]
+          expect(site.name).to eq "mmysite.net"
         end
 
         it 'creates sections' do
