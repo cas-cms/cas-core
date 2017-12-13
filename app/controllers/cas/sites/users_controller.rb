@@ -1,7 +1,7 @@
 require_dependency "cas/application_controller"
 
 module Cas
-  class UsersController < ApplicationController
+  class Sites::UsersController < ApplicationController
     def index
       @users = ::Cas::User.order('name ASC')
     end
