@@ -14,7 +14,7 @@
       <tr>
         <td>
           <%= link_to category.name,
-            cas.edit_section_category_path(@section, category),
+            cas.edit_site_section_category_path(@site, @section, category),
             id: "edit-category-#{category.id}"
           %>
         </td>
@@ -25,4 +25,4 @@
 
 <br>
 
-<%= link_to 'Nova categoria', cas.new_section_category_path(@section), id: 'new-category' %>
+<%= link_to 'Nova categoria', cas.new_site_section_category_path(@site.id, @section.id), id: 'new-category' %>

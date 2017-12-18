@@ -1,5 +1,5 @@
 module Cas
-  class Sections::ApplicationController < ApplicationController
+  class Sites::Sections::ApplicationController < Sites::ApplicationController
     before_action :load_section
 
     private

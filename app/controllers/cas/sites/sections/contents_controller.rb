@@ -1,7 +1,7 @@
 require_dependency "cas/application_controller"
 
 module Cas
-  class Sections::ContentsController < Sections::ApplicationController
+  class Sites::Sections::ContentsController < Sites::Sections::ApplicationController
     class FileBelongsToAnotherAttachable < StandardError; end
     before_action :set_content_type
 
@@ -33,7 +33,7 @@ module Cas
       end
 
       if success
-        redirect_to section_contents_url(@section), notice: 'Noticia salva com sucesso.'
+        redirect_to site_section_contents_url(@section), notice: 'Noticia salva com sucesso.'
       else
         load_categories
         render :new
@@ -68,7 +68,7 @@ module Cas
       end
 
       if success
-        redirect_to section_contents_path
+        redirect_to site_section_contents_path
       else
         load_categories
         render :edit
@@ -79,7 +79,7 @@ module Cas
       @content = scope_content_by_role.friendly.find(params[:id])
       @content.destroy
 
-      redirect_to section_contents_path
+      redirect_to site_section_contents_path
     end
 
     private

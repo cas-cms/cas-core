@@ -1,4 +1,4 @@
-<%= simple_form_for ([@section, @content]) do |f| %>
+<%= simple_form_for ([@site, @section, @content]) do |f| %>
   <% if display_field?(:category) %>
     <p>
       <%= f.input :category_id,
