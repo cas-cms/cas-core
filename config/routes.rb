@@ -17,7 +17,7 @@ Cas::Engine.routes.draw do
   resources :sites, only: [:index] do
     resources :users, controller: 'sites/users'
 
-    resources :sections, only: [:index] do
+    resources :sections, only: [:index], controller: 'sites/sections' do
       resources :contents, controller: 'sites/sections/contents'
       resources :categories, controller: 'sites/sections/categories'
     end

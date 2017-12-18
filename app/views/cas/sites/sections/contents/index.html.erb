@@ -10,7 +10,7 @@
 </div>
 
 <%= link_to 'Novo conteúdo',
-  new_site_section_content_path(@site.id, @section.id),
+  new_site_section_content_path(@site, @section),
   id: 'new-content' %>
 
 <br />
@@ -47,7 +47,7 @@
 
           <% if column_no == 1 %>
             <%= link_to value,
-              edit_site_section_content_path(@site, @section.id, content),
+              edit_site_section_content_path(@site, @section, content),
               id: "edit-content-#{content.id}" %>
           <% else %>
             <%= value %>
@@ -57,7 +57,7 @@
         </td>
       <% end %>
       <td>
-        <%= link_to 'Excluir', site_section_content_path(@site, @section.id, content),
+        <%= link_to 'Excluir', site_section_content_path(@site, @section, content),
           method: :delete,
           data: { confirm: 'Tem certeza?' },
           id: "delete-content-#{content.id}" %>

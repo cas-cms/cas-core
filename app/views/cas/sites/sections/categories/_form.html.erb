@@ -1,10 +1,10 @@
-<%= simple_form_for([@site, @section, category]) do |f| %>
-  <% if category.errors.any? %>
+<%= simple_form_for([@site, @section, @category]) do |f| %>
+  <% if @category.errors.any? %>
     <div id="error_explanation">
       <h2>Ocorreram alguns erros:</h2>
 
       <ul>
-        <% category.errors.full_messages.each do |message| %>
+        <% @category.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
       </ul>

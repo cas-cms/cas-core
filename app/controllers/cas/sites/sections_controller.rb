@@ -1,7 +1,7 @@
 module Cas
-  class Sites::SectionsController < Sites::Sections::ApplicationController
+  class Sites::SectionsController < Sites::ApplicationController
     def index
-      @sections = Section.all
+      @sections = @site.sections.all
     end
   end
 end
