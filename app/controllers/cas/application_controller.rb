@@ -14,7 +14,7 @@ module Cas
     def set_domain
       @domain ||= (ENV["DOMAIN"] || request.domain)
 
-      if (@domain.blank? || @domain == "localhost")
+      if @domain.blank? || (ENV["DOMAIN"].blank? && @domain == "localhost")
         @domain = ::Cas::Site.first!.domains.first
       end
     end

@@ -33,12 +33,14 @@ module Cas
             user = ::Cas::User.where(
               'cas_users.email = :value OR cas_users.login = :value',
               value: email_or_login
-            ).first!
+            ).first
 
-            unless updated_users.include?(user.id)
-              user.update!(sites: ::Cas::Site.all)
+            if user.present?
+              unless updated_users.include?(user.id)
+                user.update!(sites: ::Cas::Site.all)
+              end
+              updated_users << user.id
             end
-            updated_users << user.id
           end
         end
       end

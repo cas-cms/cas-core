@@ -19,11 +19,14 @@ module Cas
 
     def self.find_for_database_authentication(warden_conditions)
       conditions = warden_conditions.dup
+      domain = conditions[:domain]
+      domain = ENV["DOMAIN"] if Rails.env.development? && ENV["DOMAIN"].present?
+      domain = ::Cas::Site.first.domains.first if domain.to_s =~ /localhost/
       sql = where(["lower(login) = :value OR lower(email) = :value", {
         value: conditions[:email].downcase
       }])
       sql = sql.joins(:sites)
-      sql = sql.where("cas_sites.domains::text[] && '{#{conditions[:domain]}}'::text[]")
+      sql = sql.where("cas_sites.domains::text[] && '{#{domain}}'::text[]")
       sql.first
     end
 
