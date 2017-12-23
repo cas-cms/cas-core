@@ -6,7 +6,7 @@
 
 $(document).ready(function() {
   $("#select-site").on("change", function(e) {
-    let url = $(this).val();
+    var url = $(this).val();
     window.location = url;
   });
 
