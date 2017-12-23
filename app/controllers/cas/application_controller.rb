@@ -15,7 +15,7 @@ module Cas
       @domain ||= (ENV["DOMAIN"] || request.domain)
 
       if (@domain.blank? || @domain == "localhost")
-        @domain = Cas::Site.first!.domains.first
+        @domain = ::Cas::Site.first!.domains.first
       end
     end
   end
