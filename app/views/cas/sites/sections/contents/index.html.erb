@@ -4,13 +4,13 @@
   </div>
   <div class="col-1-2 section-options">
     <% if Cas::SectionConfig.new(@section).form_has_field?(:category) %>
-      <%= link_to "Categorias", section_categories_path(@section), id: 'manage-categories' %>
+      <%= link_to "Categorias", site_section_categories_path(@site, @section), id: 'manage-categories' %>
     <% end %>
   </div>
 </div>
 
 <%= link_to 'Novo conteúdo',
-  new_section_content_path(@section.id),
+  new_site_section_content_path(@site, @section),
   id: 'new-content' %>
 
 <br />
@@ -47,7 +47,7 @@
 
           <% if column_no == 1 %>
             <%= link_to value,
-              edit_section_content_path(@section.id, content),
+              edit_site_section_content_path(@site, @section, content),
               id: "edit-content-#{content.id}" %>
           <% else %>
             <%= value %>
@@ -57,7 +57,7 @@
         </td>
       <% end %>
       <td>
-        <%= link_to 'Excluir', section_content_path(@section.id, content),
+        <%= link_to 'Excluir', site_section_content_path(@site, @section, content),
           method: :delete,
           data: { confirm: 'Tem certeza?' },
           id: "delete-content-#{content.id}" %>

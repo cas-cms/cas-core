@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20171201191059) do
     t.string   "tags_cache"
     t.index "((((to_tsvector('simple'::regconfig, COALESCE((title)::text, ''::text)) || to_tsvector('simple'::regconfig, COALESCE(text, ''::text))) || to_tsvector('simple'::regconfig, COALESCE((location)::text, ''::text))) || to_tsvector('simple'::regconfig, COALESCE((tags_cache)::text, ''::text))))", name: "cas_contents_search_with_fulltext", using: :gist
     t.index ["author_id"], name: "index_cas_contents_on_author_id", using: :btree
+    t.index ["category_id"], name: "index_cas_contents_on_category_id", using: :btree
     t.index ["published"], name: "index_cas_contents_on_published", using: :btree
     t.index ["published_at"], name: "index_cas_contents_on_published_at", using: :btree
     t.index ["section_id"], name: "index_cas_contents_on_section_id", using: :btree

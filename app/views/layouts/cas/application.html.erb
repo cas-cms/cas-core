@@ -38,7 +38,7 @@
       <div class="col-1-2 secondary">
         <% if user_signed_in? %>
           <span class="profile">
-            <%= link_to current_user.name, cas.edit_user_path(current_user), id: "edit-profile"%>
+            <%= link_to current_user.name, cas.edit_site_user_path(@site, current_user), id: "edit-profile"%>
           </span>
           <span class="sign-out"%>
             <%= link_to "Sair", cas.destroy_user_session_path, method: :delete %>
@@ -53,7 +53,7 @@
           <li><%= link_to "Conteúdo", cas.root_path %></li>
         <% end %>
         <% if user_signed_in? && current_user.admin? %>
-          <li><%= link_to "Pessoas", cas.users_path, id: "list-people" %></li>
+          <li><%= link_to "Pessoas", cas.site_users_path(@site), id: "list-people" %></li>
         <% end %>
       </ul>
     </nav>

@@ -2,4 +2,4 @@
 
 <%= render "form_for_#{@content_type}" %>
 
-<%= link_to 'Voltar', section_contents_path %>
+<%= link_to 'Voltar', site_section_contents_path(@site, @section) %>

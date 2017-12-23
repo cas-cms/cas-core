@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'Categories' do
   let(:user) { create(:user) }
+  let(:site) { section.site }
   let!(:section) { create(:section) }
   let!(:category) { create(:category, section: section) }
 
@@ -22,7 +23,7 @@ RSpec.feature 'Categories' do
         click_on 'submit'
       end.to change(::Cas::Category, :count).by(1)
 
-      expect(current_path).to eq section_categories_path(section)
+      expect(current_path).to eq site_section_categories_path(site, section)
     end
 
     scenario "I edit a category in a section" do
@@ -36,7 +37,7 @@ RSpec.feature 'Categories' do
         click_on 'submit'
       end.to_not change(::Cas::Category, :count)
 
-      expect(current_path).to eq section_categories_path(section)
+      expect(current_path).to eq site_section_categories_path(site, section)
       expect(page).to have_content 'old category'
     end
   end

@@ -1,7 +1,7 @@
 require_dependency "cas/application_controller"
 
 module Cas
-  class Sections::CategoriesController < Sections::ApplicationController
+  class Sites::Sections::CategoriesController < Sites::Sections::ApplicationController
     before_action :set_category, only: [:edit, :update, :destroy]
 
     def index
@@ -20,7 +20,7 @@ module Cas
       @category.section = @section
 
       if @category.save
-        redirect_to section_categories_url(@section), notice: 'Categoria salva com sucesso.'
+        redirect_to site_section_categories_url(@site, @section), notice: 'Categoria salva com sucesso.'
       else
         render :new
       end
@@ -28,7 +28,7 @@ module Cas
 
     def update
       if @category.update(category_params)
-        redirect_to section_categories_url(@section), notice: 'Categoria salva com sucesso.'
+        redirect_to site_section_categories_url(@site, @section), notice: 'Categoria salva com sucesso.'
       else
         render :edit
       end

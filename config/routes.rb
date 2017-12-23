@@ -14,11 +14,13 @@ Cas::Engine.routes.draw do
     controllers: { sessions: "cas/devise/sessions" },
     skip: :registrations
 
-  resources :users, controller: 'users'
+  resources :sites, only: [:index] do
+    resources :users, controller: 'sites/users'
 
-  resources :sections, only: [:index] do
-    resources :contents, controller: 'sections/contents'
-    resources :categories, controller: 'sections/categories'
+    resources :sections, only: [:index], controller: 'sites/sections' do
+      resources :contents, controller: 'sites/sections/contents'
+      resources :categories, controller: 'sites/sections/categories'
+    end
   end
 
   # used by tinymce editor
@@ -27,5 +29,5 @@ Cas::Engine.routes.draw do
     resources :files, only: [:create, :destroy]
   end
 
-  root 'sections#index'
+  root 'sites/sections#index'
 end

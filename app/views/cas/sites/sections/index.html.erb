@@ -11,10 +11,10 @@
     <tr id="section-<%= section.id %>">
       <td><%= section.name %></td>
       <td>
-        <%= link_to 'Novo', new_section_content_path(section), id: "new-content-#{section.id}" %>
+        <%= link_to 'Novo', new_site_section_content_path(@site, section), id: "new-content-#{section.id}" %>
         &nbsp;
         &nbsp;
-        <%= link_to 'Gerenciar', section_contents_path(section), id: "manage-section-#{section.id}" %>
+        <%= link_to 'Gerenciar', site_section_contents_path(@site, section), id: "manage-section-#{section.id}" %>
       </td>
     </tr>
   <% end %>

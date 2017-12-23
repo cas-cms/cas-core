@@ -1,11 +1,11 @@
 module Cas
-  class Sections::ApplicationController < ApplicationController
+  class Sites::Sections::ApplicationController < Sites::ApplicationController
     before_action :load_section
 
     private
 
     def load_section
-      @section ||= ::Cas::Section.friendly.find(params[:section_id])
+      @section ||= @site.sections.friendly.find(params[:section_id])
     end
 
     def scope_content_by_role(model_relation = ::Cas::Content)

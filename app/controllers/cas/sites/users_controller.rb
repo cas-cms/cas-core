@@ -1,7 +1,7 @@
 require_dependency "cas/application_controller"
 
 module Cas
-  class UsersController < ApplicationController
+  class Sites::UsersController < Sites::ApplicationController
     def index
       @users = ::Cas::User.order('name ASC')
     end
@@ -14,7 +14,7 @@ module Cas
       @user = ::Cas::User.new(user_params)
       @user.roles = user_params[:roles]
       if @user.save
-        redirect_to users_path
+        redirect_to site_users_url(@site)
       else
         render :new
       end
@@ -35,7 +35,7 @@ module Cas
       end
 
       if success
-        redirect_to users_path
+        redirect_to site_users_url(@site)
       else
         render 'edit'
       end

@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "API /media_files" do
   let(:content) { create(:content) }
+  let!(:site) { create(:site) }
 
   before do
     sign_in

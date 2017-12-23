@@ -13,7 +13,7 @@ module Cas
           site = Site.first
           expect(site.slug).to eq "mysite"
           expect(site.domains).to eq ["mysite.net"]
-          expect(site.name).to eq "mmysite.net"
+          expect(site.name).to eq "mysite.net"
         end
 
         it 'creates sections' do
