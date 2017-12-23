@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Categories' do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, sites: [site]) }
   let(:site) { section.site }
   let!(:section) { create(:section) }
   let!(:category) { create(:category, section: section) }

@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.feature 'Contents' do
-  let(:admin)  { create(:user, :admin) }
-  let(:editor) { create(:user, :editor) }
-  let(:writer) { create(:user, :writer) }
+  let(:admin)  { create(:user, :admin, sites: [site]) }
+  let(:editor) { create(:user, :editor, sites: [site]) }
+  let(:writer) { create(:user, :writer, sites: [site]) }
 
   let!(:site) { create(:site) }
   let!(:section) { create(:section, site: site) }

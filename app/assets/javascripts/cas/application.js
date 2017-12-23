@@ -5,6 +5,11 @@
 //= require_self
 
 $(document).ready(function() {
+  $("#select-site").on("change", function(e) {
+    let url = $(this).val();
+    window.location = url;
+  });
+
   $(".js-tags").selectize({
     plugins: ['restore_on_backspace', 'remove_button'],
     delimiter: ',',

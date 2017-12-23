@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171201191059) do
+ActiveRecord::Schema.define(version: 20171223143551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,7 +102,17 @@ ActiveRecord::Schema.define(version: 20171201191059) do
     t.string   "domains",    default: [],              array: true
     t.index ["domains"], name: "index_cas_sites_on_domains", using: :gin
     t.index ["name"], name: "index_cas_sites_on_name", using: :btree
-    t.index ["slug"], name: "index_cas_sites_on_slug", using: :btree
+    t.index ["slug"], name: "index_cas_sites_on_slug", unique: true, using: :btree
+  end
+
+  create_table "cas_sites_users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "user_id",    null: false
+    t.uuid     "site_id",    null: false
+    t.boolean  "author_id"
+    t.boolean  "uuid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["site_id", "user_id"], name: "index_cas_sites_users_on_site_id_and_user_id", using: :btree
   end
 
   create_table "cas_users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

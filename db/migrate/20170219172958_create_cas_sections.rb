@@ -7,6 +7,7 @@ class CreateCasSections < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
-     add_index :cas_sections, :site_id
+
+    add_index :cas_sections, :site_id
   end
 end
