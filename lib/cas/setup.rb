@@ -26,6 +26,21 @@ module Cas
             )
           end
         end
+
+        if superadmins_emails_or_logins = config["config"]["superadmins"]
+          updated_users = []
+          superadmins_emails_or_logins.each do |email_or_login|
+            user = ::Cas::User.where(
+              'cas_users.email = :value OR cas_users.login = :value',
+              value: email_or_login
+            ).first!
+
+            unless updated_users.include?(user.id)
+              user.update!(sites: ::Cas::Site.all)
+            end
+            updated_users << user.id
+          end
+        end
       end
     end
 

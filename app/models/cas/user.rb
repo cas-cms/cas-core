@@ -3,7 +3,7 @@ module Cas
     ROLES = %w[admin editor writer].freeze
 
     devise :database_authenticatable, #:recoverable,
-           :rememberable, :trackable, :validatable
+           :rememberable, :trackable, :validatable, request_keys: [:domain]
 
     has_many :contents
     has_many :files, class_name: 'Cas::MediaFile', as: :attachable
@@ -22,6 +22,8 @@ module Cas
       sql = where(["lower(login) = :value OR lower(email) = :value", {
         value: conditions[:email].downcase
       }])
+      sql = sql.joins(:sites)
+      sql = sql.where("cas_sites.domains::text[] && '{#{conditions[:domain]}}'::text[]")
       sql.first
     end
 

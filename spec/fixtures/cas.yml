@@ -48,6 +48,9 @@ default: &default
       type: survey
 
 config:
+  superadmins:
+    - superadmin@example.com
+    - superadmin-login
   uploads:
     cache_directory_prefix: 'cache'
     store_directory_prefix: 'uploads'
