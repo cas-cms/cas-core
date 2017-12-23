@@ -30,27 +30,46 @@
 
   <header>
     <div class="grid top">
-      <div class="col-1-2">
+      <div class="mobile-col-1-1 col-1-3">
         <h1>
           Admin
         </h1>
       </div>
-      <div class="col-1-2 secondary">
-        <% if user_signed_in? %>
+
+      <% if user_signed_in? %>
+        <div class="mobile-col-1-1 col-1-3 site-selector">
+          <% if @user_sites.count <= 1 %>
+            <%= @user_sites[0].name %> (<%= @user_sites[0].domains.join(", ") %>)
+          <% else %>
+            <select id="select-site">
+              <% @user_sites.each do |site| %>
+                <% selected = site.id == @site.id %>
+                <option
+                  value="<%= site_sections_path(site) %>"
+                  <%= 'selected="selected"' if selected %>
+                >
+                  <%= site.name %>
+                  (<%= site.domains.join(", ") %>)
+                </option>
+              <% end %>
+            </select>
+          <% end %>
+        </div>
+        <div class="mobile-col-1-1 col-1-3 secondary">
           <span class="profile">
-            <%= link_to current_user.name, cas.edit_site_user_path(@site, current_user), id: "edit-profile"%>
+            <%= link_to "Minha conta", cas.edit_site_user_path(@site, current_user), id: "edit-profile"%>
           </span>
           <span class="sign-out"%>
             <%= link_to "Sair", cas.destroy_user_session_path, method: :delete %>
           </span>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
 
     <nav class="grid">
       <ul>
         <% if user_signed_in? %>
-          <li><%= link_to "Conteúdo", cas.root_path %></li>
+          <li><%= link_to "Conteúdo", cas.site_sections_path(@site) %></li>
         <% end %>
         <% if user_signed_in? && current_user.admin? %>
           <li><%= link_to "Pessoas", cas.site_users_path(@site), id: "list-people" %></li>
