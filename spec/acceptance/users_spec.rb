@@ -28,7 +28,7 @@ RSpec.feature 'User' do
 
       expect(admin.roles).to eq ["admin"]
 
-      new_user = ::Cas::User.where.not(id: admin.id).first!
+      new_user = ::Cas::User.where(name: "asd234").first!
       expect(new_user.sites.map(&:name)).to match_array([site, site2].map(&:name))
     end
 
