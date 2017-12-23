@@ -5,9 +5,10 @@ RSpec.feature 'Contents' do
   let(:editor) { create(:user, :editor) }
   let(:writer) { create(:user, :writer) }
 
-  let!(:section) { create(:section) }
-  let!(:survey_section) { create(:section, :survey) }
-  let!(:agenda_section) { create(:section, :agenda) }
+  let!(:site) { create(:site) }
+  let!(:section) { create(:section, site: site) }
+  let!(:survey_section) { create(:section, :survey, site: site) }
+  let!(:agenda_section) { create(:section, :agenda, site: site) }
   let!(:category) { create(:category, section: section) }
   let!(:content) { create(:content, section: section, author: user, category: category) }
   let!(:someone_else_content) { create(:content, section: section, author: someone_else, category: category) }
@@ -15,6 +16,7 @@ RSpec.feature 'Contents' do
 
   background do
     login(user)
+    visit root_path
   end
 
   context 'As admin' do
@@ -23,7 +25,7 @@ RSpec.feature 'Contents' do
 
     context 'when visit news' do
       scenario 'I create a content in a section news' do
-        visit sections_path
+        visit site_sections_path(site)
         click_link "new-content-#{section.id}"
 
         select('sports', from: 'content_category_id')
@@ -60,7 +62,7 @@ RSpec.feature 'Contents' do
           click_on 'submit'
         end.to_not change(::Cas::Content, :count)
 
-        expect(current_path).to eq section_contents_path(section)
+        expect(current_path).to eq site_section_contents_path(site, section)
         expect(page).to have_content 'new title 2'
 
         expect(content.reload.images).to be_present
@@ -115,7 +117,7 @@ RSpec.feature 'Contents' do
 
       context 'invalid data' do
         scenario "I see errors on the screen" do
-          visit sections_path
+          visit site_sections_path(site)
           click_link "new-content-#{section.id}"
 
           select('sports', from: 'content_category_id')
@@ -151,7 +153,7 @@ RSpec.feature 'Contents' do
       let!(:survey) { create(:content, :survey, section: survey_section) }
 
       scenario "I create questions" do
-        visit sections_path
+        visit site_sections_path(site)
         click_link "new-content-#{survey_section.id}"
 
         fill_in :content_title, with: "Survey title"
@@ -190,7 +192,7 @@ RSpec.feature 'Contents' do
       end
 
       scenario "I edit questions" do
-        visit sections_path
+        visit site_sections_path(site)
         click_link "manage-section-#{survey_section.id}"
         click_link "edit-content-#{survey.id}"
 
@@ -235,11 +237,11 @@ RSpec.feature 'Contents' do
     end
 
     context 'when visiting the agenda' do
-      let!(:section) { create(:section, name: 'agenda', slug: 'agenda') }
+      let!(:section) { create(:section, name: 'agenda', slug: 'agenda', site: site) }
       let(:new_content) { section.contents.reload.where(title: "new content").first }
 
       before do
-        visit sections_path
+        visit site_sections_path(site)
 
         click_link "new-content-#{section.id}"
         fill_in 'content_title', with: "new content"
@@ -249,7 +251,6 @@ RSpec.feature 'Contents' do
         select '2017', from: 'content_date_1i'
         fill_in 'content_text', with: "new content text"
 
-        $debug = true
         expect do
           click_on 'submit'
         end.to change(::Cas::Content, :count).by(1)
@@ -275,7 +276,7 @@ RSpec.feature 'Contents' do
     end
 
     scenario "I am able to go to edit someone else's content by id" do
-      visit edit_section_content_path(someone_else_content.section, someone_else_content)
+      visit edit_site_section_content_path(site, someone_else_content.section, someone_else_content)
     end
   end
 
@@ -295,7 +296,7 @@ RSpec.feature 'Contents' do
 
     scenario "I am not able to go to edit someone else's content by id" do
       expect do
-        visit edit_section_content_path(someone_else_content.section, someone_else_content)
+        visit edit_site_section_content_path(site, someone_else_content.section, someone_else_content)
       end.to raise_error ActiveRecord::RecordNotFound
     end
   end

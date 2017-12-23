@@ -1,4 +1,4 @@
-<%= simple_form_for(@user) do |f| %>
+<%= simple_form_for [@site, @user] do |f| %>
   <%= f.input :name %><br />
   <%= f.input :email %><br />
   <% if current_user.admin? %>

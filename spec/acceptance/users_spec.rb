@@ -3,6 +3,11 @@ require "rails_helper"
 RSpec.feature 'User' do
   let(:admin) { create(:user, :admin) }
   let!(:writer) { create(:user, :writer) }
+  let(:site) { create(:site) }
+
+  background do
+    site
+  end
 
   context 'As admin' do
     background do
@@ -10,7 +15,7 @@ RSpec.feature 'User' do
     end
 
     scenario 'I create a user' do
-      visit new_user_path
+      visit new_site_user_path(site)
 
       fill_in 'user[name]', with: "asd234"
       fill_in 'user[email]', with: "asd234@asd.com"
@@ -36,7 +41,7 @@ RSpec.feature 'User' do
       fill_in 'user[password_confirmation]', with: "new passw"
 
       click_on "save-form"
-      expect(current_path).to eq users_path
+      expect(current_path).to eq site_users_path(site)
       writer.reload
       expect(writer.name).to eq "asd2345"
       expect(writer.email).to eq "asd2345@asd.com"
@@ -53,7 +58,7 @@ RSpec.feature 'User' do
       select 'Admin', from: :user_roles
 
       click_on "save-form"
-      expect(current_path).to eq users_path
+      expect(current_path).to eq site_users_path(site)
       writer.reload
       expect(writer.name).to eq "new name"
       expect(writer.email).to eq "asd2345@asd.com"

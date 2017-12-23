@@ -6,7 +6,7 @@
   </div>
 </div>
 
-<%= link_to "Novo Usuário", new_user_path if current_user.admin? %>
+<%= link_to "Novo Usuário", new_site_user_path(@site) if current_user.admin? %>
 
 <br />
 <br />
@@ -24,7 +24,7 @@
         <tr id="user-<%= user.id %>">
           <td>
             <%= link_to user.name,
-              edit_user_path(user),
+              edit_site_user_path(@site, user),
               id: "edit-user-#{user.id}" %>
           </td>
           <td><%= user.roles.join(", ") %></td>
