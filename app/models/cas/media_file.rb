@@ -15,6 +15,10 @@ module Cas
     scope :non_cover, ->{ where(cover: false) }
     scope :usable, -> { where.not(attachable_id: nil) }
 
+    def site
+      attachable.site || raise("Attachable doesn't have a Cas::Site association")
+    end
+
     def url(version:, use_cdn: true)
       cdn = ENV.fetch("CDN_HOST", nil) if use_cdn
 

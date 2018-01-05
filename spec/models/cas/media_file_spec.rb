@@ -64,6 +64,17 @@ module Cas
       end
     end
 
+    describe "#site" do
+      let(:site) { create(:site) }
+      let(:section) { create(:section, site: site) }
+      let(:content) { create(:content, section: section) }
+
+      it 'returns the attachable site' do
+        file = create(:file, attachable: content)
+        expect(file.site).to eq site
+      end
+    end
+
     describe '#url' do
       before do
         allow(ENV).to receive(:fetch).with("CDN_HOST", nil) { "http://cdn" }

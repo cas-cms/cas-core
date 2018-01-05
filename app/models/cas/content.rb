@@ -9,6 +9,7 @@ module Cas
     serialize :metadata
 
     belongs_to :section
+    has_one :site, through: :section
     belongs_to :category
     belongs_to :author, class_name: Cas::User
     has_many :images, ->{ where(media_type: :image).order("cas_media_files.order ASC") }, class_name: Cas::MediaFile, as: :attachable, dependent: :destroy
