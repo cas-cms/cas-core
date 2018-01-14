@@ -1,0 +1,40 @@
+<div class="grid">
+  <div class="col-1-1">
+    <h1> Atividades </h1>
+  </div>
+  
+</div>
+<%= @activities.inspect %>
+
+<br />
+<br />
+
+<table>
+  <thead>
+    <tr>
+      <th>
+      </th>
+      <th>Data</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <%= @activities.each do |activity| %>
+    <tr>
+      <td>
+        <strong><%= activity.user.name %></strong>
+        <% if activity.event_name == 'create' %> 
+          criou
+        <% elsif activity.event_name == 'update'%>
+          editou
+        <% end %>
+        <strong><%= activity.subject.title %></strong>
+      </td>
+      <td>25/11/2017</td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<br>
+
+<%= paginate @activities %>

@@ -26,7 +26,7 @@
 
   <%= csrf_meta_tags %>
 </head>
-<body class="<%= "site-#{@site.id}" if @current_user.present? %>">
+<body class="<%= "site-#{@site.id}" if @current_user.present? && @site.present? %>">
 
   <header>
     <div class="grid top">
@@ -43,7 +43,7 @@
           <% else %>
             <select id="select-site">
               <% @user_sites.each do |site| %>
-                <% selected = site.id == @site.id %>
+                <% selected = site.id == @site&.id %>
                 <option
                   value="<%= site_sections_path(site) %>"
                   <%= 'selected="selected"' if selected %>
@@ -70,6 +70,8 @@
       <ul>
         <% if user_signed_in? %>
           <li><%= link_to "Conteúdo", cas.site_sections_path(@site) %></li>
+          <li><%= link_to "Atividades", cas.activities_path %></li>
+
         <% end %>
         <% if user_signed_in? && current_user.admin? %>
           <li><%= link_to "Pessoas", cas.site_users_path(@site), id: "list-people" %></li>

@@ -9,6 +9,7 @@ module Cas
     has_many :files, class_name: 'Cas::MediaFile', as: :attachable
     has_many :sites_users, class_name: 'Cas::SitesUser'
     has_many :sites, through: :sites_users
+    has_many :activities, as: :subject
 
     validates :name, presence: true, length: { maximum: 50 }
     validates :email, presence: true, length: { maximum: 255 },

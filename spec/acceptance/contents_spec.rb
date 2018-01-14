@@ -46,6 +46,13 @@ RSpec.feature 'Contents' do
         expect(last_content.text).to eq 'text'
         expect(last_content.tag_list).to match_array ['tag1', 'tag2']
         expect(last_content.images).to match_array [file_orphan]
+
+        activity = Cas::Activity.last
+        expect(activity.user).to eq user
+        expect(activity.site).to eq site
+        expect(activity.event_name).to eq 'create'
+
+
       end
 
       scenario "I edit a content in a section news" do
