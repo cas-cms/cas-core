@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171223143551) do
+ActiveRecord::Schema.define(version: 20180114124600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,6 +18,19 @@ ActiveRecord::Schema.define(version: 20171223143551) do
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
   enable_extension "unaccent"
+
+  create_table "cas_activities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "site_id"
+    t.uuid     "user_id"
+    t.string   "event_name"
+    t.uuid     "subject_id"
+    t.string   "subject_type"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["site_id"], name: "index_cas_activities_on_site_id", using: :btree
+    t.index ["subject_id", "subject_type"], name: "index_cas_activities_on_subject_id_and_subject_type", using: :btree
+    t.index ["user_id"], name: "index_cas_activities_on_user_id", using: :btree
+  end
 
   create_table "cas_categories", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid     "section_id",               null: false

@@ -1,0 +1,48 @@
+<div class="grid">
+  <div class="col-1-1">
+    <h1>Atividades</h1>
+  </div>
+</div>
+
+<br />
+
+<table>
+  <thead>
+    <tr>
+      <th>
+      </th>
+      <th>
+      </th>
+      <th>Data</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @activities.each do |activity| %>
+    <tr>
+      <td>
+        <%= activity.site.name %>
+      </td>
+      <td>
+        <strong><%= activity.user.name %></strong>
+        <% if activity.event_name == 'create' %>
+          criou
+        <% elsif activity.event_name == 'update'%>
+          editou
+        <% end %>
+        <strong>
+          <%= link_to activity.subject.title,
+            edit_site_section_content_path(@site, activity.subject.section, activity.subject)
+        %>
+        </strong>
+      </td>
+      <td>
+        <%= l(activity.created_at, format: :short) %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<br>
+
+<%= paginate @activities %>

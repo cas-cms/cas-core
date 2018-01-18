@@ -25,6 +25,7 @@ module Cas
           @content.section_id = @section.id
           @content.tag_list = content_params[:tag_list] if content_params[:tag_list]
           success = @content.save!
+          ::Cas::Activity.create!(user: current_user, site: @site, subject: @content, event_name: 'create')
           associate_files(@content, :images)
           associate_files(@content, :attachments)
         end
@@ -62,6 +63,7 @@ module Cas
           success = @content.update!(content_params)
           associate_files(@content, :images)
           associate_files(@content, :attachments)
+          ::Cas::Activity.create!(user: current_user, site: @site, subject: @content, event_name: 'update')
         end
       rescue ActiveRecord::RecordInvalid
         success = nil
