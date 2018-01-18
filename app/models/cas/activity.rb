@@ -3,6 +3,5 @@ module Cas
     belongs_to :site
     belongs_to :user
     belongs_to :subject, polymorphic: true
-
   end
 end

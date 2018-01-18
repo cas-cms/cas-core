@@ -14,7 +14,7 @@ Cas::Engine.routes.draw do
     controllers: { sessions: "cas/devise/sessions" },
     skip: :registrations
 
-  resources :activities, only: [:index]  
+  resources :activities, only: [:index]
   resources :sites, only: [:index] do
     resources :users, controller: 'sites/users'
 
@@ -31,5 +31,4 @@ Cas::Engine.routes.draw do
   end
 
   root 'sites/sections#index'
-  
 end

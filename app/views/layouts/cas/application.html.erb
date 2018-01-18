@@ -70,8 +70,7 @@
       <ul>
         <% if user_signed_in? %>
           <li><%= link_to "Conteúdo", cas.site_sections_path(@site) %></li>
-          <li><%= link_to "Atividades", cas.activities_path %></li>
-
+          <li><%= link_to "Atividades", cas.activities_path, id: "go-to-activities" %></li>
         <% end %>
         <% if user_signed_in? && current_user.admin? %>
           <li><%= link_to "Pessoas", cas.site_users_path(@site), id: "list-people" %></li>

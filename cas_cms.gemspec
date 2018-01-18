@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "rails", "~> 5.0.1"
-  s.add_dependency "pg", '~> 0.20'
+  s.add_dependency "pg"
   s.add_dependency 'pg_search'
   s.add_dependency "devise"
   s.add_dependency "sass-rails"

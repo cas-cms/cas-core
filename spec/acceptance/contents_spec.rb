@@ -51,8 +51,6 @@ RSpec.feature 'Contents' do
         expect(activity.user).to eq user
         expect(activity.site).to eq site
         expect(activity.event_name).to eq 'create'
-
-
       end
 
       scenario "I edit a content in a section news" do
