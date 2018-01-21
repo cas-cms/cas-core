@@ -9,11 +9,11 @@ class ::FileUploader < Shrine
     end
     original = (io.respond_to?(:[]) && io[:original]) ? io[:original] : io
     result = result.merge(original: original) unless result.keys.include?(:original)
+    Rails.logger.info "FileUploader, versions: [#{result.keys.join(", ")}]"
     result
   end
 
   def generate_location(io, context)
-    Rails.logger.info "FileUploader#generate_location"
     year  = Time.now.strftime("%Y")
     month = Time.now.strftime("%m")
     original_filename = context[:metadata]["filename"]

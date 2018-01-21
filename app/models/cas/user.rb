@@ -6,8 +6,8 @@ module Cas
            :rememberable, :trackable, :validatable, request_keys: [:domain]
 
     has_many :contents
-    has_many :files, class_name: 'Cas::MediaFile', as: :attachable
-    has_many :sites_users, class_name: 'Cas::SitesUser'
+    has_many :files, class_name: '::Cas::MediaFile', as: :attachable
+    has_many :sites_users, class_name: '::Cas::SitesUser'
     has_many :sites, through: :sites_users
     has_many :activities, as: :subject
 

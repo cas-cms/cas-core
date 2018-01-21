@@ -9,7 +9,7 @@ PATH
       jquery-rails
       jquery-ui-rails
       kaminari (~> 0.17.0)
-      pg (~> 0.20)
+      pg
       pg_search
       rails (~> 5.0.1)
       roda
@@ -67,13 +67,13 @@ GEM
       public_suffix (~> 2.0, >= 2.0.2)
     arel (7.1.4)
     awesome_print (1.7.0)
-    aws-sdk (2.10.117)
-      aws-sdk-resources (= 2.10.117)
-    aws-sdk-core (2.10.117)
+    aws-sdk (2.10.121)
+      aws-sdk-resources (= 2.10.121)
+    aws-sdk-core (2.10.121)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.10.117)
-      aws-sdk-core (= 2.10.117)
+    aws-sdk-resources (2.10.121)
+      aws-sdk-core (= 2.10.121)
     aws-sigv4 (1.0.2)
     bcrypt (3.1.11)
     builder (3.2.3)

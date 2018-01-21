@@ -6,7 +6,7 @@ module Cas
     class UnknownFileService < StandardError; end
 
     belongs_to :attachable, polymorphic: true
-    belongs_to :author, class_name: "Cas::User"
+    belongs_to :author, class_name: "::Cas::User"
 
     before_validation :set_media_type
     before_save :set_image_as_unique_cover
