@@ -1,20 +1,20 @@
 module Cas
   class ApplicationController < ActionController::Base
     protect_from_forgery with: :exception
-    before_action :authenticate_user!
-    before_action :set_current_user
-    before_action :set_user_sites
+    before_action :authenticate_person!
+    before_action :set_current_person
+    before_action :set_person_sites
     before_action :set_domain
     before_action :set_site
 
     private
 
-    def set_current_user
-      @current_user = current_user
+    def set_current_person
+      @current_person = current_person
     end
 
-    def set_user_sites
-      @user_sites = @current_user.sites if @current_user.present?
+    def set_person_sites
+      @person_sites = @current_person.sites if @current_person.present?
     end
 
     def set_domain

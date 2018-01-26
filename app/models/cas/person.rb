@@ -1,14 +1,14 @@
 module Cas
-  class User < ApplicationRecord
-    ROLES = %w[admin editor writer].freeze
+  class Person < ApplicationRecord
+    ROLES = %w[admin editor writer visitor].freeze
 
     devise :database_authenticatable, #:recoverable,
            :rememberable, :trackable, :validatable, request_keys: [:domain]
 
     has_many :contents
-    has_many :files, class_name: '::Cas::MediaFile', as: :attachable
-    has_many :sites_users, class_name: '::Cas::SitesUser'
-    has_many :sites, through: :sites_users
+    has_many :files, class_name: 'Cas::MediaFile', as: :attachable
+    has_many :people_site, class_name: 'Cas::PeopleSite'
+    has_many :sites, through: :people_site
     has_many :activities, as: :subject
 
     validates :name, presence: true, length: { maximum: 50 }

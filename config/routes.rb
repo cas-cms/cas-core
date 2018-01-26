@@ -4,19 +4,19 @@ Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
 Cas::Engine.routes.draw do
   mount Shrine.presign_endpoint(:cache) => "/files/cache/presign"
 
-  authenticate :user, ->(u){ u.roles.include?('admin') } do
+  authenticate :person, ->(u){ u.roles.include?('admin') } do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  devise_for :users,
-    class_name: "Cas::User",
+  devise_for :people,
+    class_name: "Cas::Person",
     module: :devise,
     controllers: { sessions: "cas/devise/sessions" },
     skip: :registrations
 
   resources :activities, only: [:index]
   resources :sites, only: [:index] do
-    resources :users, controller: 'sites/users'
+    resources :people, controller: 'sites/people'
 
     resources :sections, only: [:index], controller: 'sites/sections' do
       resources :contents, controller: 'sites/sections/contents'

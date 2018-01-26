@@ -26,7 +26,7 @@
 
   <%= csrf_meta_tags %>
 </head>
-<body class="<%= "site-#{@site.id}" if @current_user.present? && @site.present? %>">
+<body class="<%= "site-#{@site.id}" if @current_person.present? && @site.present? %>">
 
   <header>
     <div class="grid top">
@@ -36,13 +36,13 @@
         </h1>
       </div>
 
-      <% if user_signed_in? %>
+      <% if person_signed_in? %>
         <div class="mobile-col-1-1 col-1-3 site-selector">
-          <% if @user_sites.count <= 1 %>
-            <%= @user_sites[0].name %> (<%= @user_sites[0].domains.join(", ") %>)
+          <% if @person_sites.count <= 1 %>
+            <%= @person_sites[0].name %> (<%= @person_sites[0].domains.join(", ") %>)
           <% else %>
             <select id="select-site">
-              <% @user_sites.each do |site| %>
+              <% @person_sites.each do |site| %>
                 <% selected = site.id == @site&.id %>
                 <option
                   value="<%= site_sections_path(site) %>"
@@ -57,10 +57,10 @@
         </div>
         <div class="mobile-col-1-1 col-1-3 secondary">
           <span class="profile">
-            <%= link_to "Minha conta", cas.edit_site_user_path(@site, current_user), id: "edit-profile"%>
+            <%= link_to "Minha conta", cas.edit_site_person_path(@site, current_person), id: "edit-profile"%>
           </span>
           <span class="sign-out"%>
-            <%= link_to "Sair", cas.destroy_user_session_path, method: :delete %>
+            <%= link_to "Sair", cas.destroy_person_session_path, method: :delete %>
           </span>
         </div>
       <% end %>
@@ -68,12 +68,12 @@
 
     <nav class="grid">
       <ul>
-        <% if user_signed_in? %>
+        <% if person_signed_in? %>
           <li><%= link_to "Conteúdo", cas.site_sections_path(@site) %></li>
           <li><%= link_to "Atividades", cas.activities_path, id: "go-to-activities" %></li>
         <% end %>
-        <% if user_signed_in? && current_user.admin? %>
-          <li><%= link_to "Pessoas", cas.site_users_path(@site), id: "list-people" %></li>
+        <% if person_signed_in? && current_person.admin? %>
+          <li><%= link_to "Pessoas", cas.site_people_path(@site), id: "list-people" %></li>
         <% end %>
       </ul>
     </nav>
