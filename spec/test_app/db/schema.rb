@@ -114,7 +114,7 @@ ActiveRecord::Schema.define(version: 20180114124600) do
     t.string   "slug"
     t.string   "domains",    default: [],              array: true
     t.index ["domains"], name: "index_cas_sites_on_domains", using: :gin
-    t.index ["name"], name: "index_cas_sites_on_name", using: :btree
+    t.index ["name"], name: "index_cas_sites_on_name", unique: true, using: :btree
     t.index ["slug"], name: "index_cas_sites_on_slug", unique: true, using: :btree
   end
 

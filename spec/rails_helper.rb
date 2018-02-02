@@ -42,6 +42,7 @@ RSpec.configure do |config|
   config.around(:each) do |example|
     Cas::RemoteCallbacks.reset
     Capybara.app_host = 'http://example.com'
+    FactoryGirl.reload
     DatabaseCleaner.cleaning do
       example.run
     end

@@ -1,4 +1,5 @@
 require "cas/engine"
+require "cas/exceptions"
 require "cas/config"
 require "cas/remote_callbacks"
 require "cas/setup"

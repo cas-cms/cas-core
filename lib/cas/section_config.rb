@@ -5,26 +5,12 @@ module Cas
     end
 
     def list_order_by
-      config = YAML.load_file(filename)
-      sites = config["sites"]
-      site = sites[@section.site.slug]
-      section = site["sections"]
-
-      order_field = section.find { |key, value|
-        key == @section.slug
-      }[1]['list_order_by']
-
+      order_field = load_section_config[1]['list_order_by']
       order_field || ['created_at']
     end
 
     def list_fields
-      config = YAML.load_file(filename)
-      sites = config["sites"]
-      site = sites[@section.site.slug]
-      section = site["sections"]
-      fields = section.find { |key, value|
-        key == @section.slug
-      }[1]["list_fields"]
+      fields = load_section_config[1]["list_fields"]
       fields || ['title', 'created_at']
     end
 
@@ -40,13 +26,7 @@ module Cas
     end
 
     def form_has_field?(field)
-      config = YAML.load_file(filename)
-      sites = config["sites"]
-      site = sites[@section.site.slug]
-      section = site["sections"]
-      section_fields = section.find { |key, value|
-        key == @section.slug
-      }[1]["fields"]
+      section_fields = load_section_config[1]["fields"]
 
       Array.wrap(section_fields).any? do |section_field|
         if section_field.is_a?(Hash)
@@ -69,15 +49,24 @@ module Cas
 
     def load_field
       @config ||= begin
-        config_file = YAML.load_file(filename)
-        sites = config_file["sites"]
-        site = sites[@section.site.slug]
-        section = site["sections"]
-        field = section.find { |key, value|
-          key == @section.slug
-        }
+        field = load_section_config
         (field && field[1]) || {}
       end
+    end
+
+    def load_section_config
+      config = YAML.load_file(filename)
+      sites = config["sites"]
+      site = sites[@section.site.slug]
+
+      if site.blank?
+        raise(
+          Cas::Exceptions::UndefinedSite,
+          "Site #{@section.site.slug} is undefined in the #{filename} file."
+        )
+      end
+
+      site["sections"].find { |key, value| key == @section.slug }
     end
   end
 end
