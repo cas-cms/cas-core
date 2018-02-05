@@ -10,7 +10,7 @@ How to use my plugin.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'cas'
+gem 'cas-cms'
 ```
 
 ### Setup
@@ -37,8 +37,23 @@ gem in your main Rails application):
     export S3_REGION="value"
     export S3_BUCKET="value"
 
-## Contributing
-Contribution directions go here.
+## Developing Cas
+
+### Running tests
+
+**Ruby tests** can be run using `bundle exec rspec spec`.
+
+**Javascript tests** have to be run from within `spec/test_app` until
+[this PR](https://github.com/searls/jasmine-rails/pull/227) is merged.
+
+Until then, run
+
+```
+cd spec/test_app
+bundle exec rake spec:javascript
+```
+
+Javascript tests are written in `spec/javascripts`.
 
 ## License
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).

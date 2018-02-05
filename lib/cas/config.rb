@@ -35,7 +35,7 @@ module Cas
     end
 
     def config
-      read_file["config"] || {}
+      (read_file || {})["config"] || {}
     end
   end
 end
