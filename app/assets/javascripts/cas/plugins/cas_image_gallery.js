@@ -1,4 +1,9 @@
-//= require cas/lib/sort
+/**
+ * Guess what, Javascript doesn't have .sort() by integer out-of-the-box.
+ */
+function sortNumber(a, b) {
+  return parseInt(a) - parseInt(b);
+}
 
 function CasImage(element, gallery) {
   var image = this;
@@ -239,7 +244,7 @@ function CasImageGallery(options) {
 
       if (orderBy == "filename") {
         var listedItemFilename = $(this).data("filename");
-        ordering = [listedItemFilename, filename].sort(sortFilenames);
+        ordering = [listedItemFilename, filename].sort();
 
         /**
          * We compare the crrent file name and new file name. We sort them
@@ -263,7 +268,7 @@ function CasImageGallery(options) {
         ordering = [listedItemOrder, originalOrder].sort(sortNumber);
 
         /**
-         * We compare the current file name and new file name. We sort them
+         * We compare the crrent file name and new file name. We sort them
          * both.
          *
          * Say current images are 3.jpg and 6.jpg and new image is 5.jpg.

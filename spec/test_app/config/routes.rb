@@ -1,4 +1,3 @@
 Rails.application.routes.draw do
-  mount Cas::Engine => "/"
-  mount JasmineRails::Engine => '/specs'
+  mount Cas::Engine => "/admin"
 end
