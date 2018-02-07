@@ -3,9 +3,9 @@ require 'rails_helper'
 module Cas
   RSpec.describe Setup do
     describe '#install' do
-      let!(:superadmin) { create(:user, email: 'superadmin@example.com') }
-      let!(:superadmin2) { create(:user, login: 'superadmin-login') }
-      let!(:user) { create(:user, email: 'user@example.com') }
+      let!(:superadmin) { create(:person, email: 'superadmin@example.com') }
+      let!(:superadmin2) { create(:person, login: 'superadmin-login') }
+      let!(:person) { create(:person, email: 'person@example.com') }
 
       before do
         expect(Section.count).to eq 0
@@ -46,11 +46,11 @@ module Cas
         it 'adds all sites to all superadmins' do
           expect(superadmin.sites).to be_blank
           expect(superadmin2.sites).to be_blank
-          expect(user.sites).to be_blank
+          expect(person.sites).to be_blank
           subject.install
           expect(superadmin.reload.sites).to match_array(::Cas::Site.all)
           expect(superadmin2.reload.sites).to match_array(::Cas::Site.all)
-          expect(user.reload.sites).to be_blank
+          expect(person.reload.sites).to be_blank
         end
       end
 

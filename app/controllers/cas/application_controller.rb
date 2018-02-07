@@ -3,7 +3,7 @@ module Cas
     protect_from_forgery with: :exception
     before_action :authenticate_user!
     before_action :set_current_user
-    before_action :set_user_sites
+    before_action :set_person_sites
     before_action :set_domain
     before_action :set_site
 
@@ -13,8 +13,8 @@ module Cas
       @current_user = current_user
     end
 
-    def set_user_sites
-      @user_sites = @current_user.sites if @current_user.present?
+    def set_person_sites
+      @person_sites = @current_user.sites if @current_user.present?
     end
 
     def set_domain

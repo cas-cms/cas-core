@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180114124600) do
+ActiveRecord::Schema.define(version: 20180123173810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,15 +21,15 @@ ActiveRecord::Schema.define(version: 20180114124600) do
 
   create_table "cas_activities", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid     "site_id"
-    t.uuid     "user_id"
+    t.uuid     "person_id"
     t.string   "event_name"
     t.uuid     "subject_id"
     t.string   "subject_type"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.index ["person_id"], name: "index_cas_activities_on_person_id", using: :btree
     t.index ["site_id"], name: "index_cas_activities_on_site_id", using: :btree
     t.index ["subject_id", "subject_type"], name: "index_cas_activities_on_subject_id_and_subject_type", using: :btree
-    t.index ["user_id"], name: "index_cas_activities_on_user_id", using: :btree
   end
 
   create_table "cas_categories", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -96,6 +96,40 @@ ActiveRecord::Schema.define(version: 20180114124600) do
     t.index ["cover"], name: "index_cas_media_files_on_cover", using: :btree
   end
 
+  create_table "cas_people", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "name",                                null: false
+    t.string   "login"
+    t.uuid     "author_id"
+    t.string   "roles",                  default: [],              array: true
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.string   "email"
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.jsonb    "metadata",               default: {}
+    t.index ["author_id"], name: "index_cas_people_on_author_id", using: :btree
+    t.index ["email"], name: "index_cas_people_on_email", unique: true, using: :btree
+    t.index ["encrypted_password"], name: "index_cas_people_on_encrypted_password", using: :btree
+    t.index ["reset_password_token"], name: "index_cas_people_on_reset_password_token", unique: true, using: :btree
+  end
+
+  create_table "cas_people_sites", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "person_id",  null: false
+    t.uuid     "site_id",    null: false
+    t.boolean  "author_id"
+    t.boolean  "uuid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["site_id", "person_id"], name: "index_cas_people_sites_on_site_id_and_person_id", using: :btree
+  end
+
   create_table "cas_sections", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name",         null: false
     t.string   "section_type", null: false
@@ -116,40 +150,6 @@ ActiveRecord::Schema.define(version: 20180114124600) do
     t.index ["domains"], name: "index_cas_sites_on_domains", using: :gin
     t.index ["name"], name: "index_cas_sites_on_name", unique: true, using: :btree
     t.index ["slug"], name: "index_cas_sites_on_slug", unique: true, using: :btree
-  end
-
-  create_table "cas_sites_users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid     "user_id",    null: false
-    t.uuid     "site_id",    null: false
-    t.boolean  "author_id"
-    t.boolean  "uuid"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["site_id", "user_id"], name: "index_cas_sites_users_on_site_id_and_user_id", using: :btree
-  end
-
-  create_table "cas_users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.string   "name",                                null: false
-    t.string   "login"
-    t.uuid     "author_id"
-    t.string   "roles",                  default: [],              array: true
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.string   "email"
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.jsonb    "metadata",               default: {}
-    t.index ["author_id"], name: "index_cas_users_on_author_id", using: :btree
-    t.index ["email"], name: "index_cas_users_on_email", unique: true, using: :btree
-    t.index ["encrypted_password"], name: "index_cas_users_on_encrypted_password", using: :btree
-    t.index ["reset_password_token"], name: "index_cas_users_on_reset_password_token", unique: true, using: :btree
   end
 
   create_table "taggings", force: :cascade do |t|

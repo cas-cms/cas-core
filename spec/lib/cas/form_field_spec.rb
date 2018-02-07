@@ -4,7 +4,8 @@ module Cas
   RSpec.describe FormField do
     let(:slug) { 'agenda' }
     let(:field) { 'title' }
-    let(:section) { build(:section, slug: slug) }
+    let(:site) { build(:site, :yml_name) }
+    let(:section) { build(:section, site: site, slug: slug) }
 
     subject { described_class.new(section, field) }
 

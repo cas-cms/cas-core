@@ -1,26 +1,26 @@
 require "rails_helper"
 
 RSpec.feature 'Contents' do
-  let(:admin)  { create(:user, :admin, sites: [site]) }
-  let(:editor) { create(:user, :editor, sites: [site]) }
-  let(:writer) { create(:user, :writer, sites: [site]) }
+  let(:admin)  { create(:person, :admin, sites: [site]) }
+  let(:editor) { create(:person, :editor, sites: [site]) }
+  let(:writer) { create(:person, :writer, sites: [site]) }
 
-  let!(:site) { create(:site) }
+  let!(:site) { create(:site, :yml_name) }
   let!(:section) { create(:section, site: site) }
   let!(:survey_section) { create(:section, :survey, site: site) }
   let!(:agenda_section) { create(:section, :agenda, site: site) }
   let!(:category) { create(:category, section: section) }
-  let!(:content) { create(:content, section: section, author: user, category: category) }
+  let!(:content) { create(:content, section: section, author: person, category: category) }
   let!(:someone_else_content) { create(:content, section: section, author: someone_else, category: category) }
   let!(:file_orphan) { create(:file, attachable: nil) }
 
   background do
-    login(user)
+    login(person)
     visit root_path
   end
 
   context 'As admin' do
-    let(:user) { admin }
+    let(:person) { admin }
     let(:someone_else) { editor }
 
     context 'when visit news' do
@@ -48,7 +48,7 @@ RSpec.feature 'Contents' do
         expect(last_content.images).to match_array [file_orphan]
 
         activity = Cas::Activity.last
-        expect(activity.user).to eq user
+        expect(activity.person).to eq person
         expect(activity.site).to eq site
         expect(activity.event_name).to eq 'create'
       end
@@ -271,7 +271,7 @@ RSpec.feature 'Contents' do
   end
 
   context 'As editor' do
-    let(:user) { editor }
+    let(:person) { editor }
     let(:someone_else) { admin }
 
     scenario 'I am able to see everyones content' do
@@ -286,7 +286,7 @@ RSpec.feature 'Contents' do
   end
 
   context 'As writer' do
-    let(:user) { writer }
+    let(:person) { writer }
     let(:someone_else) { admin }
 
     scenario 'I am able to see only my own content' do

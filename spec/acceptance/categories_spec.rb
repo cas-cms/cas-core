@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.feature 'Categories' do
-  let(:user) { create(:user, sites: [site]) }
-  let(:site) { section.site }
-  let!(:section) { create(:section) }
+  let(:person) { create(:person, sites: [site]) }
+  let(:site) { create(:site, :yml_name) }
+  let!(:section) { create(:section, site: site) }
   let!(:category) { create(:category, section: section) }
 
   context 'As admin' do
     background do
-      login(user)
+      login(person)
     end
 
     scenario "I create a category in a section" do
@@ -17,7 +17,7 @@ RSpec.feature 'Categories' do
       click_link 'manage-categories'
       click_link 'new-category'
 
-      fill_in 'category_name', with: user.email
+      fill_in 'category_name', with: person.email
 
       expect do
         click_on 'submit'

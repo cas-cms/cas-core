@@ -14,8 +14,8 @@ module Cas
       fields || ['title', 'created_at']
     end
 
-    def accessible_by_user?(user)
-      roles = user.roles.map(&:to_s)
+    def accessible_by_person?(person)
+      roles = person.roles.map(&:to_s)
       accessible_roles = load_field["accessible_roles"]
 
       if accessible_roles.present?

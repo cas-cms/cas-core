@@ -1,6 +1,6 @@
 module DeviseSupport
   def sign_in
-    @user ||= FactoryGirl.create(:user)
+    @user ||= FactoryGirl.create(:person)
 
     # We action the login request using the parameters before we begin.
     # The login requests will match these to the user we just created in the factory, and authenticate us.

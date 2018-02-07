@@ -1,4 +1,4 @@
-<%= simple_form_for [@site, @user] do |f| %>
+<%= simple_form_for [@site, @person] do |f| %>
   <%= f.input :name %><br />
   <%= f.input :email %><br />
 
@@ -16,7 +16,7 @@
   <% end %>
 
   <% if current_user.admin? %>
-    <%= f.collection_select :roles, Cas::User::ROLES, :to_s, :humanize %></p>
+    <%= f.collection_select :roles, Cas::Person::ROLES, :to_s, :humanize %></p>
   <% end %>
   <%= f.input :password, required: false %><br />
   <%= f.input :password_confirmation %><br />

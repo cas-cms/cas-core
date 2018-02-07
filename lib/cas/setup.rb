@@ -28,18 +28,18 @@ module Cas
         end
 
         if superadmins_emails_or_logins = config["config"]["superadmins"]
-          updated_users = []
+          updated_people = []
           superadmins_emails_or_logins.each do |email_or_login|
-            user = ::Cas::User.where(
-              'cas_users.email = :value OR cas_users.login = :value',
+            person = ::Cas::Person.where(
+              'cas_people.email = :value OR cas_people.login = :value',
               value: email_or_login
             ).first
 
-            if user.present?
-              unless updated_users.include?(user.id)
-                user.update!(sites: ::Cas::Site.all)
+            if person.present?
+              unless updated_people.include?(person.id)
+                person.update!(sites: ::Cas::Site.all)
               end
-              updated_users << user.id
+              updated_people << person.id
             end
           end
         end
