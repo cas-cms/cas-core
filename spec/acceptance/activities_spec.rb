@@ -9,9 +9,15 @@ RSpec.feature 'Activities' do
   let(:site2) { create(:site, name: "mysite", slug: "mysite") }
   let(:site3) { create(:site, name: "mysite3", slug: "mysite3") }
 
+<<<<<<< a64f056ab8126e5f116a863bfdac3ef202d7ca46
   let(:section1) { create(:section, site: site1) }
   let(:section2) { create(:section, site: site2) }
   let(:section3) { create(:section, site: site3) }
+=======
+  let!(:site1) { create(:site, name: "mysite1", slug: "mysite1") }
+  let!(:site2) { create(:site, name: "mysite2", slug: "mysite") }
+  let!(:site3) { create(:site, name: "mysite3", slug: "mysite3") }
+>>>>>>> Fix tests
 
   let(:content1) { create(:content, section: section1) }
   let(:content2) { create(:content, section: section2) }

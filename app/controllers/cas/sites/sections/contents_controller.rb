@@ -21,11 +21,11 @@ module Cas
       success = nil
       begin
         ActiveRecord::Base.transaction do
-          @content.author_id = current_person.id
+          @content.author_id = current_user.id
           @content.section_id = @section.id
           @content.tag_list = content_params[:tag_list] if content_params[:tag_list]
           success = @content.save!
-          ::Cas::Activity.create!(person: current_person, site: @site, subject: @content, event_name: 'create')
+          ::Cas::Activity.create!(person: current_user, site: @site, subject: @content, event_name: 'create')
           associate_files(@content, :images)
           associate_files(@content, :attachments)
         end
@@ -63,7 +63,7 @@ module Cas
           success = @content.update!(content_params)
           associate_files(@content, :images)
           associate_files(@content, :attachments)
-          ::Cas::Activity.create!(person: current_person, site: @site, subject: @content, event_name: 'update')
+          ::Cas::Activity.create!(person: current_user, site: @site, subject: @content, event_name: 'update')
         end
       rescue ActiveRecord::RecordInvalid
         success = nil

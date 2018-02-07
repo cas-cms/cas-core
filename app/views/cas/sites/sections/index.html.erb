@@ -7,7 +7,7 @@
   </thead>
 
   <% @sections.each do |section| %>
-    <% next unless Cas::SectionConfig.new(section).accessible_by_person?(current_person) %>
+    <% next unless Cas::SectionConfig.new(section).accessible_by_person?(current_user) %>
     <tr id="section-<%= section.id %>">
       <td><%= section.name %></td>
       <td>

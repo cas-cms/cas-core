@@ -2,10 +2,10 @@
   <%= f.input :name %><br />
   <%= f.input :email %><br />
 
-  <% if @current_person.admin? %>
+  <% if @current_user.admin? %>
     <%= f.collection_check_boxes(
       :site_ids,
-      @current_person.sites,
+      @current_user.sites,
       :id,
       :name,
       checked: @selected_sites
@@ -15,7 +15,7 @@
     <% end %>
   <% end %>
 
-  <% if current_person.admin? %>
+  <% if current_user.admin? %>
     <%= f.collection_select :roles, Cas::Person::ROLES, :to_s, :humanize %></p>
   <% end %>
   <%= f.input :password, required: false %><br />

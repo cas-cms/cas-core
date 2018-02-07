@@ -1,5 +1,5 @@
 class Cas::Api::FilesController < Cas::ApplicationController
-  skip_before_action :authenticate_person!
+  skip_before_action :authenticate_user!
 
   def create
     if ENV.fetch("S3_BUCKET")
