@@ -21,14 +21,14 @@
 
   <tbody>
     <% @people.each do |person| %>
-        <tr id="person-<%= person.id %>">
-          <td>
-            <%= link_to person.name,
-              edit_site_person_url(@site, person),
-              id: "edit-person-#{person.id}" %>
-          </td>
-          <td><%= person.roles.join(", ") %></td>
-        </tr>
+      <tr id="person-<%= person.id %>">
+        <td>
+          <%= link_to person.name,
+            edit_site_person_url(@site, person),
+            id: "edit-person-#{person.id}" %>
+        </td>
+        <td><%= person.roles.join(", ") %></td>
+      </tr>
     <% end %>
   </tbody>
 </table>

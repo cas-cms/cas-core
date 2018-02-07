@@ -6,7 +6,7 @@ RSpec.feature 'Activities' do
   let(:writer) { create(:person, :writer, sites: [site2]) }
 
   let(:site1) { create(:site, name: "mysite1", slug: "mysite1") }
-  let(:site2) { create(:site, name: "mysite", slug: "mysite") }
+  let(:site2) { create(:site, name: "mysite", slug: "mysite", domains: ["mysite.com"]) }
   let(:site3) { create(:site, name: "mysite3", slug: "mysite3") }
 
   let(:section1) { create(:section, site: site1) }
@@ -26,7 +26,6 @@ RSpec.feature 'Activities' do
     activity2
     activity3
     Capybara.app_host = "https://#{site2.domains.first}"
-    puts site2.name
     login(person)
     visit root_path
   end
