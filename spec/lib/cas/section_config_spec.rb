@@ -3,47 +3,48 @@ require 'rails_helper'
 module Cas
   RSpec.describe SectionConfig do
     let(:slug) { 'news' }
-    let(:section) { build(:section, slug: slug) }
+    let(:site) { build(:site, :yml_name) }
+    let(:section) { build(:section, site: site, slug: slug) }
 
     subject { described_class.new(section) }
 
-    describe '#accessible_by_user?' do
+    describe '#accessible_by_person?' do
       context 'when accessible by admin only' do
-        let(:section) { build(:section, :agenda) }
+        let(:section) { build(:section, :agenda, site: site) }
 
-        context 'when user is a admin' do
-          let(:user) { build(:user, :admin) }
+        context 'when person is a admin' do
+          let(:person) { build(:person, :admin) }
 
           it 'returns true' do
-            expect(subject).to be_accessible_by_user(user)
+            expect(subject).to be_accessible_by_person(person)
           end
         end
 
-        context 'when user is a writer' do
-          let(:user) { build(:user, :writer) }
+        context 'when person is a writer' do
+          let(:person) { build(:person, :writer) }
 
           it 'returns false' do
-            expect(subject).to_not be_accessible_by_user(user)
+            expect(subject).to_not be_accessible_by_person(person)
           end
         end
       end
 
       context 'when accessible by anyone' do
-        let(:section) { build(:section, :news) }
+        let(:section) { build(:section, :news, site: site) }
 
-        context 'when user is a admin' do
-          let(:user) { build(:user, :admin) }
+        context 'when person is a admin' do
+          let(:person) { build(:person, :admin) }
 
           it 'returns true' do
-            expect(subject).to be_accessible_by_user(user)
+            expect(subject).to be_accessible_by_person(person)
           end
         end
 
-        context 'when user is a writer' do
-          let(:user) { build(:user, :writer) }
+        context 'when person is a writer' do
+          let(:person) { build(:person, :writer) }
 
           it 'returns true' do
-            expect(subject).to be_accessible_by_user(user)
+            expect(subject).to be_accessible_by_person(person)
           end
         end
       end

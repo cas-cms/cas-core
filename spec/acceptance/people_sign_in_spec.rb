@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.feature 'User' do
-  let(:admin) { create(:user, :admin, sites: [site1, site2]) }
+RSpec.feature 'Person' do
+  let(:admin) { create(:person, :admin, sites: [site1, site2]) }
   let!(:site1) { create(:site, name: 'site1', domains: ['site1.com', 'site11.com']) }
   let!(:site2) { create(:site, name: 'site2', domains: ['site2.com']) }
   let!(:site3) { create(:site, name: 'site3', domains: ['site3.com']) }

@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :user, class: Cas::User do
+  factory :person, class: ::Cas::Person do
     name "John Wayne"
     sequence(:email) { |n| "wayne#{n}@wayneenterprises.co" }
     login "my_username"

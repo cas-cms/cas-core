@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :file, class: Cas::MediaFile do
-    association :author, factory: :user
+    association :author, factory: :person
     association :attachable, factory: :content
     description 'summary content'
     service 's3'

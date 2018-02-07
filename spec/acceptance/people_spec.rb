@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.feature 'User' do
-  let(:admin) { create(:user, :admin, sites: [site, site2]) }
-  let!(:writer) { create(:user, :writer, sites: [site]) }
+RSpec.feature 'Person' do
+  let(:admin) { create(:person, :admin, sites: [site, site2]) }
+  let!(:writer) { create(:person, :writer, sites: [site]) }
   let!(:site) { create(:site) }
   let!(:site2) { create(:site, name: 'site2', domains: ['site2.com']) }
   let!(:site3) { create(:site, name: 'site3', domains: ['site3.com']) }
@@ -12,40 +12,40 @@ RSpec.feature 'User' do
       login(admin)
     end
 
-    scenario 'I create a user' do
-      visit new_site_user_path(site)
+    scenario 'I create a person' do
+      visit new_site_person_path(site)
 
-      fill_in 'user[name]', with: "asd234"
-      fill_in 'user[email]', with: "asd234@asd.com"
+      fill_in 'person[name]', with: "asd234"
+      fill_in 'person[email]', with: "asd234@asd.com"
       check "site-id-#{site2.id}"
-      select 'Admin', from: :user_roles
-      fill_in 'user[password]', with: "123456"
-      fill_in 'user[password_confirmation]', with: "123456"
+      select 'Admin', from: :person_roles
+      fill_in 'person[password]', with: "123456"
+      fill_in 'person[password_confirmation]', with: "123456"
 
       expect do
         click_on 'save-form'
-      end.to change(::Cas::User, :count).by(1)
+      end.to change(::Cas::Person, :count).by(1)
 
       expect(admin.roles).to eq ["admin"]
 
-      new_user = ::Cas::User.where(name: "asd234").first!
-      expect(new_user.sites.map(&:name)).to match_array([site, site2].map(&:name))
+      new_person = ::Cas::Person.where(name: "asd234").first!
+      expect(new_person.sites.map(&:name)).to match_array([site, site2].map(&:name))
     end
 
-    scenario 'I edit an user' do
+    scenario 'I edit an person' do
       click_on "list-people"
-      click_on "edit-user-#{writer.id}"
+      click_on "edit-person-#{writer.id}"
 
-      fill_in 'user[name]', with: "asd2345"
-      fill_in 'user[email]', with: "asd2345@asd.com"
+      fill_in 'person[name]', with: "asd2345"
+      fill_in 'person[email]', with: "asd2345@asd.com"
       check "site-id-#{site2.id}"
-      select 'Admin', from: :user_roles
+      select 'Admin', from: :person_roles
       expect(writer.password).to eq "123456"
-      fill_in 'user[password]', with: "new passw"
-      fill_in 'user[password_confirmation]', with: "new passw"
+      fill_in 'person[password]', with: "new passw"
+      fill_in 'person[password_confirmation]', with: "new passw"
 
       click_on "save-form"
-      expect(current_path).to eq site_users_path(site)
+      expect(current_path).to eq site_people_path(site)
       writer.reload
       expect(writer.sites.map(&:name)).to match_array([site, site2].map(&:name))
       expect(writer.name).to eq "asd2345"
@@ -54,17 +54,17 @@ RSpec.feature 'User' do
       expect(writer.valid_password?("new passw")).to eq true
     end
 
-    scenario "I edit an user without touching their password" do
+    scenario "I edit an person without touching their password" do
       click_on "list-people"
-      click_on "edit-user-#{writer.id}"
+      click_on "edit-person-#{writer.id}"
 
-      fill_in 'user[name]', with: "new name"
-      fill_in 'user[email]', with: "asd2345@asd.com"
+      fill_in 'person[name]', with: "new name"
+      fill_in 'person[email]', with: "asd2345@asd.com"
       check "site-id-#{site2.id}"
-      select 'Admin', from: :user_roles
+      select 'Admin', from: :person_roles
 
       click_on "save-form"
-      expect(current_path).to eq site_users_path(site)
+      expect(current_path).to eq site_people_path(site)
       writer.reload
       expect(writer.sites.map(&:name)).to match_array([site, site2].map(&:name))
       expect(writer.name).to eq "new name"
@@ -82,10 +82,10 @@ RSpec.feature 'User' do
     scenario 'I edit my profile' do
       click_on "edit-profile"
 
-      fill_in 'user[name]', with: "asd2345"
-      fill_in 'user[email]', with: "asd2345@asd.com"
-      fill_in 'user[password]', with: "123456"
-      fill_in 'user[password_confirmation]', with: "123456"
+      fill_in 'person[name]', with: "asd2345"
+      fill_in 'person[email]', with: "asd2345@asd.com"
+      fill_in 'person[password]', with: "123456"
+      fill_in 'person[password_confirmation]', with: "123456"
 
       click_on "save-form"
       writer.reload

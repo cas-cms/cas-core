@@ -1,9 +1,9 @@
 module AcceptanceOperations
-  def login(user)
-    visit new_user_session_path
+  def login(person)
+    visit new_person_session_path
 
-    fill_in 'user_email', with: user.email
-    fill_in 'user_password', with: '123456'
+    fill_in 'person_email', with: person.email
+    fill_in 'person_password', with: '123456'
 
     click_on 'login'
   end
