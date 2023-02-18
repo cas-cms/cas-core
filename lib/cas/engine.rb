@@ -16,7 +16,7 @@ module Cas
       end
     end
 
-    config.assets.precompile += ["cas/fileupload_manifest.js"]
+    #config.assets.precompile += ["cas/fileupload_manifest.js"]
 
     config.active_record.primary_key = :uuid
     config.generators do |g|

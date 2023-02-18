@@ -23,6 +23,8 @@ module Cas
       if @domain.blank? || (ENV["DOMAIN"].blank? && @domain == "localhost")
         @domain = ::Cas::Site.first!.domains.first
       end
+    rescue ActiveRecord::RecordNotFound => e
+      raise Cas::Exceptions::IncompleteSetup, "IncompleteSetup: check README.md. #{e.message}: #{e.inspect}"
     end
 
     def set_site

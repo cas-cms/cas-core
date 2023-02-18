@@ -1,5 +1,6 @@
 require 'sidekiq/web'
-Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
+# TODO - need to migrate Sidekiq
+#Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
 
 Cas::Engine.routes.draw do
   mount Shrine.presign_endpoint(:cache) => "/files/cache/presign"

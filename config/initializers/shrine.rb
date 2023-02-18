@@ -4,6 +4,8 @@ Shrine.plugin :activerecord
 Shrine.plugin :presign_endpoint
 Shrine.plugin :backgrounding
 
+pp "Rails.env: #{Rails.env.inspect}"
+return
 if Rails.env.test?
   s3_options = {
     access_key_id:     'access_key_id',
