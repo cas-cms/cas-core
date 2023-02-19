@@ -4,6 +4,8 @@ Description:
 Example:
     bin/rails generate cas:install
 
-    This will:
-      - create a configuration file in config/cas.config.yml
-      - create data based on the new YAML file
+    This will add an /admin route for Cas and create a configuration file in
+    config/cas.config.yml. Edit this file and run
+
+        bin/rails cas:apply_config
+

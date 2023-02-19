@@ -43,7 +43,7 @@ module Cas
       if Rails.env.test?
         "spec/fixtures/cas.yml"
       else
-        "config/cas.config.yml"
+        Cas::CONFIG_PATH
       end
     end
 

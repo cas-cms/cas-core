@@ -1,6 +1,6 @@
-desc "Generate sites based on the yml file"
+desc "Generate sites based on the YAML config file"
 namespace :cas do
-  task generate_sites: :environment do
+  task apply_config: :environment do
     Cas::Installation.new.generate_sites
   end
 end

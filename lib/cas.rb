@@ -20,4 +20,5 @@ require 'sidekiq'
 require 'pg_search'
 
 module Cas
+  CONFIG_PATH = "config/cas.config.yml"
 end

@@ -5,6 +5,7 @@
 # Config: global configuration across all sites
 config:
 
+  # TODO - clarify what is the initial password
   initial_admins:
     - admin@example.com
 

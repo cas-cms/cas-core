@@ -10,6 +10,7 @@ module Cas
     def uploads
       uploads = config["uploads"] || {}
 
+      # TODO - clarify what this is and how to configure
       {
         cache_directory_prefix: uploads["cache_directory_prefix"] || "cache",
         store_directory_prefix: uploads["store_directory_prefix"] || "store"
@@ -28,10 +29,8 @@ module Cas
 
     def filename
       @filename ||= begin
-                      if File.exists?("config/cas.config.yml")
-                        "config/cas.config.yml"
-                      elsif File.exists?("cas.yml")
-                        "cas.yml"
+                      if File.exists?(Cas::CONFIG_PATH)
+                        Cas::CONFIG_PATH
                       elsif ENV['RAILS_ENV'] == 'test'
                         "spec/fixtures/cas.yml"
                       else

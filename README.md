@@ -8,28 +8,20 @@ Add this line to your application's Gemfile:
 gem 'cas'
 ```
 
-### Engine
-
-_Cas_ is mounted on your main Rails application. Say your application is called
-MyBlog, you make can make it accessible at `myblog.com/admin` by setting the
-following in the `config/routes.rb` file in your main application:
-
-```ruby
-Rails.application.routes.draw do
-   mount Cas::Engine, at: "/admin"
-
-   # ...
-end
-```
-
-### Migrations
-
-Generate 
-
-### Configuration
+### Installation
 
 ```
 bin/rails generate cas:install
+```
+
+This adds an `/admin` entry to `config/routes.rb` and generates a new file,
+`config/cas.config.yml` which contains all sections your site is supposed to
+have. 
+
+Once the file is edited, run
+
+```
+bin/rails cas:apply_config
 ```
 
 ### File Uploads
