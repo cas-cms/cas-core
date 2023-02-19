@@ -19,7 +19,11 @@ module Cas
     private
 
     def read_file
-      @file ||= YAML.load_file(filename)
+      begin
+        @file ||= YAML.safe_load_file(filename, aliases: true)
+      rescue ArgumentError
+        @file ||= YAML.load_file(filename)
+      end
     end
 
     def filename

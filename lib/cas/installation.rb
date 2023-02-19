@@ -1,8 +1,19 @@
 module Cas
-  class Setup
-    def install
+  class Installation
+    def generate_sites
       ActiveRecord::Base.transaction do
-        config = YAML.load_file(filename)
+
+        # Ruby 3.0 comes with Psych 3, while Ruby 3.1 comes with Psych 4, which
+        # has a major breaking change (diff 3.3.2 → 4.0.0).
+        #
+        # The new YAML loading methods (Psych 4) do not load aliases unless
+        # they get the aliases: true argument.  The old YAML loading methods
+        # (Psych 3) do not support the :aliases keyword.
+        begin
+          config = YAML.safe_load_file(filename, aliases: true)
+        rescue ArgumentError
+          config = YAML.load(filename)
+        end
 
         config["sites"].each do |site_slug, site_config|
           site = ::Cas::Site.where(slug: site_slug).first_or_create
@@ -52,7 +63,7 @@ module Cas
       if Rails.env.test?
         "spec/fixtures/cas.yml"
       else
-        "cas.yml"
+        "config/cas.config.yml"
       end
     end
   end

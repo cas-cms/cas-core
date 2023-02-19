@@ -28,6 +28,10 @@ Generate
 
 ### Configuration
 
+```
+bin/rails generate cas:install
+```
+
 ### File Uploads
 
 You need S3 credentials to use Cas (for file uploads). Set the

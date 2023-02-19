@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 module Cas
-  RSpec.describe Setup do
-    describe '#install' do
+  RSpec.describe Installation do
+    describe '#generate_sites' do
       let!(:superadmin) { create(:user, email: 'superadmin@example.com') }
       let!(:superadmin2) { create(:user, login: 'superadmin-login') }
       let!(:user) { create(:user, email: 'user@example.com') }
@@ -11,12 +11,12 @@ module Cas
         expect(Section.count).to eq 0
       end
 
-      subject { Setup.new }
+      subject { described_class.new }
 
       context 'when the file is valid' do
         it 'creates sites' do
-          subject.install
-          subject.install
+          subject.generate_sites
+          subject.generate_sites
           expect(Site.count).to eq 1
           site = Site.first
           expect(site.slug).to eq "mysite"
@@ -25,8 +25,8 @@ module Cas
         end
 
         it 'creates sections' do
-          subject.install
-          subject.install
+          subject.generate_sites
+          subject.generate_sites
           expect(Section.count).to eq 4
           section = Section.all
           expect(section[0].name).to eq "news"
@@ -47,7 +47,7 @@ module Cas
           expect(superadmin.sites).to be_blank
           expect(superadmin2.sites).to be_blank
           expect(user.sites).to be_blank
-          subject.install
+          subject.generate_sites
           expect(superadmin.reload.sites).to match_array(::Cas::Site.all)
           expect(superadmin2.reload.sites).to match_array(::Cas::Site.all)
           expect(user.reload.sites).to be_blank

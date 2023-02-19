@@ -21,7 +21,11 @@ module Cas
 
     def load_field
       @config ||= begin
-        config_file = YAML.load_file(filename)
+        begin
+          config_file = YAML.safe_load_file(filename, aliases: true)
+        rescue ArgumentError
+          config_file = YAML.load_file(filename)
+        end
         sites = config_file["sites"]
         site = sites[@section.site.slug]
         section = site["sections"]

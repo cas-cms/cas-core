@@ -2,7 +2,7 @@ require "cas/engine"
 require "cas/exceptions"
 require "cas/config"
 require "cas/remote_callbacks"
-require "cas/setup"
+require "cas/installation"
 require "cas/section_config"
 require "cas/form_field"
 

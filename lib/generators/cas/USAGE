@@ -1,0 +1,9 @@
+Description:
+    Generates new cas.yml and configures database for it.
+
+Example:
+    bin/rails generate cas:install
+
+    This will:
+      - create a configuration file in config/cas.config.yml
+      - create data based on the new YAML file

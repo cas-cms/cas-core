@@ -1,0 +1,78 @@
+# CAS CONFIG
+#
+# This file is used to generate the data for the sites you want to manage.
+
+# Config: global configuration across all sites
+config:
+  yml_as_source_of_truth: true
+
+  # What emails and/or logins are considered superadmins?
+  superadmins:
+    - superadmin@example.com
+    - superadmin-login
+
+  # DEPRECATED
+  uploads:
+    cache_directory_prefix: 'cache'
+    store_directory_prefix: 'uploads'
+
+# Sites: define the ones you want to manage. If you have multiple, you will be
+# able to switch between them inside Cas dashboard.
+#
+# Each site has Sections, and each Section has their own Categories.
+sites:
+  mysite:
+    name: mysite.net
+
+    # Depending on this, Cas will automatically switch the site it is managing.
+    domains:
+      - mysite.net
+
+    # These are entire sections, like 'articles', 'pages', 'ads' etc
+    sections:
+      news:
+        name: news
+        type: content
+        list_fields:
+          - title
+          - category
+        fields:
+          - category
+          - tags
+          - title
+          - summary
+          - text
+          - images
+          - files
+          - tags
+          - date
+      biography:
+        name: Biography
+        type: content
+        fields:
+          - title
+          - text
+          - image
+      agenda:
+        name: Agenda
+        type: content
+        accessible_roles:
+          - admin
+        list_fields:
+          - title
+          - date_time
+        list_order_by:
+          - order_field
+        fields:
+          - title
+          - location
+          - date:
+              language: pt-br
+              format:
+                - day
+                - month
+                - year
+          - text
+      survey:
+        name: Survey
+        type: survey

@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'sidekiq'
 
   # File uploads
-  s.add_dependency 'shrine', "2.7.0" # for uploading files
+  s.add_dependency 'shrine', "~> 2.19.4" # for uploading files
   s.add_dependency 'roda' # for shrine
   s.add_dependency "aws-sdk", "~> 2.1" # for file uploads
 

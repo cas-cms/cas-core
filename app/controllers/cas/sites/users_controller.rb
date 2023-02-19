@@ -36,7 +36,7 @@ module Cas
         without_password = user_params.except(:password, :password_confirmation)
         success = @user.update_without_password(without_password)
       else
-        success = @user.update_attributes(user_params)
+        success = @user.update(user_params)
       end
 
       if success

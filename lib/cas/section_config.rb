@@ -55,7 +55,12 @@ module Cas
     end
 
     def load_section_config
-      config = YAML.load_file(filename)
+      begin
+        config = YAML.safe_load_file(filename, aliases: true)
+      rescue ArgumentError
+        config = YAML.load_file(filename)
+      end
+
       sites = config["sites"]
       site = sites[@section.site.slug]
 
