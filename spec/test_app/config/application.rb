@@ -5,6 +5,7 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 require "cas"
 require 'dotenv-rails'
+require "sprockets/railtie"
 Dotenv::Railtie.load
 
 module TestApp

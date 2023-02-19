@@ -18,6 +18,7 @@ PATH
       shrine (~> 2.19.4)
       sidekiq
       simple_form
+      sprockets-rails
 
 GEM
   remote: https://rubygems.org/
@@ -326,4 +327,4 @@ DEPENDENCIES
   webrick
 
 BUNDLED WITH
-   2.4.7
+   2.3.12

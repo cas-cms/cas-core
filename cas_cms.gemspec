@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'acts-as-taggable-on'
   s.add_dependency "select2-rails"
   s.add_dependency 'sidekiq'
+  s.add_dependency 'sprockets-rails'
 
   # File uploads
   s.add_dependency 'shrine', "~> 2.19.4" # for uploading files
