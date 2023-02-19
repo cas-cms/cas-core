@@ -15,7 +15,7 @@ module Cas
       if Rails.env.test?
         "spec/fixtures/cas.yml"
       else
-        "cas.yml"
+        "config/cas.config.yml"
       end
     end
 
@@ -23,7 +23,7 @@ module Cas
       @config ||= begin
         begin
           config_file = YAML.safe_load_file(filename, aliases: true)
-        rescue ArgumentError
+        rescue NoMethodError, ArgumentError
           config_file = YAML.load_file(filename)
         end
         sites = config_file["sites"]

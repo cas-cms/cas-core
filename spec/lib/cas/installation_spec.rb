@@ -3,18 +3,18 @@ require 'rails_helper'
 module Cas
   RSpec.describe Installation do
     describe '#generate_sites' do
-      let!(:superadmin) { create(:user, email: 'superadmin@example.com') }
-      let!(:superadmin2) { create(:user, login: 'superadmin-login') }
+      let!(:superadmin) { create(:user, login: 'superadmin-login') }
       let!(:user) { create(:user, email: 'user@example.com') }
 
       before do
         expect(Section.count).to eq 0
       end
 
-      subject { described_class.new }
+      subject { described_class.new(filename: "lib/generators/cas/templates/cas.yml") }
 
       context 'when the file is valid' do
         it 'creates sites' do
+          # Runs twice to make sure things aren't deleted
           subject.generate_sites
           subject.generate_sites
           expect(Site.count).to eq 1
@@ -25,6 +25,7 @@ module Cas
         end
 
         it 'creates sections' do
+          # Runs twice to make sure things aren't deleted
           subject.generate_sites
           subject.generate_sites
           expect(Section.count).to eq 4
@@ -43,13 +44,23 @@ module Cas
           expect(section[2].section_type).to eq "content"
         end
 
+        it "creates admins" do
+          # Runs twice to make sure things aren't deleted
+          expect {
+            subject.generate_sites
+            subject.generate_sites
+          }.to change(::Cas::User, :count).from(3).to(4)
+
+          expect(
+            ::Cas::User.where(email: "initial_user@example.com").first
+          ).to be_present
+        end
+
         it 'adds all sites to all superadmins' do
           expect(superadmin.sites).to be_blank
-          expect(superadmin2.sites).to be_blank
           expect(user.sites).to be_blank
           subject.generate_sites
           expect(superadmin.reload.sites).to match_array(::Cas::Site.all)
-          expect(superadmin2.reload.sites).to match_array(::Cas::Site.all)
           expect(user.reload.sites).to be_blank
         end
       end

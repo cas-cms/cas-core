@@ -21,14 +21,16 @@ module Cas
     def read_file
       begin
         @file ||= YAML.safe_load_file(filename, aliases: true)
-      rescue ArgumentError
+      rescue NoMethodError, ArgumentError
         @file ||= YAML.load_file(filename)
       end
     end
 
     def filename
       @filename ||= begin
-                      if File.exists?("cas.yml")
+                      if File.exists?("config/cas.config.yml")
+                        "config/cas.config.yml"
+                      elsif File.exists?("cas.yml")
                         "cas.yml"
                       elsif ENV['RAILS_ENV'] == 'test'
                         "spec/fixtures/cas.yml"

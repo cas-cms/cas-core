@@ -43,7 +43,7 @@ module Cas
       if Rails.env.test?
         "spec/fixtures/cas.yml"
       else
-        "cas.yml"
+        "config/cas.config.yml"
       end
     end
 
@@ -57,7 +57,7 @@ module Cas
     def load_section_config
       begin
         config = YAML.safe_load_file(filename, aliases: true)
-      rescue ArgumentError
+      rescue NoMethodError, ArgumentError
         config = YAML.load_file(filename)
       end
 

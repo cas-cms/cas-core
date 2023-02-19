@@ -4,8 +4,6 @@ Shrine.plugin :activerecord
 Shrine.plugin :presign_endpoint
 Shrine.plugin :backgrounding
 
-pp "Rails.env: #{Rails.env.inspect}"
-
 if Rails.env.test?
   s3_options = {
     access_key_id:     'access_key_id',
@@ -21,24 +19,31 @@ if Rails.env.test?
   }
 else
   if ENV["S3_ACCESS_KEY_ID"].blank?
-    msg = "You need to configure S3 credentials. See the README.md for more details."
+    msg = "You need to configure S3 credentials. See the README.md for more details. Falling back to file storage."
     puts msg
     Rails.logger.error msg
+
+    require "shrine/storage/file_system"
+    Shrine.storages = {
+      cache: Shrine::Storage::FileSystem.new("public", prefix: "uploads/cache"), # temporary
+      store: Shrine::Storage::FileSystem.new("public", prefix: "uploads"),       # permanent
+    }
+
+  else
+    s3_options = {
+      access_key_id:     ENV.fetch("S3_ACCESS_KEY_ID"),
+      secret_access_key: ENV.fetch("S3_SECRET_ACCESS_KEY"),
+      region:            ENV.fetch("S3_REGION"),
+      bucket:            ENV.fetch("S3_BUCKET"),
+    }
+
+    require "shrine/storage/s3"
+    config = Cas::Config.new.uploads
+    Shrine.storages = {
+      cache: Shrine::Storage::S3.new(prefix: config[:cache_directory_prefix], **s3_options),
+      store: Shrine::Storage::S3.new(prefix: config[:store_directory_prefix], **s3_options),
+    }
   end
-
-  s3_options = {
-    access_key_id:     ENV.fetch("S3_ACCESS_KEY_ID"),
-    secret_access_key: ENV.fetch("S3_SECRET_ACCESS_KEY"),
-    region:            ENV.fetch("S3_REGION"),
-    bucket:            ENV.fetch("S3_BUCKET"),
-  }
-
-  require "shrine/storage/s3"
-  config = Cas::Config.new.uploads
-  Shrine.storages = {
-    cache: Shrine::Storage::S3.new(prefix: config[:cache_directory_prefix], **s3_options),
-    store: Shrine::Storage::S3.new(prefix: config[:store_directory_prefix], **s3_options),
-  }
 end
 
 Shrine::Attacher.promote do |data|
