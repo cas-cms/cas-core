@@ -5,12 +5,13 @@ module Cas
     describe '#generate_sites' do
       let!(:superadmin) { create(:user, login: 'superadmin-login') }
       let!(:user) { create(:user, email: 'user@example.com') }
+      let(:new_admin) { Cas::User.find_by(email: 'admin@example.com') }
 
       before do
         expect(Section.count).to eq 0
       end
 
-      subject { described_class.new(filename: "lib/generators/cas/templates/cas.yml") }
+      subject { described_class.new(filename: "lib/generators/cas/templates/cas.config.yml") }
 
       context 'when the file is valid' do
         it 'creates sites' do
@@ -49,10 +50,10 @@ module Cas
           expect {
             subject.generate_sites
             subject.generate_sites
-          }.to change(::Cas::User, :count).from(3).to(4)
+          }.to change(::Cas::User, :count).from(2).to(3)
 
           expect(
-            ::Cas::User.where(email: "initial_user@example.com").first
+            new_admin
           ).to be_present
         end
 
@@ -60,8 +61,10 @@ module Cas
           expect(superadmin.sites).to be_blank
           expect(user.sites).to be_blank
           subject.generate_sites
+
           expect(superadmin.reload.sites).to match_array(::Cas::Site.all)
           expect(user.reload.sites).to be_blank
+          expect(new_admin.sites).to match_array(::Cas::Site.all)
         end
       end
 

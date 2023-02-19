@@ -3,7 +3,8 @@ module Cas
     source_root File.expand_path("templates", __dir__)
 
     def copy_initializer_file
-      copy_file "cas.yml", Cas::CONFIG_PATH
+      rake("db:migrate")
+      copy_file "cas.config.yml", Cas::CONFIG_PATH
       route 'mount Cas::Engine, at: "/admin"'
 
       puts ""

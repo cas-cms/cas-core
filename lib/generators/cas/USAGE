@@ -4,8 +4,11 @@ Description:
 Example:
     bin/rails generate cas:install
 
-    This will add an /admin route for Cas and create a configuration file in
-    config/cas.config.yml. Edit this file and run
+    This will:
+      - run Cas migrations
+      - add an `/admin` route for Cas
+      - create a configuration file in config/cas.config.yml. After you edit
+        this file, run
 
-        bin/rails cas:apply_config
+          bin/rails cas:apply_config
 

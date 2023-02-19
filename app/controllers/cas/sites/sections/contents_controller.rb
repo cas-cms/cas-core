@@ -92,6 +92,7 @@ module Cas
 
     def content_params
       @content_params ||= begin
+        # TODO - these need some explanation
         result = params.require(:content).permit(
           :category_id,
           :title,
@@ -102,7 +103,8 @@ module Cas
           :text,
           :url,
           :embedded,
-          :tag_list
+          :tag_list,
+          :file
         )
 
         unless result.keys.map(&:to_sym).include?(:published)

@@ -1,5 +1,6 @@
 //= require jquery
 //= require jquery_ujs
+// TODO - fix editor
 // require tinymce-jquery
 //= require cas/vendor/selectize.min
 //= require_self

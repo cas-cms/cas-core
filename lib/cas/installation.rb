@@ -1,6 +1,7 @@
 module Cas
   class Installation
-    def initialize(filename: nil)
+    def initialize(filename: nil, logger: Rails.logger)
+      @logger = logger
       @filename = filename
       @filename ||= begin
         if Rails.env.test?
@@ -24,18 +25,23 @@ module Cas
     end
 
     def generate_sites
+      @logger.info "Creating data..."
       ActiveRecord::Base.transaction do
-        create_sites
+        @logger.info "  - admins"
         create_initial_admins
+        @logger.info "  - sites"
+        create_sites
+        @logger.info "  - setting superadmins"
         set_superadmins
       end
+      @logger.info "Done."
     end
 
     private
 
     def create_sites
       @config["sites"].each do |site_slug, site_config|
-        site = ::Cas::Site.where(slug: site_slug).first_or_create
+        site = ::Cas::Site.where(slug: site_slug).first_or_create!
         site.update!(
           domains: site_config["domains"],
           name: site_config["name"]
@@ -80,12 +86,17 @@ module Cas
           value: email_or_login
         ).first
 
-        if user.present?
-          unless updated_users.include?(user.id)
-            user.update!(sites: ::Cas::Site.all)
-          end
-          updated_users << user.id
+        if user.blank?
+          @logger.info "Cannot set user '#{email_or_login}' as superadmin because it doesn't exist"
+          next
         end
+
+        next if updated_users.include?(user.id)
+
+        user.sites = ::Cas::Site.all
+        user.save!
+
+        updated_users << user.id
       end
     end
   end
