@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cas (0.1.3)
+    cas-cms (0.1.3)
       acts-as-taggable-on
       aws-sdk (~> 2.1)
       devise
@@ -315,7 +315,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   capybara
-  cas!
+  cas-cms!
   database_cleaner
   dotenv-rails
   factory_girl_rails (~> 4.0)

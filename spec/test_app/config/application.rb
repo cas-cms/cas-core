@@ -2,11 +2,12 @@ require_relative 'boot'
 
 require 'rails/all'
 
-Bundler.require(*Rails.groups)
-require "cas"
 require 'dotenv-rails'
 require "sprockets/railtie"
+Bundler.require(*Rails.groups)
+require 'dotenv-rails'
 Dotenv::Railtie.load
+require "cas"
 
 module TestApp
   class Application < Rails::Application

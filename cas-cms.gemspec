@@ -5,7 +5,7 @@ require "cas/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "cas"
+  s.name        = "cas-cms"
   s.version     = Cas::VERSION
   s.authors     = ["Alexandre de Oliveira"]
   s.email       = ["chavedomundo@gmail.com"]
