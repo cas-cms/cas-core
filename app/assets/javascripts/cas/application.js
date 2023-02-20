@@ -1,7 +1,6 @@
 //= require jquery
 //= require jquery_ujs
-// TODO - fix editor
-// require tinymce-jquery
+//= require tinymce
 //= require cas/vendor/selectize.min
 //= require_self
 
@@ -38,6 +37,8 @@ $(document).ready(function() {
   });
 
   tinyMCE.init({
+    branding: false,
+    promotion: false,
     selector: 'textarea.editor',
     mode : "exact",
     relative_urls : false,
@@ -49,7 +50,7 @@ $(document).ready(function() {
     inline_styles: false,
     extended_valid_elements: "embed,param,object,iframe[src|title|width|height|allowfullscreen|frameborder]",
     language : "pt_BR",
-    plugins : 'image,imagetools,code,paste,pagebreak,table,wordcount,link',
+    plugins : 'image code pagebreak table wordcount link',
     default_link_target: "_blank",
     images_upload_url: paths.fileUpload.path,
     images_upload_credentials: true

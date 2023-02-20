@@ -30,7 +30,7 @@ var UploadSharedFunctions = {
     console.log("error", e);
     console.log("data", data);
     data.progressBar.remove();
-    alert('Falha ao enviar arquivo: '+data.files[0].name);
+    alert('Failed sending file: '+data.files[0].name);
   }
 };
 
@@ -47,7 +47,7 @@ var ImageGalleryUploadFunctions = {
     for (var index in data.originalFiles) {
       var file = data.originalFiles[index];
       if(file['type'].length && !acceptFileTypes.test(file['type'])) {
-        alert('O arquivo enviado não é uma imagem.');
+        alert('File is not a valid image.');
         return false;
       }
     }

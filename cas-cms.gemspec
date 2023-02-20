@@ -31,9 +31,11 @@ Gem::Specification.new do |s|
   s.add_dependency "select2-rails"
   s.add_dependency 'sidekiq'
   s.add_dependency 'sprockets-rails'
+  s.add_dependency "tinymce-rails"
+  s.add_dependency 'tinymce-rails-langs'
 
   # File uploads
-  s.add_dependency 'shrine', "~> 2.19.4" # for uploading files
+  s.add_dependency 'shrine', "2.19.1" # for uploading files
   s.add_dependency 'roda' # for shrine
   s.add_dependency "aws-sdk", "~> 2.1" # for file uploads
 

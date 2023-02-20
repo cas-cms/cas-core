@@ -4,6 +4,8 @@ require 'sidekiq/web'
 
 Cas::Engine.routes.draw do
   mount Shrine.presign_endpoint(:cache) => "/files/cache/presign"
+  # TODO - fix
+  # mount Shrine.upload_endpoint(:cache) => "/files/upload"
 
   authenticate :user, ->(u){ u.roles.include?('admin') } do
     mount Sidekiq::Web => '/sidekiq'

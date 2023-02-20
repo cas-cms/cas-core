@@ -1,3 +1,6 @@
+# On why we use Shrine over Active Storage:
+# https://github.com/shrinerb/shrine/blob/d9aba64bd5515584645f8885c76d56fa1a842bac/doc/advantages.md
+
 require 'shrine'
 
 Shrine.plugin :activerecord
@@ -20,14 +23,8 @@ if Rails.env.test?
 else
   if ENV["S3_ACCESS_KEY_ID"].blank?
     msg = "You need to configure S3 credentials. See the README.md for more details. Falling back to file storage."
-    puts msg
     Rails.logger.error msg
-
-    require "shrine/storage/file_system"
-    Shrine.storages = {
-      cache: Shrine::Storage::FileSystem.new("public", prefix: "uploads/cache"), # temporary
-      store: Shrine::Storage::FileSystem.new("public", prefix: "uploads"),       # permanent
-    }
+    raise msg
 
   else
     s3_options = {

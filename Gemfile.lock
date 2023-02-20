@@ -15,10 +15,12 @@ PATH
       roda
       sass-rails
       select2-rails
-      shrine (~> 2.19.4)
+      shrine (= 2.19.1)
       sidekiq
       simple_form
       sprockets-rails
+      tinymce-rails
+      tinymce-rails-langs
 
 GEM
   remote: https://rubygems.org/
@@ -274,9 +276,9 @@ GEM
       sprockets-rails
       tilt
     select2-rails (4.0.13)
-    shrine (2.19.4)
+    shrine (2.19.1)
       content_disposition (~> 1.0)
-      down (>= 4.1, < 6)
+      down (~> 4.1)
     sidekiq (7.0.5)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
@@ -297,11 +299,15 @@ GEM
     thor (1.2.1)
     tilt (2.1.0)
     timeout (0.3.2)
+    tinymce-rails (6.3.1)
+      railties (>= 3.1.1)
+    tinymce-rails-langs (6.20220429)
+      tinymce-rails (~> 6.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
-    webrick (1.7.0)
+    webrick (1.8.1)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)

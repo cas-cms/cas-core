@@ -30,6 +30,7 @@ module Cas
           associate_files(@content, :attachments)
         end
       rescue ActiveRecord::RecordInvalid
+        Rails.logger.info "Errors: #{@content.errors.full_messages.inspect}"
         success = nil
       end
 
@@ -92,7 +93,11 @@ module Cas
 
     def content_params
       @content_params ||= begin
-        # TODO - these need some explanation
+        # When no file is uploaded, when the content form is submitted the
+        # `file` input ends up being sent empty (e.g file: [""]). This confuses
+        # Rails.
+        params[:content].delete(:file) if params[:content][:file].map(&:presence).compact.blank?
+
         result = params.require(:content).permit(
           :category_id,
           :title,
