@@ -24,17 +24,25 @@
         <%= activity.site.name %>
       </td>
       <td>
-        <strong><%= activity.user.name %></strong>
+        <% if activity.user.present? %>
+          <strong><%= activity.user.name %></strong>
+        <% else %>
+          <strong><%= activity.user_description %></strong>
+        <% end %>
         <% if activity.event_name == 'create' %>
           criou
         <% elsif activity.event_name == 'update'%>
           editou
         <% end %>
-        <strong>
-          <%= link_to activity.subject.title,
-            edit_site_section_content_path(@site, activity.subject.section, activity.subject)
-        %>
-        </strong>
+        <% if activity.subject.present? %>
+          <strong>
+            <%= link_to activity.subject.title,
+              edit_site_section_content_path(@site, activity.subject.section, activity.subject)
+            %>
+          </strong>
+        <% else %>
+          <%= activity.subject_description %>
+        <% end %>
       </td>
       <td>
         <%= l(activity.created_at, format: :short) %>

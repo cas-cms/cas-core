@@ -11,11 +11,19 @@ module Cas
     belongs_to :section
     belongs_to :category, optional: true
     belongs_to :author, class_name: "::Cas::User"
-    has_one :site, through: :section
-    has_many :images, ->{ where(media_type: :image).order("cas_media_files.order ASC") }, class_name: "::Cas::MediaFile", as: :attachable, dependent: :destroy
-    has_many :attachments, ->{ where(media_type: :attachment).order("cas_media_files.order ASC") }, class_name: "::Cas::MediaFile", as: :attachable, dependent: :destroy
+
+    has_many :images,
+      ->{ where(media_type: :image).order("cas_media_files.order ASC") },
+      class_name: "::Cas::MediaFile", as: :attachable, dependent: :destroy
+    has_many :attachments,
+      ->{ where(media_type: :attachment).order("cas_media_files.order ASC") },
+      class_name: "::Cas::MediaFile", as: :attachable, dependent: :destroy
     has_many :activities, as: :subject
-    has_one :cover_image, ->{ where(media_type: :image, cover: true) }, class_name: "::Cas::MediaFile", as: :attachable
+
+    has_one :site, through: :section
+    has_one :cover_image,
+      ->{ where(media_type: :image, cover: true) },
+      class_name: "::Cas::MediaFile", as: :attachable
 
     validates :title, presence: true
 

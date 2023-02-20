@@ -22,9 +22,9 @@ if Rails.env.test?
   }
 else
   if ENV["S3_ACCESS_KEY_ID"].blank?
-    msg = "You need to configure S3 credentials. See the README.md for more details. Falling back to file storage."
+    msg = "You need to configure S3 credentials. See the README.md for more details. File uploads will be broken until you fix it."
     Rails.logger.error msg
-    raise msg
+    puts msg
 
   else
     s3_options = {

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2018_01_14_124600) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_20_165900) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -26,6 +26,8 @@ ActiveRecord::Schema[7.0].define(version: 2018_01_14_124600) do
     t.string "subject_type"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.string "user_description"
+    t.string "subject_description"
     t.index ["site_id"], name: "index_cas_activities_on_site_id"
     t.index ["subject_id", "subject_type"], name: "index_cas_activities_on_subject_id_and_subject_type"
     t.index ["user_id"], name: "index_cas_activities_on_user_id"
