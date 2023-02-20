@@ -1,3 +1,3 @@
 module Cas
-  VERSION = '0.1.3'
+  VERSION = '1.0.0.alpha1'
 end
