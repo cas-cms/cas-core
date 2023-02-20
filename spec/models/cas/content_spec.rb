@@ -23,6 +23,14 @@ module Cas
           subject.reload
           expect(subject.tags_cache).to eq "tag1, tag2, category_name"
         end
+
+        it 'saves tags with spaces' do
+          expect(subject.tags_cache).to be_blank
+          subject.tag_list = "tag one, tag two, tag3"
+          subject.save!
+          subject.reload
+          expect(subject.tags_cache).to eq "tag one, tag two, tag3"
+        end
       end
 
       describe "published_at" do
