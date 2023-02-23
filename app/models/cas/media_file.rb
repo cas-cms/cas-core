@@ -5,8 +5,8 @@ module Cas
     class UnknownPath < StandardError; end
     class UnknownFileService < StandardError; end
 
-    belongs_to :attachable, polymorphic: true
-    belongs_to :author, class_name: "::Cas::User"
+    belongs_to :attachable, polymorphic: true, optional: true
+    belongs_to :author, class_name: "::Cas::User", optional: true
 
     before_validation :set_media_type
     before_save :set_image_as_unique_cover

@@ -1,10 +1,11 @@
 class Cas::Api::FilesController < Cas::ApplicationController
-  skip_before_action :authenticate_user!
+  #skip_before_action :authenticate_user!
 
   def create
     if ENV.fetch("S3_BUCKET")
       service = "s3"
     end
+
     metadata = resource_params[:attributes][:metadata]
     file = ::Cas::MediaFile.new(
       service: service,
@@ -13,9 +14,15 @@ class Cas::Api::FilesController < Cas::ApplicationController
       mime_type: metadata[:original][:metadata][:mime_type],
       media_type: resource_params[:attributes][:media_type],
       file: metadata.to_json,
-      attachable: attachable_record
+      attachable: attachable_record,
+      author: current_user,
     )
-    file.save
+
+    unless !file.valid?
+      Rails.logger.debug "File upload failed: #{file.errors.inspect}"
+    end
+
+    file.save!
     Cas::RemoteCallbacks.callbacks[:after_file_upload].call(file)
     render json: {
       data: {
