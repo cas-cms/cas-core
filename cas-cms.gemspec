@@ -29,15 +29,15 @@ Gem::Specification.new do |s|
   s.add_dependency "friendly_id"
   s.add_dependency 'acts-as-taggable-on'
   s.add_dependency "select2-rails"
-  s.add_dependency 'sidekiq'
+  s.add_dependency 'sidekiq', "> 5.0"
   s.add_dependency 'sprockets-rails'
   s.add_dependency "tinymce-rails"
   s.add_dependency 'tinymce-rails-langs'
 
   # File uploads
-  s.add_dependency 'shrine', "2.19.1" # for uploading files
+  s.add_dependency 'shrine', "~> 3.0" # for uploading files
   s.add_dependency 'roda' # for shrine
-  s.add_dependency "aws-sdk", "~> 2.1" # for file uploads
+  s.add_dependency "aws-sdk-s3" # for file uploads
 
   s.add_development_dependency "amazing_print"
   s.add_development_dependency "sqlite3"

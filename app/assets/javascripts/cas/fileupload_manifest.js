@@ -77,14 +77,12 @@ var ImageGalleryUploadFunctions = {
     data.progressBar.remove();
 
     var file = {
-      original: {
-        id: data.formData.key.match(/cache\/(.+)/)[1], // we have to remove the prefix part
-        storage: 'cache',
-        metadata: {
-          size:      data.files[0].size,
-          filename:  data.files[0].name.match(/[^\/\\]*$/)[0], // IE returns full path
-          mime_type: data.files[0].type
-        }
+      id: data.formData.key.match(/cache\/(.+)/)[1], // we have to remove the prefix part
+      storage: 'cache',
+      metadata: {
+        size:      data.files[0].size,
+        filename:  data.files[0].name.match(/[^\/\\]*$/)[0], // IE returns full path
+        mime_type: data.files[0].type
       }
     }
 
@@ -148,14 +146,12 @@ var AttachmentUploadFunctions = {
     data.progressBar.remove();
 
     var file = {
-      original: {
-        id: data.formData.key.match(/cache\/(.+)/)[1], // we have to remove the prefix part
-        storage: 'cache',
-        metadata: {
-          size:      data.files[0].size,
-          filename:  data.files[0].name.match(/[^\/\\]*$/)[0], // IE returns full path
-          mime_type: data.files[0].type
-        }
+      id: data.formData.key.match(/cache\/(.+)/)[1], // we have to remove the prefix part
+      storage: 'cache',
+      metadata: {
+        size:      data.files[0].size,
+        filename:  data.files[0].name.match(/[^\/\\]*$/)[0], // IE returns full path
+        mime_type: data.files[0].type
       }
     }
 

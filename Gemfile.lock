@@ -3,7 +3,7 @@ PATH
   specs:
     cas-cms (1.0.0.alpha1)
       acts-as-taggable-on
-      aws-sdk (~> 2.1)
+      aws-sdk-s3
       devise
       friendly_id
       jquery-rails
@@ -15,8 +15,8 @@ PATH
       roda
       sass-rails
       select2-rails
-      shrine (= 2.19.1)
-      sidekiq
+      shrine (~> 3.0)
+      sidekiq (> 5.0)
       simple_form
       sprockets-rails
       tinymce-rails
@@ -96,13 +96,19 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     amazing_print (1.4.0)
     aws-eventstream (1.2.0)
-    aws-sdk (2.11.632)
-      aws-sdk-resources (= 2.11.632)
-    aws-sdk-core (2.11.632)
-      aws-sigv4 (~> 1.0)
-      jmespath (~> 1.0)
-    aws-sdk-resources (2.11.632)
-      aws-sdk-core (= 2.11.632)
+    aws-partitions (1.717.0)
+    aws-sdk-core (3.170.0)
+      aws-eventstream (~> 1, >= 1.0.2)
+      aws-partitions (~> 1, >= 1.651.0)
+      aws-sigv4 (~> 1.5)
+      jmespath (~> 1, >= 1.6.1)
+    aws-sdk-kms (1.62.0)
+      aws-sdk-core (~> 3, >= 3.165.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.119.1)
+      aws-sdk-core (~> 3, >= 3.165.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.4)
     aws-sigv4 (1.5.2)
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.18)
@@ -140,8 +146,8 @@ GEM
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
       railties (>= 3.2)
-    down (4.8.1)
-      addressable (~> 2.5)
+    down (5.4.0)
+      addressable (~> 2.8)
     erubi (1.12.0)
     factory_girl (4.9.0)
       activesupport (>= 3.0.0)
@@ -276,9 +282,9 @@ GEM
       sprockets-rails
       tilt
     select2-rails (4.0.13)
-    shrine (2.19.1)
+    shrine (3.4.0)
       content_disposition (~> 1.0)
-      down (~> 4.1)
+      down (~> 5.1)
     sidekiq (7.0.5)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)

@@ -10,6 +10,7 @@ require 'capybara/rspec'
 require 'capybara/rails'
 require 'factory_girl_rails'
 require 'database_cleaner'
+require 'sidekiq/testing'
 
 Dir[Rails.root.join('../support/**/*.rb')].each   { |f| require f }
 
@@ -43,6 +44,8 @@ RSpec.configure do |config|
     Cas::RemoteCallbacks.reset
     Capybara.app_host = 'http://example.com'
     FactoryGirl.reload
+    Sidekiq::Worker.clear_all
+    Sidekiq::Testing.inline!
     DatabaseCleaner.cleaning do
       example.run
     end

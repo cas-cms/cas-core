@@ -1,14 +1,13 @@
 class ::FileUploader < Shrine
-  plugin :versions
-  plugin :processing
 
-  process(:store) do |io, context|
-    result = {}
+  Attacher.derivatives do |original|
+    result = {
+    }
+
     if context[:record].media_type == 'image'
-      result = Cas::RemoteCallbacks.callbacks[:uploaded_image_versions].call(io, context)
+      result = Cas::RemoteCallbacks.callbacks[:uploaded_image_versions].call(original)
     end
-    original = (io.respond_to?(:[]) && io[:original]) ? io[:original] : io
-    result = result.merge(original: original) unless result.keys.include?(:original)
+
     Rails.logger.info "FileUploader, versions: [#{result.keys.join(", ")}]"
     result
   end

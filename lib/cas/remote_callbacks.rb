@@ -9,9 +9,9 @@ module Cas
       #     big:    big_image
       #   }
       #
-      # `original` should always be present. If it is not, we will merge it
-      # afterwards automatically.
-      uploaded_image_versions: ->(io, context) {
+      # `original` should not be present after Shrine 3.0. If it is not, we will
+      # merge it afterwards automatically.
+      uploaded_image_versions: ->(original) {
         {}
       },
 

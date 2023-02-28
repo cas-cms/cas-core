@@ -16,14 +16,12 @@ RSpec.describe "API /media_files" do
             service: "s3",
             media_type: 'custom-media-type',
             metadata: {
-              original: {
-                id: "filename1.jpg",
-                storage: "cache",
-                metadata: {
-                  size: 1,
-                  filename: "file1.jpg",
-                  "mime-type": "image/jpeg",
-                }
+              id: "filename1.jpg",
+              storage: "cache",
+              metadata: {
+                size: 1,
+                filename: "file1.jpg",
+                "mime-type": "image/jpeg",
               }
             }
           },
@@ -53,14 +51,12 @@ RSpec.describe "API /media_files" do
         expect(new_file.media_type).to eq "custom-media-type"
         expect(new_file.attachable).to eq content
         expect(new_file.file_data).to eq({
-          original: {
-            id: "filename1.jpg",
-            storage: "cache",
-            metadata: {
-              size: "1",
-              filename: "file1.jpg",
-              mime_type: "image/jpeg",
-            }
+          id: "filename1.jpg",
+          storage: "cache",
+          metadata: {
+            size: "1",
+            filename: "file1.jpg",
+            mime_type: "image/jpeg",
           }
         }.to_json)
 

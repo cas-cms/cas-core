@@ -3,7 +3,12 @@ require 'sidekiq/web'
 #Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
 
 Cas::Engine.routes.draw do
-  mount Shrine.presign_endpoint(:cache) => "/files/cache/presign"
+  if Shrine.respond_to?(:presign_endpoint)
+    mount Shrine.presign_endpoint(:cache) => "/files/cache/presign"
+  else
+    Rails.logger.info "Shrine's presign endpoint is disabled"
+  end
+
   # TODO - fix
   # mount Shrine.upload_endpoint(:cache) => "/files/upload"
 

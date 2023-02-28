@@ -1,6 +1,6 @@
 module Cas
   class MediaFile < ApplicationRecord
-    include FileUploader::Attachment.new(:file)
+    include FileUploader::Attachment.new(:file) # This is for the Shrine gem
 
     class UnknownPath < StandardError; end
     class UnknownFileService < StandardError; end
@@ -39,13 +39,30 @@ module Cas
           raise UnknownFileService
         end
 
-      # Shrine gem uses `file_data`
+      # Shrine gem uses `file_data` because `file` is the name we specified for
+      # the Attachment at the top of this model.
       elsif JSON.parse(file_data).present?
-        if cdn.present?
-          file_url(version.to_sym, host: cdn, public: true)
-        else
-          file_url(version.to_sym, public: true).gsub(/\?.*/, "")
-        end
+        params = {
+          public: true
+        }
+        params[:host] = cdn if cdn.present?
+
+        # With Shrine, the default image version is :original. Other versions
+        # are called derivatives. The `file_url` method expects a derivative
+        # name as first argument.
+        #
+        # When we pass :original, it just returns `nil` because the main file is
+        # not considered a derivative. If we had something like :larger, then
+        # that would be the argument.
+        url = if version == :original
+                file_url(params)
+              else
+                file_url(version, params)
+              end
+
+        # Amazon S3 has URLs that include some query strings like signatures
+        # which we don't want to include in URLs.
+        url&.gsub(/\?.*/, "")
       else
         raise UnknownPath
       end

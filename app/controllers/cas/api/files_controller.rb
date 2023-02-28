@@ -9,14 +9,16 @@ class Cas::Api::FilesController < Cas::ApplicationController
     metadata = resource_params[:attributes][:metadata]
     file = ::Cas::MediaFile.new(
       service: service,
-      size: metadata[:original][:metadata][:size].to_i,
-      original_name: metadata[:original][:metadata][:filename],
-      mime_type: metadata[:original][:metadata][:mime_type],
+      size: metadata[:metadata][:size].to_i,
+      original_name: metadata[:metadata][:filename],
+      mime_type: metadata[:metadata][:mime_type],
       media_type: resource_params[:attributes][:media_type],
       file: metadata.to_json,
       attachable: attachable_record,
       author: current_user,
     )
+
+    Rails.logger.debug metadata.inspect
 
     unless !file.valid?
       Rails.logger.debug "File upload failed: #{file.errors.inspect}"
@@ -61,11 +63,9 @@ class Cas::Api::FilesController < Cas::ApplicationController
           :cover,
           :media_type,
           metadata: [
-            original: [
-              :id,
-              :storage,
-              metadata: [:size, :filename, :mime_type, 'mime-type']
-            ]
+            :id,
+            :storage,
+            metadata: [:size, :filename, :mime_type, 'mime-type']
           ]
         ],
         relationships: [
@@ -76,10 +76,10 @@ class Cas::Api::FilesController < Cas::ApplicationController
       )
 
     if r[:attributes][:metadata].present?
-      if r[:attributes][:metadata][:original][:metadata][:mime_type].blank?
-        r[:attributes][:metadata][:original][:metadata][:mime_type] = r[:attributes][:metadata][:original][:metadata][:"mime-type"]
+      if r[:attributes][:metadata][:metadata][:mime_type].blank?
+        r[:attributes][:metadata][:metadata][:mime_type] = r[:attributes][:metadata][:metadata][:"mime-type"]
       end
-      r[:attributes][:metadata][:original][:metadata].delete(:"mime-type")
+      r[:attributes][:metadata][:metadata].delete(:"mime-type")
     end
     r
   end
