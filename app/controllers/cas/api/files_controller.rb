@@ -1,5 +1,5 @@
 class Cas::Api::FilesController < Cas::ApplicationController
-  #skip_before_action :authenticate_user!
+  skip_before_action :authenticate_user!
 
   def create
     if ENV.fetch("S3_BUCKET")
@@ -23,6 +23,7 @@ class Cas::Api::FilesController < Cas::ApplicationController
     end
 
     file.save!
+
     Cas::RemoteCallbacks.callbacks[:after_file_upload].call(file)
     render json: {
       data: {

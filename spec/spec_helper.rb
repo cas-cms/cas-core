@@ -1,6 +1,6 @@
 ENV['RAILS_ENV'] ||= 'test'
 require 'pry'
-require 'awesome_print'
+require 'amazing_print'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

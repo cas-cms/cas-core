@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'roda' # for shrine
   s.add_dependency "aws-sdk", "~> 2.1" # for file uploads
 
-  s.add_development_dependency "awesome_print"
+  s.add_development_dependency "amazing_print"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "database_cleaner"
   s.add_development_dependency "rspec-rails"

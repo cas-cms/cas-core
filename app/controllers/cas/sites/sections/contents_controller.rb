@@ -25,6 +25,7 @@ module Cas
           @content.section_id = @section.id
           @content.tag_list = content_params[:tag_list] if content_params[:tag_list]
           success = @content.save!
+
           ::Cas::Activity.create!(user: current_user, site: @site, subject: @content, event_name: 'create')
           associate_files(@content, :images)
           associate_files(@content, :attachments)
@@ -96,7 +97,9 @@ module Cas
         # When no file is uploaded, when the content form is submitted the
         # `file` input ends up being sent empty (e.g file: [""]). This confuses
         # Rails.
-        params[:content].delete(:file) if params[:content][:file].map(&:presence).compact.blank?
+        if params[:content][:file].present?
+          params[:content].delete(:file) if params[:content][:file].map(&:presence)&.compact.blank?
+        end
 
         result = params.require(:content).permit(
           :category_id,

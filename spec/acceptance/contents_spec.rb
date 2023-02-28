@@ -32,7 +32,7 @@ RSpec.feature 'Contents' do
         fill_in 'content_title', with: 'new content'
         fill_in 'content_summary', with: 'summary'
         fill_in 'content_text', with: 'text'
-        fill_in 'content_tag_list', with: 'tag1 tag2'
+        fill_in 'content_tag_list', with: 'tag1.1 tag1.2,tag2'
 
         find("#test_image_1", visible: false).set(file_orphan.id)
 
@@ -44,7 +44,7 @@ RSpec.feature 'Contents' do
         expect(last_content.title).to eq "new content"
         expect(last_content.summary).to eq 'summary'
         expect(last_content.text).to eq 'text'
-        expect(last_content.tag_list).to match_array ['tag1', 'tag2']
+        expect(last_content.tag_list).to match_array ['tag1.1 tag1.2', 'tag2']
         expect(last_content.images).to match_array [file_orphan]
 
         activity = Cas::Activity.last
@@ -58,7 +58,7 @@ RSpec.feature 'Contents' do
         click_link "edit-content-#{content.id}"
 
         fill_in 'content[title]', with: 'new title 2'
-        fill_in 'content_tag_list', with: 'edited-tag1 tag2'
+        fill_in 'content_tag_list', with: 'edited-tag1.1 edited-tag1.2,tag2'
         find("#test_image_1", visible: false).set(file_orphan.id)
 
         expect(content.images).to be_blank
@@ -72,7 +72,7 @@ RSpec.feature 'Contents' do
 
         expect(content.reload.images).to be_present
         expect(content.title).to eq 'new title 2'
-        expect(content.tag_list).to match_array ['edited-tag1', 'tag2']
+        expect(content.tag_list).to match_array ['edited-tag1.1 edited-tag1.2', 'tag2']
       end
 
       scenario "I edit the order of the images" do
@@ -167,11 +167,14 @@ RSpec.feature 'Contents' do
         fill_in :question_3_text, with: "question 3"
         fill_in :question_4_text, with: ""
         check :content_published
-        click_on 'submit'
+
+        expect {
+          click_on 'submit'
+        }.to change(::Cas::Content, :count).by(1)
 
         expect(survey).to be_published
 
-        new_survey = survey_section.contents.reload.first
+        new_survey = survey_section.contents.where.not(id: survey.id).first!
         expect(new_survey.metadata).to eq({
           "survey" => {
             "questions" => {
@@ -212,7 +215,10 @@ RSpec.feature 'Contents' do
         fill_in :question_3_text, with: ""
         fill_in :question_4_text, with: "new question"
         uncheck :content_published
-        click_on 'submit'
+
+        expect {
+          click_on 'submit'
+        }.to change(::Cas::Content, :count).by(0)
 
         survey.reload
         expect(survey).to_not be_published
@@ -253,7 +259,7 @@ RSpec.feature 'Contents' do
         fill_in 'content_location', with: "new location"
         select '13',  from: 'content_date_3i'
         select 'July', from: 'content_date_2i'
-        select '2017', from: 'content_date_1i'
+        select Time.now.year.to_s, from: 'content_date_1i'
         fill_in 'content_text', with: "new content text"
 
         expect do
