@@ -54,7 +54,7 @@ module Cas
         # When we pass :original, it just returns `nil` because the main file is
         # not considered a derivative. If we had something like :larger, then
         # that would be the argument.
-        url = if version == :original
+        url = if version.to_sym == :original
                 file_url(params)
               else
                 file_url(version, params)

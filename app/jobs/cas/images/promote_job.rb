@@ -13,7 +13,6 @@ module Cas
         attacher.atomic_promote
       rescue Shrine::AttachmentChanged, ActiveRecord::RecordNotFound => e
         Rails.logger.info e.inspect
-        puts e.inspect
         # attachment has changed or record has been deleted, nothing to do
       end
     end

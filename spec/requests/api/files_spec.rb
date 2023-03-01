@@ -38,6 +38,10 @@ RSpec.describe "API /media_files" do
     end
 
     context 'when relationship is passed in' do
+      before do
+        stub_any_media_url(url: "/cache/filename1.jpg")
+      end
+
       it 'creates a new file' do
         expect(Cas::MediaFile.count).to eq 0
         post "/admin/api/files", params: payload

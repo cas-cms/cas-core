@@ -83,9 +83,23 @@ module Cas
       context 'when S3' do
         subject { build(:file) }
 
+        let(:attacher_url) { "/cache/" + JSON.parse(subject.file_data).fetch("id") }
+
         before do
           allow(ENV).to receive(:fetch).with("S3_BUCKET") { "com.bucket" }
           allow(ENV).to receive(:fetch).with("S3_REGION", "s3") { "us-east-1" }
+          allow(ENV).to receive(:fetch).with("AWS_EC2_METADATA_DISABLED", "false") { "false" }
+
+          # This is not ideal because we're stubbing internal methods from a
+          # gem which we don't control. Unfortunately, we use S3 in production
+          # but in tests we don't, and Shrine returns different objects with
+          # different methods when we call `file_url`, which is really an
+          # alias to Shrine::Attacher#url, but the problem is that it uses a
+          # `storage` object to figure out that `url`, and in tests it's not S3,
+          # so it just returns `nil`.
+          #
+          # This will bypass that.
+          stub_attacher_url(subject: subject, attacher_url: attacher_url)
         end
 
         context 'when no CDN should be used' do
@@ -101,7 +115,8 @@ module Cas
             it 'returns full URL' do
               # In test env, Shrine is not configured with S3 so it's not
               # returning the host here, but when S3 is configured it is.
-              expect(subject.url(version: "original", use_cdn: false)).to match "/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
+              expect(subject.url(version: "original", use_cdn: false))
+                .to match "/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
             end
           end
         end
@@ -122,12 +137,17 @@ module Cas
           end
 
           context 'when uploaded with shrine' do
+            let(:attacher_url) { "http://cdn/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg" }
+
             it 'returns shrine URL with CDN as host' do
-              expect(subject.url(version: :original)).to match "http://cdn/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
+              expect(subject.url(version: :original))
+                .to match "http://cdn/cache/fc8ff0798fee2a486cf335de777f3a0d.jpg"
             end
           end
 
           context 'when only path is present' do
+            let(:attacher_url) { nil }
+
             subject { build(:file, file_data: "{}", path: 'custom-path') }
 
             it 'returns CDN host + path' do

@@ -32,6 +32,7 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
   config.include Cas::Engine.routes.url_helpers
   config.include AcceptanceOperations
+  config.include ShrineStubbing
   config.include FactoryGirl::Syntax::Methods
   config.include DeviseSupport, type: :request
 
@@ -45,7 +46,6 @@ RSpec.configure do |config|
     Capybara.app_host = 'http://example.com'
     FactoryGirl.reload
     Sidekiq::Worker.clear_all
-    Sidekiq::Testing.inline!
     DatabaseCleaner.cleaning do
       example.run
     end
