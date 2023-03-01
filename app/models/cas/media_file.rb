@@ -60,6 +60,13 @@ module Cas
                 file_url(version, params)
               end
 
+        # Shrine 3 returns `nil` when a derivative doesn't exist. It also
+        # returns `nil` when we pass parameters. This is a fallback way of
+        # avoiding any `nil` returns. However, notice that we can't pass
+        # `params` because Shrine just ignores it and returns `nil` if it's
+        # present (it wasn't like that in Shrine 2).
+        url = file_url if url.blank?
+
         # Amazon S3 has URLs that include some query strings like signatures
         # which we don't want to include in URLs.
         url&.gsub(/\?.*/, "")
