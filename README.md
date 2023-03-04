@@ -1,5 +1,7 @@
 # Cas
 
+For branches for specific versions: [rails-5](https://github.com/cas-cms/cas-core/tree/rails-5)
+
 ## Usage
 
 Add this line to your application's Gemfile:
@@ -16,7 +18,7 @@ bin/rails generate cas:install
 
 This adds an `/admin` entry to `config/routes.rb` and generates a new file,
 `config/cas.config.yml` which contains all sections your site is supposed to
-have. 
+have.
 
 Once the file is edited, run
 
