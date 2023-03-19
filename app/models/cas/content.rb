@@ -1,6 +1,6 @@
 module Cas
   class Content < ApplicationRecord
-    include ::PgSearch
+    include ::PgSearch::Model
     extend ::FriendlyId
 
     friendly_id :title, use: :slugged
@@ -10,7 +10,7 @@ module Cas
 
     belongs_to :section
     belongs_to :category, optional: true
-    belongs_to :author, class_name: "::Cas::User"
+    belongs_to :author, class_name: "::Cas::User", optional: true
 
     has_many :images,
       ->{ where(media_type: :image).order("cas_media_files.order ASC") },

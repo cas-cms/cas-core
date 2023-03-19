@@ -38,9 +38,7 @@
 
       <% if user_signed_in? %>
         <div class="mobile-col-1-1 col-1-3 site-selector">
-          <% if @user_sites.count <= 1 %>
-            <%= @user_sites[0].name %> (<%= @user_sites[0].domains.join(", ") %>)
-          <% else %>
+          <% if @user_sites.count > 1 %>
             <select id="select-site">
               <% @user_sites.each do |site| %>
                 <% selected = site.id == @site&.id %>
