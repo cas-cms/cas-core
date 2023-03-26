@@ -18,7 +18,7 @@ bin/rails generate cas:install
 
 This adds an `/admin` entry to `config/routes.rb` and generates a new file,
 `config/cas.config.yml` which contains all sections your site is supposed to
-have.
+have. [See the documentation for the config file](docs/config.md).
 
 Once the file is edited, run
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_20_165900) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_18_190300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -45,11 +45,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_165900) do
     t.index ["slug"], name: "index_cas_categories_on_slug"
   end
 
+  create_table "cas_content_to_contents", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid "cas_content_id"
+    t.text "relationship_type"
+    t.uuid "cas_other_section_id"
+    t.uuid "cas_other_content_id"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["cas_content_id", "cas_other_section_id", "cas_other_content_id"], name: "cas_content_to_content_and_section"
+    t.index ["cas_other_content_id"], name: "cas_content_to_content"
+  end
+
   create_table "cas_contents", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid "section_id", null: false
     t.string "title"
     t.text "text"
-    t.uuid "author_id", null: false
+    t.uuid "author_id"
     t.datetime "date", precision: nil
     t.boolean "published"
     t.datetime "created_at", precision: nil, null: false

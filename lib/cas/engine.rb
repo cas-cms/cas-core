@@ -16,6 +16,8 @@ module Cas
       end
     end
 
+    config.autoload_paths << "#{config.root}/lib/cas"
+
     config.assets.precompile += [
       "cas/application.css",
       "cas/application.js",

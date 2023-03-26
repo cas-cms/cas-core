@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cas-cms (1.0.0.alpha1)
+    cas-cms (1.0.0.alpha2)
       acts-as-taggable-on
       aws-sdk-s3
       devise
@@ -96,13 +96,13 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     amazing_print (1.4.0)
     aws-eventstream (1.2.0)
-    aws-partitions (1.717.0)
-    aws-sdk-core (3.170.0)
+    aws-partitions (1.732.0)
+    aws-sdk-core (3.170.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.62.0)
+    aws-sdk-kms (1.63.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.119.1)
@@ -201,7 +201,7 @@ GEM
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    pg (1.4.5)
+    pg (1.4.6)
     pg_search (2.3.6)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
@@ -246,13 +246,13 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rake (13.0.6)
-    redis-client (0.12.2)
+    redis-client (0.14.0)
       connection_pool
     regexp_parser (2.7.0)
     responders (3.1.0)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    roda (3.65.0)
+    roda (3.66.0)
       rack
     rspec-core (3.12.1)
       rspec-support (~> 3.12.0)
@@ -285,7 +285,7 @@ GEM
     shrine (3.4.0)
       content_disposition (~> 1.0)
       down (~> 5.1)
-    sidekiq (7.0.5)
+    sidekiq (7.0.7)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
@@ -305,7 +305,7 @@ GEM
     thor (1.2.1)
     tilt (2.1.0)
     timeout (0.3.2)
-    tinymce-rails (6.3.1)
+    tinymce-rails (6.4.0)
       railties (>= 3.1.1)
     tinymce-rails-langs (6.20220429)
       tinymce-rails (~> 6.0)

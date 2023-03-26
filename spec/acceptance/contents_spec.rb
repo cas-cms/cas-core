@@ -7,10 +7,16 @@ RSpec.feature 'Contents' do
 
   let!(:site) { create(:site) }
   let!(:section) { create(:section, site: site) }
+  let!(:biography_section) { create(:section, :biography, site: site) }
   let!(:survey_section) { create(:section, :survey, site: site) }
   let!(:agenda_section) { create(:section, :agenda, site: site) }
+
   let!(:category) { create(:category, section: section) }
+
   let!(:content) { create(:content, section: section, author: user, category: category) }
+  let!(:biography1) { create(:content, section: biography_section) }
+  let!(:biography2) { create(:content, section: biography_section) }
+
   let!(:someone_else_content) { create(:content, section: section, author: someone_else, category: category) }
   let!(:file_orphan) { create(:file, attachable: nil) }
 
@@ -73,6 +79,33 @@ RSpec.feature 'Contents' do
         expect(content.reload.images).to be_present
         expect(content.title).to eq 'new title 2'
         expect(content.tag_list).to match_array ['edited-tag1.1 edited-tag1.2', 'tag2']
+      end
+
+      scenario "I edit a related section in a the news section" do
+        click_link "manage-section-#{section.id}"
+        click_link "edit-content-#{content.id}"
+
+        # The YAML fixture has `biography` as a relation field in `news`
+        expect(page).to have_content("Related biography")
+        select(biography1.title, from: "Related biography")
+
+        expect do
+          click_on 'submit'
+        end.to change { content.content_to_content.reload.count }.from(0).to(1)
+        expect(content.reload.related_contents).to eq([biography1])
+        expect(content.content_to_content.first!.related_section).to eq(biography_section)
+
+        # Asserting edited data
+        #
+        # Let's go back and make sure the new relationship is present in the
+        # form's select.
+        click_link "edit-content-#{content.id}"
+        select(biography2.title, from: "Related biography")
+        expect do
+          click_on 'submit'
+        end.not_to change { content.content_to_content.reload.count }
+        expect(content.reload.related_contents).to eq([biography2])
+        expect(content.content_to_content.first!.related_section).to eq(biography_section)
       end
 
       scenario "I edit the order of the images" do

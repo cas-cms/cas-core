@@ -22,5 +22,11 @@ FactoryGirl.define do
       slug 'survey'
       section_type 'survey'
     end
+
+    trait :biography do
+      name 'Biography'
+      slug 'biography'
+      section_type 'content'
+    end
   end
 end

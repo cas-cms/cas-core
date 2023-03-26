@@ -1,4 +1,32 @@
 module Cas
+  # When updating this class, please update docs/config.md
+  #
+  # The section config has a format like the following:
+  #
+  #   news:
+  #     name: "Today's News"
+  #     type: content
+  #     has_many:
+  #       - teams
+  #     list_fields:
+  #       - title
+  #       - category
+  #     fields:
+  #       - category
+  #       - tags
+  #       - title
+  #       - teams:
+  #           key: value
+  #       - summary
+  #       - text
+  #       - images
+  #       - files
+  #       - tags
+  #       - date
+  #
+  # To get a particular field, you can call
+  #
+  #   fields = load_section_config[1]["list_fields"]
   class SectionConfig
     def initialize(section)
       @section = section
@@ -26,9 +54,7 @@ module Cas
     end
 
     def form_has_field?(field)
-      section_fields = load_section_config[1]["fields"]
-
-      Array.wrap(section_fields).any? do |section_field|
+      form_fields.any? do |section_field|
         if section_field.is_a?(Hash)
           section_field.keys.map(&:to_s).include?(field.to_s)
         else
@@ -37,7 +63,27 @@ module Cas
       end
     end
 
+    def form_associations
+      form_fields
+        .select { |field|
+          field_name = if field.is_a?(Hash)
+                         field.keys.first
+                       else
+                         field
+                       end
+
+          associations.include?(field_name.to_s)
+        }
+        .map { |association|
+          Cas::SectionAssociation.new(association)
+        }
+    end
+
     private
+
+    def form_fields
+      @form_fields ||= Array.wrap(load_section_config[1]["fields"])
+    end
 
     def filename
       if Rails.env.test?
@@ -45,6 +91,10 @@ module Cas
       else
         Cas::CONFIG_PATH
       end
+    end
+
+    def associations
+      @associations ||= Array.wrap(load_section_config[1]["has_many"])
     end
 
     def load_field

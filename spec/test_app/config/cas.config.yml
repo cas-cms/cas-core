@@ -47,9 +47,13 @@ sites:
           - summary
           - text
           - images
+          - biography:
+              label: "Related biography"
           - files
           - tags
           - date
+        has_many:
+          - biography
       biography:
         name: Biography
         type: content

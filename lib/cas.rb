@@ -4,11 +4,13 @@ require "cas/config"
 require "cas/remote_callbacks"
 require "cas/installation"
 require "cas/section_config"
+require "cas/section_association"
 require "cas/form_field"
 
 require 'devise'
 require 'simple_form'
 require 'friendly_id'
+require 'select2-rails'
 require 'jquery-rails'
 require 'jquery-ui-rails'
 require 'kaminari'

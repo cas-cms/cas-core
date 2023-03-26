@@ -12,23 +12,19 @@ module Cas
 
     def new
       @content = ::Cas::Content.new
+      @content.content_to_content.build
       load_categories
     end
 
     def create
       @content = ::Cas::Content.new(content_params)
+      @content.author_id = current_user.id
+      @content.section_id = @section.id
 
       success = nil
       begin
         ActiveRecord::Base.transaction do
-          @content.author_id = current_user.id
-          @content.section_id = @section.id
-          @content.tag_list = content_params[:tag_list] if content_params[:tag_list]
-          success = @content.save!
-
-          ::Cas::Activity.create!(user: current_user, site: @site, subject: @content, event_name: 'create')
-          associate_files(@content, :images)
-          associate_files(@content, :attachments)
+          success = serialize_form_value_into_models
         end
       rescue ActiveRecord::RecordInvalid
         Rails.logger.info "Errors: #{@content.errors.full_messages.inspect}"
@@ -61,13 +57,10 @@ module Cas
       success = nil
       begin
         ActiveRecord::Base.transaction do
-          @content.tag_list = content_params[:tag_list]
-          success = @content.update!(content_params)
-          associate_files(@content, :images)
-          associate_files(@content, :attachments)
-          ::Cas::Activity.create!(user: current_user, site: @site, subject: @content, event_name: 'update')
+          success = serialize_form_value_into_models
         end
-      rescue ActiveRecord::RecordInvalid
+      rescue ActiveRecord::RecordInvalid => e
+        Rails.logger.info "Content Invalid: #{e.message} - #{@content.errors.inspect}"
         success = nil
       end
 
@@ -112,8 +105,14 @@ module Cas
           :url,
           :embedded,
           :tag_list,
-          :file
+          :file,
+          content_to_content: [:cas_other_content_id]
         )
+
+        result[:content_to_content] = Array.wrap(result[:content_to_content]).map { |json|
+            # content_json has { "cas_other_content_id": "some-id" }
+            Cas::ContentToContent.new(json)
+          }
 
         unless result.keys.map(&:to_sym).include?(:published)
           result[:published] = true
@@ -126,6 +125,45 @@ module Cas
         end
 
         result
+      end
+    end
+
+    # This is called by create and update methods and do basically the same
+    # thing except for one being a `save!` and the other being an `update!`
+    def serialize_form_value_into_models
+      event = @content.new_record? ? :create : :update
+
+      @content.tag_list = content_params[:tag_list] if content_params[:tag_list]
+      associate_related_content(@content)
+      Rails.logger.info "Errors: #{@content.errors.inspect}"
+
+      success = if event == :create
+                  @content.save!
+                else
+                  @content.update!(content_params)
+                end
+
+      associate_files(@content, :images)
+      associate_files(@content, :attachments)
+
+      ::Cas::Activity.create!(
+        user: current_user,
+        site: @site,
+        subject: @content,
+        event_name: event
+      )
+
+      success
+    end
+
+    # This takes what we got in params's `content_to_content` and assigns in
+    # @content.
+    def associate_related_content(content)
+      return if params.dig(:content, :content_to_content).blank?
+
+      content.content_to_content = []
+      content_params[:content_to_content]&.each do |content_to_content|
+        content.content_to_content << content_to_content
       end
     end
 

@@ -21,6 +21,12 @@
     </p>
   <% end %>
 
+  <% form_associations.each do |association| %>
+    <%= f.simple_fields_for :content_to_content do |rf| %>
+      <%= render 'form_association', f: rf, association: association %>
+    <% end %>
+  <% end %>
+
   <% if display_field?(:location) %>
     <p>
       <%= f.input :location, as: :string, label: 'Local:' %>

@@ -2,6 +2,7 @@
 //= require jquery_ujs
 //= require tinymce
 //= require cas/vendor/selectize.min
+//= require select2
 //= require_self
 
 $(document).ready(function() {
@@ -9,6 +10,8 @@ $(document).ready(function() {
     var url = $(this).val();
     window.location = url;
   });
+
+  $(".js-select2").select2();
 
   $(".js-tags").selectize({
     plugins: ['restore_on_backspace', 'remove_button'],

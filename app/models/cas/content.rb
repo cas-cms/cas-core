@@ -1,5 +1,8 @@
 module Cas
   class Content < ApplicationRecord
+
+    include CasContentConcern if defined?(CasContentConcern)
+
     include ::PgSearch::Model
     extend ::FriendlyId
 
@@ -19,6 +22,9 @@ module Cas
       ->{ where(media_type: :attachment).order("cas_media_files.order ASC") },
       class_name: "::Cas::MediaFile", as: :attachable, dependent: :destroy
     has_many :activities, as: :subject
+
+    has_many :content_to_content, foreign_key: :cas_content_id, class_name: "Cas::ContentToContent"
+    has_many :related_contents, through: :content_to_content
 
     has_one :site, through: :section
     has_one :cover_image,
