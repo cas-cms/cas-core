@@ -86,8 +86,7 @@ RSpec.feature 'Contents' do
         click_link "edit-content-#{content.id}"
 
         # The YAML fixture has `biography` as a relation field in `news`
-        expect(page).to have_content("Related biography")
-        select(biography1.title, from: "Related biography")
+        fill_in 'content_content_to_content', with: "#{biography1.id}"
 
         expect do
           click_on 'submit'
@@ -100,7 +99,7 @@ RSpec.feature 'Contents' do
         # Let's go back and make sure the new relationship is present in the
         # form's select.
         click_link "edit-content-#{content.id}"
-        select(biography2.title, from: "Related biography")
+        fill_in 'content_content_to_content', with: "#{biography1.id},#{biography2.id}"
         expect do
           click_on 'submit'
         end.not_to change { content.content_to_content.reload.count }

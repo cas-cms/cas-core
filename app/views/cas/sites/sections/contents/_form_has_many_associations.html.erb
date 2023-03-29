@@ -1,0 +1,12 @@
+<p>
+  <%= f.input :content_to_content,
+    as: :string,
+    required: false,
+    label: "Associações",
+    input_html: {
+      value: f.object.related_contents.map { |content| content.title }.join(", "),
+      class: "js-has-many-associations",
+      data: { autocomplete: autocomplete_for_has_many.to_json }
+    }
+  %>
+</p>

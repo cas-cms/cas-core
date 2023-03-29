@@ -5,6 +5,57 @@
 //= require select2
 //= require_self
 
+/**
+ * Selectize is this lib that overrides <input> and makes them look like a set
+ * of tags, so you can add new values with autocompletion, and it's quite
+ * snappy.
+ */
+function initSelectize(element, options) {
+  let render = {}
+  /**
+   * In some cases, we want to allow the user to create new values. For example,
+   * when we have a list of tags, we want the user to be able to create new
+   * tags.
+   *
+   * In other cases, such as a list of has-many associations, we don't want the
+   * user creating new values.
+   */
+  if (options.canCreate) {
+    render = {
+      option_create: function(item, escape) {
+        var input = item.input;
+        return '<div class="create">' +
+          (input ? '<span class="caption">Criar <b>' + escape(input) + '</b></span>' : '') +
+          '</div>';
+      },
+    }
+  }
+
+  let params = {
+    plugins: ['restore_on_backspace', 'remove_button'],
+    delimiter: ',',
+    persist: true,
+    preload: false,
+    render: render,
+    onInitialize: function(){
+      var selectize = this;
+      var data = this.$input.data('autocomplete');
+      selectize.addOption(data);
+    }
+  }
+
+  if (options.canCreate) {
+    params["create"] = function(input) {
+      return {
+        value: input,
+        text: input
+      }
+    }
+  }
+
+  element.selectize(params);
+}
+
 $(document).ready(function() {
   $("#select-site").on("change", function(e) {
     var url = $(this).val();
@@ -13,31 +64,8 @@ $(document).ready(function() {
 
   $(".js-select2").select2();
 
-  $(".js-tags").selectize({
-    plugins: ['restore_on_backspace', 'remove_button'],
-    delimiter: ',',
-    persist: true,
-    preload: false,
-    render: {
-      option_create: function(item, escape) {
-        var input = item.input;
-        return '<div class="create">' +
-          (input ? '<span class="caption">Criar <b>' + escape(input) + '</b></span>' : '') +
-          '</div>';
-      },
-    },
-    create: function(input) {
-      return {
-        value: input,
-        text: input
-      }
-    },
-    onInitialize: function(){
-      var selectize = this;
-      var data = this.$input.data('autocomplete');
-      selectize.addOption(data);
-    }
-  });
+  initSelectize($(".js-tags"), { canCreate: true });
+  initSelectize($(".js-has-many-associations"), { canCreate: false });
 
   tinyMCE.init({
     branding: false,
