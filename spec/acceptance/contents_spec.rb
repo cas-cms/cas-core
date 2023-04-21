@@ -169,14 +169,14 @@ RSpec.feature 'Contents' do
       end
 
       scenario 'I delete a content in a section news' do
+        initial_count = ::Cas::Content.count
         click_link "manage-section-#{section.id}"
 
-        expect(::Cas::Content.count).to eq 2
         expect(page).to have_content content.title
 
         click_link "delete-content-#{content.id}"
 
-        expect(::Cas::Content.count).to eq 1
+        expect(::Cas::Content.count).to eq initial_count - 1
         expect(page).to_not have_content content.title
       end
 
