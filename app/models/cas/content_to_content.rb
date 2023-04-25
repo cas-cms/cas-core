@@ -10,7 +10,7 @@ module Cas
 
     def set_related_section
       return true if related_section.present?
-      self.related_section = related_content.section
+      self.related_section = related_content&.section
     end
   end
 end
