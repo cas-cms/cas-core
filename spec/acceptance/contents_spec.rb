@@ -82,30 +82,39 @@ RSpec.feature 'Contents' do
         expect(content.tag_list).to match_array ['edited-tag1.1 edited-tag1.2', 'tag2']
       end
 
-      scenario "I edit a related section in a the news section" do
-        click_link "manage-section-#{section.id}"
-        click_link "edit-content-#{content.id}"
+      describe "associated content" do
+        scenario "I edit a related section in a the news section" do
+          click_link "manage-section-#{section.id}"
+          click_link "edit-content-#{content.id}"
 
-        # The YAML fixture has `biography` as a relation field in `news`
-        fill_in 'content_content_to_content', with: "#{biography1.id}"
+          input_value = "#{biography1.id}"
+          # The YAML fixture has `biography` as a relation field in `news`
+          fill_in 'content_content_to_content', with: input_value
 
-        expect(content.content_to_content.count).to eq(0)
-        click_on 'submit'
-        expect(content.content_to_content.reload.count).to eq(1)
-        expect(content.reload.related_contents).to eq([biography1])
-        expect(content.content_to_content.first!.related_section).to eq(biography_section)
+          expect(content.content_to_content.count).to eq(0)
+          click_on 'submit'
+          expect(content.content_to_content.reload.count).to eq(1)
+          expect(content.reload.related_contents).to eq([biography1])
+          expect(content.content_to_content.first!.related_section).to eq(biography_section)
 
-        # Asserting edited data
-        #
-        # Let's go back and make sure the new relationship is present in the
-        # form's select.
-        click_link "edit-content-#{content.id}"
-        fill_in 'content_content_to_content', with: "#{biography2.id},#{biography3.id}"
-        click_on 'submit'
+          # Asserting edited data
+          #
+          # Let's go back and make sure the new relationship is present in the
+          # form's select.
+          click_link "edit-content-#{content.id}"
+          expect(find('#content_content_to_content').value).to eq(input_value)
 
-        expect(content.content_to_content.reload.count).to eq(2)
-        expect(content.reload.related_contents).to eq([biography2, biography3])
-        expect(content.content_to_content.first!.related_section).to eq(biography_section)
+          input_value = "#{biography2.id},#{biography3.id}"
+          fill_in 'content_content_to_content', with: input_value
+          click_on 'submit'
+
+          expect(content.content_to_content.reload.count).to eq(2)
+          expect(content.reload.related_contents).to eq([biography2, biography3])
+          expect(content.content_to_content.first!.related_section).to eq(biography_section)
+
+          click_link "edit-content-#{content.id}"
+          expect(find('#content_content_to_content').value).to eq(input_value)
+        end
       end
 
       scenario "I edit the order of the images" do

@@ -31,17 +31,22 @@ function initSelectize(element, options) {
     }
   }
 
+  let items = []
+  if (element && element.data('items')) {
+    items = element.data('items')
+  }
+
   let params = {
     plugins: ['restore_on_backspace', 'remove_button'],
     delimiter: ',',
     persist: true,
+    valueField: 'value',
+    labelField: 'text',
     preload: false,
     render: render,
-    onInitialize: function(){
-      var selectize = this;
-      var data = this.$input.data('autocomplete');
-      selectize.addOption(data);
-    }
+    highlight: true,
+    options: element.data('autocomplete'),
+    items: items
   }
 
   if (options.canCreate) {
