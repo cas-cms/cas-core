@@ -84,6 +84,15 @@ module Cas
         end
       end
 
+      context 'when a section has a field for an association' do
+        let(:field) { :biography }
+
+        it 'returns true' do
+          form_has_field = subject.form_has_field?(field)
+          expect(form_has_field).to eq true
+        end
+      end
+
       context 'when field has configurations' do
         let(:slug) { 'agenda' }
         let(:field) { :date }

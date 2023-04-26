@@ -1,0 +1,19 @@
+<p>
+  <%= f.input :content_to_content,
+    as: :string,
+    required: false,
+    label: "Associações",
+    input_html: {
+      # This value is replaced by selectize with whatever is in `data[items]`
+      # below, but it's useful for testing with Capybara.
+      value: f.object.related_contents.map { |content| content.id }.join(","),
+      class: "js-has-many-associations",
+      data: {
+        autocomplete: autocomplete_for_has_many.to_json,
+        # These are the selected items. `selectize` will replace the value of
+        # the input with this array.
+        items: f.object.related_contents.map { |content| content.id }.to_json
+      }
+    }
+  %>
+</p>

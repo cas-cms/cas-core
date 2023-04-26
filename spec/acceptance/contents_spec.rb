@@ -16,6 +16,7 @@ RSpec.feature 'Contents' do
   let!(:content) { create(:content, section: section, author: user, category: category) }
   let!(:biography1) { create(:content, section: biography_section) }
   let!(:biography2) { create(:content, section: biography_section) }
+  let!(:biography3) { create(:content, section: biography_section) }
 
   let!(:someone_else_content) { create(:content, section: section, author: someone_else, category: category) }
   let!(:file_orphan) { create(:file, attachable: nil) }
@@ -81,31 +82,39 @@ RSpec.feature 'Contents' do
         expect(content.tag_list).to match_array ['edited-tag1.1 edited-tag1.2', 'tag2']
       end
 
-      scenario "I edit a related section in a the news section" do
-        click_link "manage-section-#{section.id}"
-        click_link "edit-content-#{content.id}"
+      describe "associated content" do
+        scenario "I edit a related section in a the news section" do
+          click_link "manage-section-#{section.id}"
+          click_link "edit-content-#{content.id}"
 
-        # The YAML fixture has `biography` as a relation field in `news`
-        expect(page).to have_content("Related biography")
-        select(biography1.title, from: "Related biography")
+          input_value = "#{biography1.id}"
+          # The YAML fixture has `biography` as a relation field in `news`
+          fill_in 'content_content_to_content', with: input_value
 
-        expect do
+          expect(content.content_to_content.count).to eq(0)
           click_on 'submit'
-        end.to change { content.content_to_content.reload.count }.from(0).to(1)
-        expect(content.reload.related_contents).to eq([biography1])
-        expect(content.content_to_content.first!.related_section).to eq(biography_section)
+          expect(content.content_to_content.reload.count).to eq(1)
+          expect(content.reload.related_contents).to eq([biography1])
+          expect(content.content_to_content.first!.related_section).to eq(biography_section)
 
-        # Asserting edited data
-        #
-        # Let's go back and make sure the new relationship is present in the
-        # form's select.
-        click_link "edit-content-#{content.id}"
-        select(biography2.title, from: "Related biography")
-        expect do
+          # Asserting edited data
+          #
+          # Let's go back and make sure the new relationship is present in the
+          # form's select.
+          click_link "edit-content-#{content.id}"
+          expect(find('#content_content_to_content').value).to eq(input_value)
+
+          input_value = "#{biography2.id},#{biography3.id}"
+          fill_in 'content_content_to_content', with: input_value
           click_on 'submit'
-        end.not_to change { content.content_to_content.reload.count }
-        expect(content.reload.related_contents).to eq([biography2])
-        expect(content.content_to_content.first!.related_section).to eq(biography_section)
+
+          expect(content.content_to_content.reload.count).to eq(2)
+          expect(content.reload.related_contents).to eq([biography2, biography3])
+          expect(content.content_to_content.first!.related_section).to eq(biography_section)
+
+          click_link "edit-content-#{content.id}"
+          expect(find('#content_content_to_content').value).to eq(input_value)
+        end
       end
 
       scenario "I edit the order of the images" do
@@ -339,9 +348,12 @@ RSpec.feature 'Contents' do
     end
 
     scenario "I am not able to go to edit someone else's content by id" do
-      expect do
-        visit edit_site_section_content_path(site, someone_else_content.section, someone_else_content)
-      end.to raise_error ActiveRecord::RecordNotFound
+      visit edit_site_section_content_path(
+        site,
+        someone_else_content.section,
+        someone_else_content
+      )
+      expect(page).to have_content "ActiveRecord::RecordNotFound"
     end
   end
 end

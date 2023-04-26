@@ -1,9 +1,0 @@
-<p>
-  <%= f.input :cas_other_content_id,
-    label: "#{association.label}:",
-    collection: @site.sections.find_by!(slug: association.field_name).contents.map { |content|
-      [content.title, content.id]
-    },
-    input_html: { class: 'js-select2' }
-  %>
-</p>

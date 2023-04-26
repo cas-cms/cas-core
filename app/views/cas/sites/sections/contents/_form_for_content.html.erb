@@ -21,10 +21,8 @@
     </p>
   <% end %>
 
-  <% form_associations.each do |association| %>
-    <%= f.simple_fields_for :content_to_content do |rf| %>
-      <%= render 'form_association', f: rf, association: association %>
-    <% end %>
+  <% if form_associations.present? %>
+    <%= render 'form_has_many_associations', f: f %>
   <% end %>
 
   <% if display_field?(:location) %>
@@ -46,7 +44,7 @@
   <% end %>
 
   <% if display_field?(:tags) %>
-    <% autocomplete = ActsAsTaggableOn::Tag.all.map { |t| {value: t.name, text: t.name} } %>
+    <% tags_autocomplete = ActsAsTaggableOn::Tag.all.map { |t| {value: t.name, text: t.name} } %>
     <%= f.input :tag_list,
       as: :string,
       required: false,
@@ -54,7 +52,7 @@
       input_html: {
         value: f.object.tag_list.join(", "),
         class: "js-tags",
-        data: { autocomplete: autocomplete.to_json }
+        data: { autocomplete: tags_autocomplete.to_json }
       }
     %>
   <% end %>

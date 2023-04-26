@@ -50,7 +50,6 @@ sites:
     domains:
       - mamarecipes.com
 
-
     # Config: global configuration across all sites
     config:
       # [optional]
