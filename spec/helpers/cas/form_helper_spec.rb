@@ -17,8 +17,8 @@ describe Cas::FormHelper, type: :helper do
       @content = create(:content, section: @section)
 
       expect(helper.autocomplete_for_has_many).to match_array([
-        { id: related_content1.id, title: "#{related_content1.title} (Biography)" },
-        { id: related_content2.id, title: "#{related_content2.title} (Biography)" },
+        { value: related_content1.id, text: "#{related_content1.title} (Biography)" },
+        { value: related_content2.id, text: "#{related_content2.title} (Biography)" },
       ])
     end
   end

@@ -106,13 +106,21 @@ module Cas
           :embedded,
           :tag_list,
           :file,
-          content_to_content: [:cas_other_content_id]
+          :content_to_content
         )
 
-        result[:content_to_content] = Array.wrap(result[:content_to_content]).map { |json|
-            # content_json has { "cas_other_content_id": "some-id" }
-            Cas::ContentToContent.new(json)
+        if result[:content_to_content].present?
+          result[:content_to_content] = result[:content_to_content].split(",").map { |id|
+            # Params comes like this:
+            #
+            # {
+            #   content_to_content: "f0ba2d53-07ba-4e66-be76-edbcfc2559a5,7719b57e-fc23-45dc-8a42-faec74806b80"
+            # }
+            Cas::ContentToContent.new(cas_other_content_id: id)
           }
+        else
+          result[:content_to_content] = []
+        end
 
         unless result.keys.map(&:to_sym).include?(:published)
           result[:published] = true

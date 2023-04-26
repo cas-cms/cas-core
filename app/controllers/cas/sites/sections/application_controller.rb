@@ -13,6 +13,7 @@ module Cas
       if !current_user.admin? && !current_user.editor?
         model_relation = model_relation.where(author_id: current_user.id)
       end
+
       model_relation
     end
 

@@ -21,12 +21,6 @@
     </p>
   <% end %>
 
-  <% form_associations.each do |association| %>
-    <% f.simple_fields_for :content_to_content do |rf| %>
-      <% # render 'form_association', f: rf, association: association %>
-    <% end %>
-  <% end %>
-
   <%= render 'form_has_many_associations', f: f %>
 
   <% if display_field?(:location) %>
