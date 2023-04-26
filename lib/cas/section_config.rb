@@ -27,6 +27,7 @@ module Cas
   # To get a particular field, you can call
   #
   #   fields = load_section_config[1]["list_fields"]
+  #
   class SectionConfig
     def initialize(section)
       @section = section

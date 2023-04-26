@@ -21,7 +21,9 @@
     </p>
   <% end %>
 
-  <%= render 'form_has_many_associations', f: f %>
+  <% if form_associations.present? %>
+    <%= render 'form_has_many_associations', f: f %>
+  <% end %>
 
   <% if display_field?(:location) %>
     <p>
