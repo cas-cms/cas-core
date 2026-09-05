@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180114124600) do
+ActiveRecord::Schema.define(version: 20260905120000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(version: 20180114124600) do
     t.datetime "published_at"
     t.string   "tags_cache"
     t.index "((((to_tsvector('simple'::regconfig, COALESCE((title)::text, ''::text)) || to_tsvector('simple'::regconfig, COALESCE(text, ''::text))) || to_tsvector('simple'::regconfig, COALESCE((location)::text, ''::text))) || to_tsvector('simple'::regconfig, COALESCE((tags_cache)::text, ''::text))))", name: "cas_contents_search_with_fulltext", using: :gist
+    t.index "section_id, published, COALESCE(published_at, created_at) DESC, created_at DESC", name: "index_cas_contents_on_section_published_publication_date", using: :btree
     t.index ["author_id"], name: "index_cas_contents_on_author_id", using: :btree
     t.index ["category_id"], name: "index_cas_contents_on_category_id", using: :btree
     t.index ["published"], name: "index_cas_contents_on_published", using: :btree

@@ -73,5 +73,50 @@ module Cas
         end
       end
     end
+
+    describe "publication date" do
+      let!(:section) { create(:section) }
+      let!(:published_last_week) { create(:content, section: section, created_at: 1.day.ago, published_at: 7.days.ago) }
+      let!(:published_yesterday) { create(:content, section: section, created_at: 3.days.ago, published_at: 1.day.ago) }
+      # published_at can be blank on rows that predate the column or were
+      # published outside the model; update_columns skips the callback
+      let!(:never_stamped) do
+        create(:content, section: section, created_at: 4.days.ago).tap do |content|
+          content.update_columns(published_at: nil)
+        end
+      end
+
+      describe ".by_publication_date" do
+        it "orders newest first, using created_at when published_at is blank" do
+          expect(section.contents.by_publication_date).to eq [published_yesterday, never_stamped, published_last_week]
+        end
+
+        it "orders oldest first when asked" do
+          expect(section.contents.by_publication_date(:asc)).to eq [published_last_week, never_stamped, published_yesterday]
+        end
+
+        it "breaks ties on created_at" do
+          same_moment = create(:content, section: section, created_at: 2.days.ago, published_at: published_yesterday.published_at)
+
+          expect(section.contents.by_publication_date.first(2)).to eq [same_moment, published_yesterday]
+        end
+      end
+
+      describe ".published_since" do
+        it "keeps contents published on or after the time, using created_at when published_at is blank" do
+          expect(section.contents.published_since(5.days.ago)).to match_array [published_yesterday, never_stamped]
+        end
+      end
+
+      describe "#publication_date" do
+        it "is published_at when present" do
+          expect(published_yesterday.publication_date).to eq published_yesterday.published_at
+        end
+
+        it "is created_at when published_at is blank" do
+          expect(never_stamped.reload.publication_date).to eq never_stamped.created_at
+        end
+      end
+    end
   end
 end
