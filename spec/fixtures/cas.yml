@@ -51,6 +51,7 @@ default: &default
               - day
               - month
               - year
+            start_year: 2017
         - text
     survey:
       name: Survey

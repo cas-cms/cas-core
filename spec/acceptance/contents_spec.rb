@@ -217,7 +217,7 @@ RSpec.feature 'Contents' do
 
         expect(survey).to be_published
 
-        new_survey = survey_section.contents.reload.first
+        new_survey = survey_section.contents.reload.where(title: "Survey title").first
         expect(new_survey.metadata).to eq({
           "survey" => {
             "questions" => {
