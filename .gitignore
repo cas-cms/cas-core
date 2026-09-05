@@ -1,5 +1,9 @@
 .DS_Store
 .bundle/
+# local-only Gemfile used to run the suite on a Ruby the committed lock predates
+Gemfile.local
+Gemfile.local.lock
+vendor/bundle/
 log/*.log
 pkg/
 spec/test_app/db/*.sqlite3
