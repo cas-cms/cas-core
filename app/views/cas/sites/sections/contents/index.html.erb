@@ -40,6 +40,10 @@
             <% if content.date.present? %>
               <% value = l(content.date, format: :short) %>
             <% end %>
+          <% elsif field == 'published_at' %>
+            <% if content.published_at.present? %>
+              <% value = l(content.published_at, format: :short) %>
+            <% end %>
           <% else %>
             <% value = content.public_send(field) %>
           <% end %>

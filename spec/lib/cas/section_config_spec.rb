@@ -52,7 +52,7 @@ module Cas
     describe '#list_fields' do
       context 'when it is defined' do
         it 'returns what is in the file' do
-          expect(subject.list_fields).to eq ['title', 'category']
+          expect(subject.list_fields).to eq ['title', 'category', 'published_at']
         end
       end
 

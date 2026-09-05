@@ -28,14 +28,14 @@
   <% end %>
 
   <% if display_field?(:date) %>
-    <% field = field_properties(:date) %>
     <p>
-      <%= f.input :date,
-        as: (field.format.map(&:to_s).include?("hour") ? :datetime : :date),
-        label: 'Data:',
-        order: field.format,
-        default: @default_date
-      %>
+      <%= f.input :date, date_input_options(:date, f.object.date || @default_date).merge(label: 'Data:', default: @default_date) %>
+    </p>
+  <% end %>
+
+  <% if display_field?(:published_at) %>
+    <p>
+      <%= f.input :published_at, date_input_options(:published_at, f.object.published_at).merge(label: 'Data de publicação:') %>
     </p>
   <% end %>
 

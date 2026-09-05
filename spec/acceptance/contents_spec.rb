@@ -53,6 +53,52 @@ RSpec.feature 'Contents' do
         expect(activity.event_name).to eq 'create'
       end
 
+      scenario 'I backdate a content by setting its publication date' do
+        visit site_sections_path(site)
+        click_link "new-content-#{section.id}"
+
+        fill_in 'content_title', with: 'backdated content'
+        select '2010', from: 'content_published_at_1i'
+        select 'March', from: 'content_published_at_2i'
+        select '7', from: 'content_published_at_3i'
+        select '14', from: 'content_published_at_4i'
+        select '30', from: 'content_published_at_5i'
+        click_on 'submit'
+
+        backdated = Cas::Content.where(title: 'backdated content').first
+        expect(backdated.published_at).to eq Time.zone.local(2010, 3, 7, 14, 30)
+        expect(page).to have_content '07 Mar 14:30'
+      end
+
+      scenario 'I see the stored publication date when editing a content' do
+        content.update!(published_at: Time.zone.local(2012, 5, 20, 9, 15))
+
+        click_link "manage-section-#{section.id}"
+        click_link "edit-content-#{content.id}"
+
+        expect(find('#content_published_at_1i').value).to eq '2012'
+        expect(find('#content_published_at_2i').value).to eq '5'
+        expect(find('#content_published_at_3i').value).to eq '20'
+        expect(find('#content_published_at_4i').value).to eq '09'
+        expect(find('#content_published_at_5i').value).to eq '15'
+
+        # the year select must still reach the present so the item can be
+        # moved forward again
+        expect(page).to have_select('content_published_at_1i', with_options: ['2007', Date.current.year.to_s])
+      end
+
+      scenario 'I keep a publication date older than the configured start year' do
+        content.update!(published_at: Time.zone.local(1999, 6, 1, 8, 0))
+
+        click_link "manage-section-#{section.id}"
+        click_link "edit-content-#{content.id}"
+        expect(find('#content_published_at_1i').value).to eq '1999'
+
+        click_on 'submit'
+
+        expect(content.reload.published_at).to eq Time.zone.local(1999, 6, 1, 8, 0)
+      end
+
       scenario "I edit a content in a section news" do
         click_link "manage-section-#{section.id}"
         click_link "edit-content-#{content.id}"

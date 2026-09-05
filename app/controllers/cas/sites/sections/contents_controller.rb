@@ -98,6 +98,7 @@ module Cas
           :location,
           :summary,
           :published,
+          :published_at,
           :date,
           :text,
           :url,

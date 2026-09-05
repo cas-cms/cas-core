@@ -41,5 +41,25 @@ module Cas
         end
       end
     end
+
+    describe '#start_year' do
+      let(:slug) { 'news' }
+
+      context 'when there is no value' do
+        let(:field) { :date }
+
+        it 'returns nil' do
+          expect(subject.start_year).to eq nil
+        end
+      end
+
+      context 'when there is a value' do
+        let(:field) { :published_at }
+
+        it 'returns the value from the file' do
+          expect(subject.start_year).to eq 2007
+        end
+      end
+    end
   end
 end

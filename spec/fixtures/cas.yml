@@ -6,6 +6,7 @@ default: &default
       list_fields:
         - title
         - category
+        - published_at
       fields:
         - category
         - tags
@@ -16,6 +17,14 @@ default: &default
         - files
         - tags
         - date
+        - published_at:
+            format:
+              - day
+              - month
+              - year
+              - hour
+              - minute
+            start_year: 2007
     biography:
       name: Biography
       type: content
