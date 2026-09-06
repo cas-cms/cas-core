@@ -61,13 +61,11 @@ RSpec.feature 'Contents' do
         select '2010', from: 'content_published_at_1i'
         select 'March', from: 'content_published_at_2i'
         select '7', from: 'content_published_at_3i'
-        select '14', from: 'content_published_at_4i'
-        select '30', from: 'content_published_at_5i'
         click_on 'submit'
 
         backdated = Cas::Content.where(title: 'backdated content').first
-        expect(backdated.published_at).to eq Time.zone.local(2010, 3, 7, 14, 30)
-        expect(page).to have_content '07 Mar 14:30'
+        expect(backdated.published_at).to eq Time.zone.local(2010, 3, 7)
+        expect(page).to have_content '07 Mar'
       end
 
       scenario 'I see the stored publication date when editing a content' do
@@ -79,12 +77,11 @@ RSpec.feature 'Contents' do
         expect(find('#content_published_at_1i').value).to eq '2012'
         expect(find('#content_published_at_2i').value).to eq '5'
         expect(find('#content_published_at_3i').value).to eq '20'
-        expect(find('#content_published_at_4i').value).to eq '09'
-        expect(find('#content_published_at_5i').value).to eq '15'
+        expect(page).to have_no_field('content_published_at_4i')
 
         # the year select must still reach the present so the item can be
         # moved forward again
-        expect(page).to have_select('content_published_at_1i', with_options: ['2007', Date.current.year.to_s])
+        expect(page).to have_select('content_published_at_1i', with_options: ['1900', Date.current.year.to_s])
       end
 
       scenario 'I keep a publication date older than the configured start year' do

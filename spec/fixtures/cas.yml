@@ -22,9 +22,7 @@ default: &default
               - day
               - month
               - year
-              - hour
-              - minute
-            start_year: 2007
+            start_year: 1900
     biography:
       name: Biography
       type: content
@@ -51,6 +49,8 @@ default: &default
               - day
               - month
               - year
+              - hour
+              - minute
             start_year: 2017
         - text
     survey:

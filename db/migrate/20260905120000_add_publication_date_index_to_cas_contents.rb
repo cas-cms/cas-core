@@ -1,7 +1,9 @@
 # Serves listings ordered with Cas::Content.by_publication_date, which sorts
 # on COALESCE(published_at, created_at) so rows without published_at keep
-# their place. The expression must stay identical to
-# Cas::Content::PUBLICATION_DATE_SQL for Postgres to use the index.
+# their place. Postgres matches the index to the ORDER BY by function and
+# argument order (table qualifiers do not matter), so those must stay in step
+# with Cas::Content::PUBLICATION_DATE_SQL. Expression indexes have no column
+# list, so only index_name_exists? can guard this one.
 class AddPublicationDateIndexToCasContents < ActiveRecord::Migration[5.0]
   INDEX_NAME = "index_cas_contents_on_section_published_publication_date"
 

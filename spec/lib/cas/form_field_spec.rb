@@ -37,7 +37,7 @@ module Cas
         let(:field) { :date }
 
         it 'returns the format' do
-          expect(subject.format).to eq [:day, :month, :year]
+          expect(subject.format).to eq [:day, :month, :year, :hour, :minute]
         end
       end
     end
@@ -57,7 +57,7 @@ module Cas
         let(:field) { :published_at }
 
         it 'returns the value from the file' do
-          expect(subject.start_year).to eq 2007
+          expect(subject.start_year).to eq 1900
         end
       end
     end

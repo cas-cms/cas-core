@@ -27,9 +27,9 @@ module Cas
     end
 
     # Rails drops a stored year that falls outside start_year..end_year and
-    # saves the first option instead, so the stored year is always included.
-    # The range ends at the current year: later years would let a mis-click
-    # date an item into the future.
+    # saves the first option instead, so the range spans the start year, the
+    # current year and the stored year. It does not extend past the current
+    # year on its own, so a mis-click cannot date an item into the future.
     def year_range_options(field, value)
       years = [field.start_year, Date.current.year, value && value.year].compact
       { start_year: years.min, end_year: years.max }

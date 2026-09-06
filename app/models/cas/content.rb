@@ -30,7 +30,8 @@ module Cas
     # The index in db/migrate/20260905120000 uses the same expression.
     PUBLICATION_DATE_SQL = "COALESCE(cas_contents.published_at, cas_contents.created_at)".freeze
 
-    scope :published_since, ->(time) { where("#{PUBLICATION_DATE_SQL} >= ?", time) }
+    # Filters on the publication date only; chain .published to drop drafts.
+    scope :publication_date_since, ->(time) { where("#{PUBLICATION_DATE_SQL} >= ?", time) }
 
     scope :by_publication_date, ->(direction = :desc) {
       sql_direction = direction.to_s.upcase
@@ -55,6 +56,16 @@ module Cas
       published_at || created_at
     end
 
+    # Date and datetime selects submit their value in parts; see
+    # MultiparameterTime for how a pick without a time of day is completed.
+    def published_at=(value)
+      super(time_from_parts(value, published_at))
+    end
+
+    def date=(value)
+      super(time_from_parts(value, date))
+    end
+
     def metadata
       if self[:metadata].is_a?(String)
         JSON.parse(self[:metadata])
@@ -64,6 +75,10 @@ module Cas
     end
 
     private
+
+    def time_from_parts(value, current)
+      value.is_a?(Hash) ? MultiparameterTime.new(value, current: current).to_time : value
+    end
 
     def set_published_at
       if published_at.blank? && published
