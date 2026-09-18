@@ -1,0 +1,14 @@
+{
+  "name": "cas-cms",
+  "private": true,
+  "description": "JavaScript specs for the cas-cms admin assets.",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "jquery": "^1.12.4",
+    "jsdom": "^26.0.0",
+    "vitest": "^3.0.0"
+  }
+}

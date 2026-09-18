@@ -15,6 +15,29 @@
 var gallery;
 
 /**
+ * Builds a value that makes each presign request URL unique.
+ *
+ * Date.now() alone is not enough. `_onAdd` fires the `add` callback once per
+ * file synchronously, many files per millisecond, so every file selected within
+ * the same millisecond builds a byte-identical presign URL and all of those
+ * requests are in flight at once. Browsers coalesce concurrent identical GETs
+ * into one load and hand the single response to every caller, so all of those
+ * files receive the SAME presigned S3 key and then silently overwrite each
+ * other on upload. In production a 39-file selection came back with only 8
+ * distinct keys -- see HUM-199 and spec/javascripts/presign_uniqueness.test.js.
+ *
+ * The server cannot prevent this. Shrine's presign endpoint already sends
+ * `Cache-Control: no-store`, but coalescing happens before a response exists,
+ * so the only fix is to stop the URLs from matching. This is the same scheme as
+ * jQuery's own `cache: false` nonce: a counter seeded from the clock.
+ */
+var presignRequestCount = 0;
+function presignCacheBuster() {
+  presignRequestCount += 1;
+  return Date.now() + '-' + presignRequestCount;
+}
+
+/**
  * Shared functions
  *
  * These are functions that are used for both images and generic attachments.
@@ -59,7 +82,7 @@ var ImageGalleryUploadFunctions = {
 
     var options = {
       extension: data.files[0].name.match(/(\.\w+)?$/)[0], // set extension
-      _: Date.now(),                                       // prevent caching
+      _: presignCacheBuster(),                             // must be unique per file
     }
 
     $.getJSON('/admin/files/cache/presign', options, function(result) {
@@ -132,7 +155,7 @@ var AttachmentUploadFunctions = {
 
     var options = {
       extension: data.files[0].name.match(/(\.\w+)?$/)[0], // set extension
-      _: Date.now(),                                       // prevent caching
+      _: presignCacheBuster(),                             // must be unique per file
     }
 
     $.getJSON('/admin/files/cache/presign', options, function(result) {
