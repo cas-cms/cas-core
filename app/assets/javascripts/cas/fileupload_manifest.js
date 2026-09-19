@@ -15,6 +15,31 @@
 var gallery;
 
 /**
+ * Builds a value that makes each presign request URL unique.
+ *
+ * Date.now() alone is not enough. `_onAdd` fires the `add` callback once per
+ * file synchronously, many files per millisecond, so every file selected within
+ * the same millisecond builds a byte-identical presign URL and all of those
+ * requests go out at once. Some clients answer those duplicates from a single
+ * load: in one reported batch only a handful of requests reached the server,
+ * and the files sharing a URL also shared one presigned S3 key, overwriting
+ * each other on upload until most of the batch was gone.
+ *
+ * Which clients do this is not settled. Desktop Chrome and desktop Safari both
+ * issue every request and so never collide; the batch that lost files came from
+ * mobile Safari. Making the URLs differ removes the precondition entirely, so
+ * it stops mattering. The server cannot help here: Shrine's presign endpoint
+ * already sends `Cache-Control: no-store`. This is the same scheme as jQuery's
+ * own `cache: false` nonce, a counter seeded from the clock. See
+ * spec/javascripts/presign_uniqueness.test.js.
+ */
+var presignRequestCount = 0;
+function presignCacheBuster() {
+  presignRequestCount += 1;
+  return Date.now() + '-' + presignRequestCount;
+}
+
+/**
  * Shared functions
  *
  * These are functions that are used for both images and generic attachments.
@@ -59,7 +84,7 @@ var ImageGalleryUploadFunctions = {
 
     var options = {
       extension: data.files[0].name.match(/(\.\w+)?$/)[0], // set extension
-      _: Date.now(),                                       // prevent caching
+      _: presignCacheBuster(),                             // must be unique per file
     }
 
     $.getJSON('/admin/files/cache/presign', options, function(result) {
@@ -132,7 +157,7 @@ var AttachmentUploadFunctions = {
 
     var options = {
       extension: data.files[0].name.match(/(\.\w+)?$/)[0], // set extension
-      _: Date.now(),                                       // prevent caching
+      _: presignCacheBuster(),                             // must be unique per file
     }
 
     $.getJSON('/admin/files/cache/presign', options, function(result) {

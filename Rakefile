@@ -34,4 +34,12 @@ Rake::TestTask.new(:test) do |t|
 end
 
 
+desc "Run the JavaScript specs (vitest, see spec/javascripts)"
+task :js do
+  unless File.directory?(File.expand_path("../node_modules", __FILE__))
+    abort "node_modules is missing. Run `npm install` first."
+  end
+  sh "npm test"
+end
+
 task default: :test

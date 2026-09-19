@@ -37,6 +37,20 @@ gem in your main Rails application):
     export S3_REGION="value"
     export S3_BUCKET="value"
 
+## Tests
+
+```bash
+bundle exec rspec   # Ruby specs
+npm install         # once
+npm test            # JavaScript specs (or: rake js)
+```
+
+The JavaScript specs live in `spec/javascripts` and run on vitest. They are a
+separate, manual step: `rake` does not run them. They boot real jQuery and the
+real vendored jQuery-File-Upload stack inside JSDOM and drive the actual widget,
+rather than standing in for it with mocks. The one substitution is the jQuery UI
+widget factory, which production takes from the jquery-ui-rails gem.
+
 ## Contributing
 Contribution directions go here.
 
