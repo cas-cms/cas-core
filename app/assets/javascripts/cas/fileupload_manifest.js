@@ -23,8 +23,8 @@ var gallery;
  * requests are in flight at once. Browsers coalesce concurrent identical GETs
  * into one load and hand the single response to every caller, so all of those
  * files receive the SAME presigned S3 key and then silently overwrite each
- * other on upload. In production a 39-file selection came back with only 8
- * distinct keys -- see HUM-199 and spec/javascripts/presign_uniqueness.test.js.
+ * other on upload, so selecting a large batch silently loses most of it. See
+ * spec/javascripts/presign_uniqueness.test.js.
  *
  * The server cannot prevent this. Shrine's presign endpoint already sends
  * `Cache-Control: no-store`, but coalescing happens before a response exists,
