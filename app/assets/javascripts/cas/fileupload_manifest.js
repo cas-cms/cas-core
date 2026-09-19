@@ -20,16 +20,18 @@ var gallery;
  * Date.now() alone is not enough. `_onAdd` fires the `add` callback once per
  * file synchronously, many files per millisecond, so every file selected within
  * the same millisecond builds a byte-identical presign URL and all of those
- * requests are in flight at once. Browsers coalesce concurrent identical GETs
- * into one load and hand the single response to every caller, so all of those
- * files receive the SAME presigned S3 key and then silently overwrite each
- * other on upload, so selecting a large batch silently loses most of it. See
- * spec/javascripts/presign_uniqueness.test.js.
+ * requests go out at once. Some clients answer those duplicates from a single
+ * load: in one reported batch only a handful of requests reached the server,
+ * and the files sharing a URL also shared one presigned S3 key, overwriting
+ * each other on upload until most of the batch was gone.
  *
- * The server cannot prevent this. Shrine's presign endpoint already sends
- * `Cache-Control: no-store`, but coalescing happens before a response exists,
- * so the only fix is to stop the URLs from matching. This is the same scheme as
- * jQuery's own `cache: false` nonce: a counter seeded from the clock.
+ * Which clients do this is not settled. Desktop Chrome and desktop Safari both
+ * issue every request and so never collide; the batch that lost files came from
+ * mobile Safari. Making the URLs differ removes the precondition entirely, so
+ * it stops mattering. The server cannot help here: Shrine's presign endpoint
+ * already sends `Cache-Control: no-store`. This is the same scheme as jQuery's
+ * own `cache: false` nonce, a counter seeded from the clock. See
+ * spec/javascripts/presign_uniqueness.test.js.
  */
 var presignRequestCount = 0;
 function presignCacheBuster() {
