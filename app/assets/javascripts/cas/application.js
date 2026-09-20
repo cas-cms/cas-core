@@ -2,6 +2,7 @@
 //= require jquery_ujs
 //= require tinymce-jquery
 //= require cas/vendor/selectize.min
+//= require cas/plugins/cas_published_at
 //= require_self
 
 $(document).ready(function() {

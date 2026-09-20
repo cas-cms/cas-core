@@ -19,8 +19,11 @@ module Cas
 
     validates :title, presence: true
 
-    before_validation :set_published_at
+    # On save, not on validation, so a save that fails leaves no stamp on the
+    # record the form re-renders.
+    before_save :set_published_at
     before_save :cache_tags
+    validate :published_at_complete
 
     scope :published, ->{ where(published: true) }
 
@@ -58,7 +61,12 @@ module Cas
 
     # Date and datetime selects submit their value in parts; see
     # MultiparameterTime for how a pick without a time of day is completed.
+    # A pick with some parts left blank is refused by validation and the
+    # stored date kept, so a mis-click cannot replace a date with "now".
     def published_at=(value)
+      @published_at_half_picked = half_picked?(value)
+      return if @published_at_half_picked
+
       super(time_from_parts(value, published_at))
     end
 
@@ -78,6 +86,14 @@ module Cas
 
     def time_from_parts(value, current)
       value.is_a?(Hash) ? MultiparameterTime.new(value, current: current).to_time : value
+    end
+
+    def half_picked?(value)
+      value.is_a?(Hash) && MultiparameterTime.new(value).incomplete?
+    end
+
+    def published_at_complete
+      errors.add(:published_at, 'informe dia, mês e ano') if @published_at_half_picked
     end
 
     def set_published_at
