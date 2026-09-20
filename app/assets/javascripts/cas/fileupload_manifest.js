@@ -40,6 +40,21 @@ function presignCacheBuster() {
 }
 
 /**
+ * Turns a file's progress bar into its error message, in place.
+ *
+ * A selection is one action by the user and an outage fails every file in it,
+ * so one modal per file is unusable on a phone. Reporting where the bar was
+ * says which files failed, next to where the user was already looking, and
+ * leaves the successful ones alone.
+ */
+function reportFailedUpload(data) {
+  data.progressBar
+    .removeClass('progress-status')
+    .addClass('upload-failure')
+    .text('Falha ao enviar: '+data.files[0].name);
+}
+
+/**
  * Shared functions
  *
  * These are functions that are used for both images and generic attachments.
@@ -54,8 +69,18 @@ var UploadSharedFunctions = {
   fail: function(e, data) {
     console.log("error", e);
     console.log("data", data);
-    data.progressBar.remove();
-    alert('Falha ao enviar arquivo: '+data.files[0].name);
+    if (data.errorThrown === 'abort') { return; }
+
+    reportFailedUpload(data);
+  },
+
+  /**
+   * Without this a file whose presign request failed keeps a progress bar at
+   * 0% for ever and is silently never uploaded.
+   */
+  presignFailed: function(data, jqXHR, textStatus) {
+    console.log("presign failed", textStatus, jqXHR && jqXHR.status);
+    reportFailedUpload(data);
   }
 };
 
@@ -95,6 +120,8 @@ var ImageGalleryUploadFunctions = {
       data.paramName = 'file';
       $.blueimp.fileupload.prototype.options.add.call(that, e, data);
       data.submit();
+    }).fail(function(jqXHR, textStatus) {
+      UploadSharedFunctions.presignFailed(data, jqXHR, textStatus);
     });
   },
   done: function(e, data) {
@@ -166,6 +193,8 @@ var AttachmentUploadFunctions = {
       data.url = result['url'];
       data.paramName = 'file';
       data.submit();
+    }).fail(function(jqXHR, textStatus) {
+      UploadSharedFunctions.presignFailed(data, jqXHR, textStatus);
     });
   },
   done: function(e, data) {
@@ -253,6 +282,13 @@ $(function() {
 
   $('.cas-image-gallery [type=file]').fileupload({
     maxChunkSize: 10000000, // 10000000 = 10mb
+    /**
+     * Selecting a whole camera roll otherwise starts one upload per file at
+     * once, which saturates a phone's connection and is what makes them fail.
+     * Note this bounds the uploads only: the presign requests are issued from
+     * the add callback, which runs per file before anything is queued.
+     */
+    limitConcurrentUploads: 3,
     dropZone: $('.cas-image-gallery.dropzone'),
     dataType: 'json',
     disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
@@ -270,6 +306,7 @@ $(function() {
 
   $('.cas-attachments [type=file]').fileupload({
     maxChunkSize: 10000000, // 10000000 = 10mb
+    limitConcurrentUploads: 3,
     dropZone: $('.cas-attachments.dropzone'),
     dataType: 'json',
 
