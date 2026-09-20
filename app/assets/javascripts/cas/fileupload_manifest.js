@@ -283,10 +283,15 @@ $(function() {
   $('.cas-image-gallery [type=file]').fileupload({
     maxChunkSize: 10000000, // 10000000 = 10mb
     /**
-     * Selecting a whole camera roll otherwise starts one upload per file at
-     * once, which saturates a phone's connection and is what makes them fail.
-     * Note this bounds the uploads only: the presign requests are issued from
-     * the add callback, which runs per file before anything is queued.
+     * How many uploads run at once, NOT how many files can be selected. The
+     * whole selection is still uploaded: the rest wait in the widget's queue
+     * and the next one starts each time an upload finishes. Without this,
+     * picking a camera roll starts every upload simultaneously and saturates
+     * the connection they all need, which is what makes them fail.
+     *
+     * Presign requests are not bounded by this. They are issued from the add
+     * callback, which runs once per file when the files are picked, before
+     * anything reaches the upload queue.
      */
     limitConcurrentUploads: 3,
     dropZone: $('.cas-image-gallery.dropzone'),
@@ -306,7 +311,7 @@ $(function() {
 
   $('.cas-attachments [type=file]').fileupload({
     maxChunkSize: 10000000, // 10000000 = 10mb
-    limitConcurrentUploads: 3,
+    limitConcurrentUploads: 3, // see the gallery uploader above
     dropZone: $('.cas-attachments.dropzone'),
     dataType: 'json',
 
