@@ -1,0 +1,11 @@
+<%# Unchecked saves a draft. A record with no stored answer yet is shown as
+    checked, so saving keeps publishing by default; once an answer is stored,
+    including one from a submit that failed validation, that is what shows.
+    The publication date partial that follows is shown only while this box
+    is checked (plugins/cas_published_at.js). %>
+<p>
+  <%= f.input :published,
+    as: :boolean,
+    label: 'Publicado?',
+    input_html: { checked: f.object.published.nil? || f.object.published? } %>
+</p>

@@ -9,6 +9,11 @@ require 'rspec/rails'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'factory_girl_rails'
+# Rails.root is spec/test_app, so factory_girl_rails only looks under it. The
+# factories live at the gem root, and the railtie has already run its own
+# find_definitions by now, so they have to be loaded again here.
+FactoryGirl.definition_file_paths << File.expand_path('../factories', __FILE__)
+FactoryGirl.find_definitions
 require 'database_cleaner'
 
 Dir[Rails.root.join('../support/**/*.rb')].each   { |f| require f }
@@ -42,6 +47,8 @@ RSpec.configure do |config|
   config.around(:each) do |example|
     Cas::RemoteCallbacks.reset
     Capybara.app_host = 'http://example.com'
+    # Resets sequences, so the first site is always example.com, which
+    # Capybara.app_host relies on.
     FactoryGirl.reload
     DatabaseCleaner.cleaning do
       example.run

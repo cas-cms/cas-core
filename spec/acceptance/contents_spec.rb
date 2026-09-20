@@ -68,6 +68,145 @@ RSpec.feature 'Contents' do
         expect(page).to have_content '07 Mar'
       end
 
+      scenario 'The publication date is blank until I choose one' do
+        visit site_sections_path(site)
+        click_link "new-content-#{section.id}"
+
+        # The classes are what plugins/cas_published_at.js hooks into; the JS
+        # spec builds its own markup, so the real partial is pinned here.
+        expect(page).to have_css('.published-at-summary a.js-choose-published-at', text: 'Publicar noutra data')
+        # Inside the wrapper the script hides, not beside it: f.input emits a
+        # div, which would close a <p> wrapper and leave the selects outside.
+        within('.published-at-selects') { expect(page).to have_select('content_published_at_1i') }
+        expect(find('#content_published_at_1i').value).to be_blank
+        expect(find('#content_published_at_2i').value).to be_blank
+        expect(find('#content_published_at_3i').value).to be_blank
+      end
+
+      scenario 'A draft saved without a date is stamped when it is published' do
+        visit site_sections_path(site)
+        click_link "new-content-#{section.id}"
+        fill_in 'content_title', with: 'draft content'
+        uncheck 'content_published'
+        click_on 'submit'
+
+        draft = Cas::Content.where(title: 'draft content').first
+        expect(draft.published_at).to be_nil
+
+        visit site_sections_path(site)
+        click_link "manage-section-#{section.id}"
+        click_link "edit-content-#{draft.id}"
+        check 'content_published'
+        click_on 'submit'
+
+        expect(draft.reload.published_at).to be_within(1.minute).of(Time.current)
+      end
+
+      scenario 'A draft keeps its chosen date when it is published' do
+        draft = create(:content, section: section, author: user, published: false, published_at: Time.zone.local(2012, 5, 20, 9, 15))
+
+        visit site_sections_path(site)
+        click_link "manage-section-#{section.id}"
+        click_link "edit-content-#{draft.id}"
+
+        expect(page).to have_content 'Data de publicação: 20/05/2012'
+        expect(page).to have_css('.published-at-summary a.js-choose-published-at', text: 'alterar')
+
+        check 'content_published'
+        click_on 'submit'
+
+        expect(draft.reload.published_at).to eq Time.zone.local(2012, 5, 20, 9, 15)
+      end
+
+      scenario 'A failed save does not date the draft I park afterwards' do
+        visit site_sections_path(site)
+        click_link "new-content-#{section.id}"
+        click_on 'submit'
+
+        # Re-rendered with the title error, still undated.
+        expect(page).to have_link 'Publicar noutra data'
+
+        fill_in 'content_title', with: 'parked after a typo'
+        uncheck 'content_published'
+        click_on 'submit'
+
+        parked = Cas::Content.where(title: 'parked after a typo').first
+        expect(parked.published_at).to be_nil
+      end
+
+      scenario 'A half-picked date is refused and the stored date kept' do
+        content.update!(published_at: Time.zone.local(2012, 5, 20, 9, 15))
+
+        click_link "manage-section-#{section.id}"
+        click_link "edit-content-#{content.id}"
+        find('#content_published_at_1i').find('option[value=""]').select_option
+        click_on 'submit'
+
+        expect(page).to have_content 'informe dia, mês e ano'
+        expect(content.reload.published_at).to eq Time.zone.local(2012, 5, 20, 9, 15)
+      end
+
+      scenario 'A new content is published unless I say otherwise' do
+        visit site_sections_path(site)
+        click_link "new-content-#{section.id}"
+
+        expect(page).to have_checked_field('content_published')
+      end
+
+      scenario 'I save a content as a draft by unchecking published' do
+        visit site_sections_path(site)
+        click_link "new-content-#{section.id}"
+
+        fill_in 'content_title', with: 'draft content'
+        uncheck 'content_published'
+        click_on 'submit'
+
+        draft = Cas::Content.where(title: 'draft content').first
+        expect(draft.published).to eq false
+      end
+
+      scenario 'I see a draft as unpublished when editing it' do
+        content.update!(published: false)
+
+        click_link "manage-section-#{section.id}"
+        click_link "edit-content-#{content.id}"
+
+        expect(page).to have_unchecked_field('content_published')
+      end
+
+      scenario 'The published checkbox is absent when the section does not list it' do
+        biography = create(:section, site: site, name: 'Biography', slug: 'biography')
+
+        visit site_sections_path(site)
+        click_link "new-content-#{biography.id}"
+
+        expect(page).to have_field('content_title')
+        expect(page).to have_no_field('content_published')
+      end
+
+      scenario 'I keep my draft choice when the form fails validation' do
+        visit site_sections_path(site)
+        click_link "new-content-#{section.id}"
+
+        uncheck 'content_published'
+        click_on 'submit'
+
+        expect(page).to have_unchecked_field('content_published')
+      end
+
+      scenario 'Editing a draft from a section without the checkbox keeps it a draft' do
+        biography = create(:section, site: site, name: 'Biography', slug: 'biography')
+        draft = create(:content, section: biography, author: user, published: false)
+
+        visit site_sections_path(site)
+        click_link "manage-section-#{biography.id}"
+        click_link "edit-content-#{draft.id}"
+        fill_in 'content_title', with: 'still a draft'
+        click_on 'submit'
+
+        expect(draft.reload.published).to eq false
+      end
+
       scenario 'I see the stored publication date when editing a content' do
         content.update!(published_at: Time.zone.local(2012, 5, 20, 9, 15))
 
@@ -199,6 +338,15 @@ RSpec.feature 'Contents' do
 
     context 'when managing a survey' do
       let!(:survey) { create(:content, :survey, section: survey_section) }
+
+      scenario 'I see an unpublished survey as unpublished when editing it' do
+        survey.update!(published: false)
+
+        click_link "manage-section-#{survey_section.id}"
+        click_link "edit-content-#{survey.id}"
+
+        expect(page).to have_unchecked_field('content_published')
+      end
 
       scenario "I create questions" do
         visit site_sections_path(site)

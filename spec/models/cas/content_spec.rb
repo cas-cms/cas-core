@@ -28,8 +28,10 @@ module Cas
       describe "published_at" do
         subject { build(:content, published_at: published_at, published: published) }
 
+        # On save, not on validation: a failed save must not leave a stamp on
+        # the record the form re-renders.
         before do
-          subject.valid?
+          subject.save
         end
 
         context 'when published_at is nil' do
@@ -70,6 +72,38 @@ module Cas
               expect(subject.published_at).to eq published_at
             end
           end
+        end
+
+      end
+
+      describe 'a validation that fails' do
+        it 'does not stamp published_at' do
+          content = build(:content, title: nil, published: true, published_at: nil)
+
+          content.valid?
+
+          expect(content.published_at).to be_nil
+        end
+      end
+
+      describe 'a half-picked publication date' do
+        let(:stored) { Time.zone.local(2012, 5, 20, 9, 15) }
+        subject { create(:content, published_at: stored) }
+
+        it 'is rejected and the stored date is kept' do
+          subject.published_at = { 1 => 2010, 2 => nil, 3 => nil }
+
+          expect(subject).not_to be_valid
+          expect(subject.errors[:published_at]).to eq ['informe dia, mês e ano']
+          expect(subject.published_at).to eq stored
+        end
+
+        it 'is forgotten once a full date is assigned' do
+          subject.published_at = { 1 => 2010, 2 => nil, 3 => nil }
+          subject.published_at = { 1 => 2010, 2 => 3, 3 => 7 }
+
+          expect(subject).to be_valid
+          expect(subject.published_at).to eq Time.zone.local(2010, 3, 7)
         end
       end
     end

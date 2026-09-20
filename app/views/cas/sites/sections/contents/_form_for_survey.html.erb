@@ -23,12 +23,7 @@
     <% end %>
   <% end %>
 
-  <p>
-    <%= f.input :published,
-      as: :boolean,
-      label: 'Publicado?',
-      input_html: { checked: true } %>
-  </p>
+  <%= render 'published_field', f: f %>
 
   <div class="actions">
     <%= f.submit "Salvar", id: 'submit' %>

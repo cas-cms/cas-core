@@ -106,10 +106,6 @@ module Cas
           :tag_list
         )
 
-        unless result.keys.map(&:to_sym).include?(:published)
-          result[:published] = true
-        end
-
         if params.dig(:content, :metadata).present?
           # TODO the survey is sending empty questions and these
           # are being saved anyway. We need to filter these.

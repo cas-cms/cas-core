@@ -33,10 +33,12 @@
     </p>
   <% end %>
 
+  <% if display_field?(:published) %>
+    <%= render 'published_field', f: f %>
+  <% end %>
+
   <% if display_field?(:published_at) %>
-    <p>
-      <%= f.input :published_at, date_input_options(:published_at, f.object.published_at).merge(label: 'Data de publicação:') %>
-    </p>
+    <%= render 'published_at_field', f: f %>
   <% end %>
 
   <% if display_field?(:tags) %>

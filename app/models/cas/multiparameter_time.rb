@@ -9,14 +9,23 @@ module Cas
   #
   # A pick without a time of day keeps the stored time when the day is
   # unchanged, takes the current time when the day is today, and is midnight
-  # otherwise.
+  # otherwise. A pick missing any of year, month or day is no date: the
+  # selects offer a blank option, and Rails passes nil for the parts left
+  # blank.
   class MultiparameterTime
+    DATE_PARTS = [1, 2, 3].freeze
+
     def initialize(parts, current: nil)
       @parts = parts
       @current = current
     end
 
+    def incomplete?
+      !date_given?
+    end
+
     def to_time
+      return if incomplete?
       return with_time_of_day if time_of_day_given?
       return @current if same_day_as_current?
       return Time.current if today?
@@ -25,6 +34,10 @@ module Cas
     end
 
     private
+
+    def date_given?
+      DATE_PARTS.all? { |part| @parts[part].present? }
+    end
 
     def time_of_day_given?
       @parts.key?(4)

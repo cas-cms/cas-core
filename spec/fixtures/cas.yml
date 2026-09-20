@@ -17,6 +17,7 @@ default: &default
         - files
         - tags
         - date
+        - published
         - published_at:
             format:
               - day

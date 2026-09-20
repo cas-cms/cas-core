@@ -1,0 +1,23 @@
+<%# The selects start blank, so a save without a pick leaves published_at
+    empty and the model stamps the moment the content is first published.
+    With JavaScript the selects stay hidden behind a link until the editor
+    asks for another date; without it they simply show, blank.
+    Wrappers are divs: f.input emits a div, which would close a <p>. %>
+<% chosen = f.object.published_at %>
+<div class="js-published-at published-at"
+     data-follows="#content_published"
+     data-chosen="<%= chosen.present? %>"
+     data-open="<%= f.object.errors[:published_at].present? %>">
+  <div class="published-at-summary">
+    <% if chosen.present? %>
+      Data de publicação: <%= chosen.strftime('%d/%m/%Y') %>
+      <%= link_to 'alterar', '#', class: 'js-choose-published-at' %>
+    <% else %>
+      <%= link_to 'Publicar noutra data', '#', class: 'js-choose-published-at' %>
+    <% end %>
+  </div>
+  <div class="published-at-selects">
+    <%= f.input :published_at,
+      date_input_options(:published_at, chosen).merge(label: 'Data de publicação:', include_blank: true) %>
+  </div>
+</div>
