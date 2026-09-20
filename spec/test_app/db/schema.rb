@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20260905120000) do
+ActiveRecord::Schema.define(version: 20260920120000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20260905120000) do
     t.text     "text"
     t.uuid     "author_id",                   null: false
     t.datetime "date"
-    t.boolean  "published"
+    t.boolean  "published",    default: true, null: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.integer  "pageviews",    default: 0

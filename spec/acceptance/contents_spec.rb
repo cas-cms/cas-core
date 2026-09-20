@@ -68,6 +68,67 @@ RSpec.feature 'Contents' do
         expect(page).to have_content '07 Mar'
       end
 
+      scenario 'A new content is published unless I say otherwise' do
+        visit site_sections_path(site)
+        click_link "new-content-#{section.id}"
+
+        expect(page).to have_checked_field('content_published')
+      end
+
+      scenario 'I save a content as a draft by unchecking published' do
+        visit site_sections_path(site)
+        click_link "new-content-#{section.id}"
+
+        fill_in 'content_title', with: 'draft content'
+        uncheck 'content_published'
+        click_on 'submit'
+
+        draft = Cas::Content.where(title: 'draft content').first
+        expect(draft.published).to eq false
+      end
+
+      scenario 'I see a draft as unpublished when editing it' do
+        content.update!(published: false)
+
+        click_link "manage-section-#{section.id}"
+        click_link "edit-content-#{content.id}"
+
+        expect(page).to have_unchecked_field('content_published')
+      end
+
+      scenario 'The published checkbox is absent when the section does not list it' do
+        biography = create(:section, site: site, name: 'Biography', slug: 'biography')
+
+        visit site_sections_path(site)
+        click_link "new-content-#{biography.id}"
+
+        expect(page).to have_field('content_title')
+        expect(page).to have_no_field('content_published')
+      end
+
+      scenario 'I keep my draft choice when the form fails validation' do
+        visit site_sections_path(site)
+        click_link "new-content-#{section.id}"
+
+        uncheck 'content_published'
+        click_on 'submit'
+
+        expect(page).to have_unchecked_field('content_published')
+      end
+
+      scenario 'Editing a draft from a section without the checkbox keeps it a draft' do
+        biography = create(:section, site: site, name: 'Biography', slug: 'biography')
+        draft = create(:content, section: biography, author: user, published: false)
+
+        visit site_sections_path(site)
+        click_link "manage-section-#{biography.id}"
+        click_link "edit-content-#{draft.id}"
+        fill_in 'content_title', with: 'still a draft'
+        click_on 'submit'
+
+        expect(draft.reload.published).to eq false
+      end
+
       scenario 'I see the stored publication date when editing a content' do
         content.update!(published_at: Time.zone.local(2012, 5, 20, 9, 15))
 
@@ -199,6 +260,15 @@ RSpec.feature 'Contents' do
 
     context 'when managing a survey' do
       let!(:survey) { create(:content, :survey, section: survey_section) }
+
+      scenario 'I see an unpublished survey as unpublished when editing it' do
+        survey.update!(published: false)
+
+        click_link "manage-section-#{survey_section.id}"
+        click_link "edit-content-#{survey.id}"
+
+        expect(page).to have_unchecked_field('content_published')
+      end
 
       scenario "I create questions" do
         visit site_sections_path(site)

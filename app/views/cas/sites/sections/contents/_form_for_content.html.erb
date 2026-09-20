@@ -39,6 +39,10 @@
     </p>
   <% end %>
 
+  <% if display_field?(:published) %>
+    <%= render 'published_field', f: f %>
+  <% end %>
+
   <% if display_field?(:tags) %>
     <% autocomplete = ActsAsTaggableOn::Tag.all.map { |t| {value: t.name, text: t.name} } %>
     <%= f.input :tag_list,
