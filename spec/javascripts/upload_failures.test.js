@@ -127,7 +127,7 @@ describe('upload concurrency', () => {
     upload($, '.cas-attachments [type=file]', photos(10))
     await new Promise((resolve) => setTimeout(resolve, 100))
 
-    expect(s3Uploads(requestedUrls)).toHaveLength(3)
+    expect(s3Uploads(requestedUrls)).toHaveLength(5)
   })
 
   it('queues the gallery uploader too', async () => {
@@ -140,6 +140,6 @@ describe('upload concurrency', () => {
     upload($, '.cas-image-gallery [type=file]', photos(10))
     await new Promise((resolve) => setTimeout(resolve, 100))
 
-    expect(s3Uploads(requestedUrls)).toHaveLength(3)
+    expect(s3Uploads(requestedUrls)).toHaveLength(5)
   })
 })

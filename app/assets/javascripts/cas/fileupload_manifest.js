@@ -292,8 +292,11 @@ $(function() {
      * Presign requests are not bounded by this. They are issued from the add
      * callback, which runs once per file when the files are picked, before
      * anything reaches the upload queue.
+     *
+     * Five: uploads were reported as starting to fail somewhere around nine
+     * at once, so this sits below that with room to spare.
      */
-    limitConcurrentUploads: 3,
+    limitConcurrentUploads: 5,
     dropZone: $('.cas-image-gallery.dropzone'),
     dataType: 'json',
     disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
@@ -311,7 +314,7 @@ $(function() {
 
   $('.cas-attachments [type=file]').fileupload({
     maxChunkSize: 10000000, // 10000000 = 10mb
-    limitConcurrentUploads: 3, // see the gallery uploader above
+    limitConcurrentUploads: 5, // see the gallery uploader above
     dropZone: $('.cas-attachments.dropzone'),
     dataType: 'json',
 
